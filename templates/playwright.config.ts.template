@@ -1,0 +1,26 @@
+import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+
+// Đổi Staging ↔ UAT chỉ bằng biến TEST_ENV, không sửa code.
+dotenv.config({ path: `.env.${process.env.TEST_ENV || 'staging'}` });
+
+export default defineConfig({
+  testDir: './tests/e2e',
+  use: {
+    baseURL: process.env.BASE_URL,        // URL gốc lấy từ .env, KHÔNG hardcode
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+  },
+  retries: 2,                             // Staging chập chờn hơn local
+  reporter: [['html'], ['list']],
+  projects: [
+    // Đăng nhập 1 lần, lưu storageState cho các project sau tái dùng.
+    { name: 'setup', testMatch: /auth\.setup\.ts/ },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'], storageState: 'tests/fixtures/.auth/user.json' },
+      dependencies: ['setup'],
+    },
+  ],
+});

@@ -1,0 +1,31 @@
+name: E2E Tests (Playwright → Staging)
+on:
+  schedule:
+    - cron: '0 18 * * *'        # nightly full regression (UTC)
+  workflow_dispatch:            # chạy thủ công
+  # repository_dispatch:        # bật để trigger sau khi deploy
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      TEST_ENV: staging
+      BASE_URL: ${{ secrets.STAGING_BASE_URL }}
+      TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+      TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+        working-directory: e2e-tests
+      - run: npx playwright install --with-deps chromium
+        working-directory: e2e-tests
+      # Smoke nhanh trước; bỏ --grep để chạy full regression nightly.
+      - run: npx playwright test ${{ github.event_name == 'workflow_dispatch' && '--grep @smoke' || '' }}
+        working-directory: e2e-tests
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: e2e-tests/playwright-report/

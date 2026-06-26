@@ -1,0 +1,18 @@
+# Quy ước viết test cho dự án này (web-playwright)
+
+- Framework: Playwright + TypeScript. Test chạy trên môi trường DEPLOY (Staging/UAT), KHÔNG localhost.
+- Mọi goto() dùng đường dẫn TƯƠNG ĐỐI (vd page.goto('/login')); baseURL do config lấy từ .env.
+- KHÔNG hardcode URL, email, mật khẩu → đọc từ process.env / fixtures.
+- Page Object Model: mỗi màn hình 1 class trong tests/pages/.
+- Selector ưu tiên: getByRole > getByLabel > getByTestId. CẤM XPath / CSS brittle.
+- Mỗi test độc lập, không phụ thuộc thứ tự chạy.
+- Môi trường dùng chung: test TỰ TẠO dữ liệu riêng (email/SĐT có timestamp ngẫu nhiên), TỰ DỌN sau khi xong,
+  KHÔNG xoá/sửa dữ liệu người khác, tránh thao tác phá hoại trên Staging/UAT.
+- Tên test theo format: "should [hành vi] when [điều kiện]".
+- Mỗi assertion phải có ý nghĩa nghiệp vụ; mỗi test gắn comment ID test case (vd // TC-LOGIN-01).
+- Khi nghi ứng dụng có bug: KHÔNG sửa test cho xanh — ghi e2e-tests/docs/bugs.md để tester xác nhận.
+- Lỗi do môi trường (Staging down/deploy/mạng/data drift): KHÔNG sửa test — ghi e2e-tests/docs/env-issues.md.
+
+## testkit pipeline
+propose-free: chạy theo pha /testkit:analyze → cases → scenarios → script → run → ci.
+Mỗi artifact trong e2e-tests/docs/ phải được người review (> Review: APPROVED) trước khi sang pha sau.

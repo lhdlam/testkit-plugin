@@ -1,0 +1,13 @@
+import { test as setup, expect } from '@playwright/test';
+import { LoginPage } from './pages/LoginPage';
+
+const authFile = 'tests/fixtures/.auth/user.json';
+
+// Đăng nhập 1 lần, lưu phiên — mọi test sau tái dùng (trừ test kiểm tra chính luồng đăng nhập).
+setup('authenticate', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login(process.env.TEST_USER_EMAIL!, process.env.TEST_USER_PASSWORD!);
+  await expect(page).toHaveURL(/.*dashboard/);
+  await page.context().storageState({ path: authFile });
+});

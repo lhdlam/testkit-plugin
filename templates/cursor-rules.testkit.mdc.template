@@ -1,0 +1,21 @@
+---
+description: testkit conventions + slash bridge for this test-automation project
+alwaysApply: true
+---
+
+# testkit (Cursor)
+
+Bạn đang ở dự án test-automation dùng testkit. Cursor KHÔNG có hook cưỡng chế → **review gate là advisory**:
+trước khi sang pha sau, TỰ kiểm artifact pha trước có dòng `> Review: APPROVED`; nếu còn `PENDING` → DỪNG,
+nhắc user duyệt.
+
+## Slash bridge
+Khi user gõ `/testkit:<name>`:
+1. Đọc `<plugin>/commands/<name>.md` (đường dẫn cài đặt testkit).
+2. Làm theo nội dung (đa số wrap một skill cùng tên trong `<plugin>/skills/<name>/SKILL.md`).
+3. Đọc `<plugin>/profiles/<target>.md` để biết luật của target hiện tại.
+
+## Quy ước (xem CLAUDE.md để biết bản đầy đủ)
+- Agent viết test, framework chạy test. Selector bền vững. Test độc lập, tự tạo/tự dọn dữ liệu.
+- KHÔNG green-washing: nghi bug → ghi docs/bugs.md, không sửa test cho xanh.
+- KHÔNG bịa yêu cầu / không đoán selector. Truy vết test ↔ test case ↔ yêu cầu.
