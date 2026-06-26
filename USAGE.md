@@ -23,8 +23,8 @@ cho agent đi tiếp. Agent viết test, **Playwright chạy test**.
 
 **Claude Code**
 ```
-/plugin add marketplace github:mor-duongmh/testkit-plugin
-/plugin install testkit@mor-duongmh
+/plugin add marketplace github:lhdlam/testkit-plugin
+/plugin install testkit@lhdlam
 ```
 
 **Cursor** — testkit sinh `.cursor/rules/` ở bước init. Lưu ý: trên Cursor **gate là advisory**

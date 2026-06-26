@@ -1,10 +1,10 @@
 {
   "name": "testkit",
   "version": "0.1.0",
-  "description": "Mor's AI test-automation toolkit. One declarative pipeline (understand → cases → scenarios → script → run/self-heal → CI) with pluggable target profiles (web-playwright, web-from-docs, web-blackbox, desktop-pyside6). Agent writes & maintains tests; Playwright/pytest runs them. Built for testers. Runs on Claude Code (enforced gates) and Cursor (advisory).",
-  "author": { "name": "Mor", "email": "duongmh@mor.com.vn" },
-  "homepage": "https://github.com/mor-duongmh/testkit-plugin",
-  "repository": "https://github.com/mor-duongmh/testkit-plugin",
+  "description": "AI test-automation toolkit. One declarative pipeline (understand → cases → scenarios → script → run/self-heal → CI) with pluggable target profiles (web-playwright, web-from-docs, web-blackbox, desktop-pyside6). Agent writes & maintains tests; Playwright/pytest runs them. Built for testers. Runs on Claude Code (enforced gates) and Cursor (advisory).",
+  "author": { "name": "lhdlam" },
+  "homepage": "https://github.com/lhdlam/testkit-plugin",
+  "repository": "https://github.com/lhdlam/testkit-plugin",
   "license": "MIT",
-  "keywords": ["mor", "testkit", "test-automation", "playwright", "pytest-qt", "e2e", "qa", "tester", "cursor"]
+  "keywords": ["testkit", "test-automation", "playwright", "pytest-qt", "e2e", "qa", "tester", "cursor"]
 }

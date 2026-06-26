@@ -1,4 +1,4 @@
-# testkit — Mor's AI test-automation toolkit
+# testkit — AI test-automation toolkit
 
 > Một plugin, một namespace `/testkit:*` — agent **viết & bảo trì** test, Playwright/pytest **chạy** test.
 > Dành cho **tester**. Chạy trên **Claude Code** (gate cưỡng chế) và **Cursor** (gate advisory).
@@ -36,8 +36,8 @@ feature-map   test-cases      ui-map/scenarios   spec/test_*     bugs.md       w
 
 ### Claude Code
 ```
-/plugin add marketplace github:mor-duongmh/testkit-plugin
-/plugin install testkit@mor-duongmh
+/plugin add marketplace github:lhdlam/testkit-plugin
+/plugin install testkit@lhdlam
 ```
 
 ### Cursor
@@ -91,4 +91,4 @@ pha trước `APPROVED`. Trên Cursor là advisory.
 
 ## License
 
-MIT © Mor.
+MIT.

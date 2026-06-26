@@ -1,10 +1,9 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "mor-duongmh",
-  "description": "Mor's Claude Code plugin marketplace — testkit: AI test-automation toolkit for testers (web + desktop) under a unified /testkit:* namespace.",
+  "name": "lhdlam",
+  "description": "Claude Code plugin marketplace — testkit: AI test-automation toolkit for testers (web + desktop) under a unified /testkit:* namespace.",
   "owner": {
-    "name": "duongmh",
-    "email": "duongmh@mor.com.vn"
+    "name": "lhdlam"
   },
   "plugins": [
     {
@@ -12,13 +11,13 @@
       "description": "AI test-automation toolkit. Declarative 6-phase pipeline + pluggable target profiles (web-playwright, web-from-docs, web-blackbox, desktop-pyside6). Agent writes tests, Playwright/pytest runs them. For testers. Claude Code (enforced) + Cursor (advisory).",
       "source": {
         "source": "git-subdir",
-        "url": "https://github.com/mor-duongmh/testkit-plugin.git",
+        "url": "https://github.com/lhdlam/testkit-plugin.git",
         "path": ".",
         "ref": "main"
       },
       "category": "testing",
-      "author": { "name": "Mor" },
-      "homepage": "https://github.com/mor-duongmh/testkit-plugin"
+      "author": { "name": "lhdlam" },
+      "homepage": "https://github.com/lhdlam/testkit-plugin"
     }
   ]
 }
