@@ -63,6 +63,9 @@ PreToolUse hook cưỡng chế → **các gate là advisory** (agent tự giác)
 /testkit:ci          → Phase 6: workflow CI
 ```
 
+**Tăng trưởng (incremental):** `/testkit:new-feature` — khi project đã có bộ test, chỉ sinh test cho 1
+feature mới (scope qua git diff hoặc mô tả), không quét lại cả repo, không đụng test cũ.
+
 > Hướng dẫn từng bước chi tiết cho tester: xem [USAGE.md](USAGE.md).
 
 ## Trạng thái & gate
@@ -78,11 +81,13 @@ pha trước `APPROVED`. Trên Cursor là advisory.
 | **M1** | Target `web-playwright` end-to-end (6 pha + gate + templates + test) | ✅ Xong |
 | **M2** | Target `desktop-pyside6` (pytest-qt, monkeypatch modal, headless) | ✅ Xong |
 | **M3** | Target `web-from-docs` + `web-blackbox` (RTM, ui-map qua MCP) | ✅ Xong |
-| M4 | Cursor bridge đầy đủ (mirror `.cursor/rules/` tự động) | 🟡 Một phần (template sẵn) |
+| **M4** | Cursor bridge (mirror `.cursor/rules/` từ template ở bước init) | ✅ Xong |
 | **M5** | Subagents: `coverage-auditor`, `failure-classifier`, `selector-stability`, `test-integrity` | ✅ Xong |
-| M6 | `/testkit:new-feature` (incremental qua git diff / mô tả) + coverage dashboard | ⬜ Kế hoạch |
+| **M6** | `/testkit:new-feature` (incremental qua git diff / mô tả) | ✅ Xong |
+| M6+ | Coverage dashboard (HTML từ rtm + kết quả chạy) | ⬜ Kế hoạch |
 
-> Cả 4 target + 4 subagent đã hiện thực đầy đủ. Còn lại trên lộ trình: `/testkit:new-feature` (M6).
+> Cả 4 target + 4 subagent + incremental mode đã hiện thực đầy đủ. Còn lại trên lộ trình:
+> coverage dashboard (HTML). Pipeline cốt lõi đã hoàn chỉnh và dùng được.
 
 ## License
 

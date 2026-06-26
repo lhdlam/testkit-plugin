@@ -44,8 +44,10 @@ Tạo `pytest.ini` (`qt_api = pyside6`), thư mục `tests/{screens,fixtures}`, 
 
 1. Đọc template `${TESTKIT_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/templates/CLAUDE.md.<target>.template`,
    điền theo project, ghi ra `CLAUDE.md` ở gốc dự án test.
-2. **Cursor**: mirror cùng nội dung sang `.cursor/rules/testkit.mdc` (frontmatter `alwaysApply: true`)
-   + `.cursor/rules/testkit-slash.mdc` (bridge: "user gõ /testkit:X → đọc commands/X.md").
+2. **Cursor**: copy template `${TESTKIT_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/templates/cursor-rules.testkit.mdc.template`
+   → `.cursor/rules/testkit.mdc` (frontmatter `alwaysApply: true`). File này gộp cả quy ước + slash bridge
+   (user gõ `/testkit:X` → đọc `commands/X.md`) + nhắc gate là **advisory** trên Cursor. Đồng bộ phần "Quy ước"
+   với `CLAUDE.md` của target (cùng nguồn — đừng để lệch).
 3. Copy `playwright.config.ts` / `pytest.ini` từ templates nếu chưa có.
 
 ## Bước 4 — Ghi target & khởi tạo state

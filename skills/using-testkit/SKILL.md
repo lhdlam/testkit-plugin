@@ -32,6 +32,7 @@ pytest-qt) **chạy** test. Bạn (agent) đi qua một pipeline 6 pha, mỗi ph
 | 4 Script | `generate-script` | POM/Screen Object + spec/test_* | `/testkit:script` |
 | 5 Chạy/heal | `run-and-heal` | test xanh + `bugs.md`/`env-issues.md` | `/testkit:run` |
 | 6 CI | `setup-ci` | workflow CI | `/testkit:ci` |
+| ↻ Incremental | `new-feature` | artifact + test cho 1 feature (`*-feat-xxxx`) | `/testkit:new-feature` |
 
 ## Target profile
 
