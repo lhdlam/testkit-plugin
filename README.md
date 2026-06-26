@@ -79,11 +79,10 @@ pha trước `APPROVED`. Trên Cursor là advisory.
 | **M2** | Target `desktop-pyside6` (pytest-qt, monkeypatch modal, headless) | ✅ Xong |
 | **M3** | Target `web-from-docs` + `web-blackbox` (RTM, ui-map qua MCP) | ✅ Xong |
 | M4 | Cursor bridge đầy đủ (mirror `.cursor/rules/` tự động) | 🟡 Một phần (template sẵn) |
-| M5 | Subagents: `coverage-auditor`, `failure-classifier`, `selector-stability`, `test-integrity` | ⬜ Kế hoạch |
+| **M5** | Subagents: `coverage-auditor`, `failure-classifier`, `selector-stability`, `test-integrity` | ✅ Xong |
 | M6 | `/testkit:new-feature` (incremental qua git diff / mô tả) + coverage dashboard | ⬜ Kế hoạch |
 
-> Cả 4 target đã hiện thực đầy đủ (web-playwright, web-from-docs, web-blackbox, desktop-pyside6).
-> Còn lại trên lộ trình: subagents (M5) và `/testkit:new-feature` (M6).
+> Cả 4 target + 4 subagent đã hiện thực đầy đủ. Còn lại trên lộ trình: `/testkit:new-feature` (M6).
 
 ## License
 

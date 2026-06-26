@@ -30,7 +30,12 @@ Bảng mỗi test case:
 ```
 Đánh dấu rõ mục nào **CHƯA có test case** (gap) để tester thấy độ phủ khách quan.
 
-> RTM là công cụ chống-sót then chốt — đừng bỏ qua. (Phase 5/agent `coverage-auditor` sẽ dùng lại.)
+> RTM là công cụ chống-sót then chốt — đừng bỏ qua.
+
+## Tùy chọn — kiểm độ phủ bằng subagent
+Sau khi sinh `rtm.md`, có thể dispatch agent `coverage-auditor` (Agent tool) để đo độ phủ khách quan:
+nó liệt kê yêu cầu **0 test case** (High), case chỉ happy-path (Medium), và case **bịa** (cite REQ không có
+trong feature-map). Đính kèm tóm tắt vào cuối `rtm.md` cho tester.
 
 ## Kết thúc
 Thêm `> Review: PENDING` cuối `test-cases.md`. Nhắc user kiểm 2 chiều: chống bịa (bám nguồn) +

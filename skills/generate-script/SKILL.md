@@ -35,6 +35,11 @@ Mục tiêu: biến kịch bản thành **code chạy được**, ổn định, 
 Assertion phải khớp **Expected Result** trong test-cases. Nếu UI/hành vi thật khác Expected → KHÔNG
 sửa assertion cho khớp sản phẩm; ghi `docs/bugs.md` và dừng để tester phân định.
 
+## Tùy chọn — audit selector bằng subagent
+Sau khi sinh Page/Screen Object, có thể dispatch agent `selector-stability` (Agent tool) để soát selector
+brittle: web (XPath/CSS nth/absolute URL) hoặc desktop (findChild thiếu objectName / theo chỉ số). Sửa các
+mục High trước khi chạy.
+
 ## Kết thúc
-Báo cáo file đã tạo + kết quả chạy thử. Thêm `> Review: PENDING` vào `scenarios.md`? Không — pha này
-review trên code: nhắc tester đọc lại assertion có đúng nghiệp vụ. → Bước tiếp: `/testkit:run`.
+Báo cáo file đã tạo + kết quả chạy thử. Pha này review trên code: nhắc tester đọc lại assertion có đúng
+nghiệp vụ. → Bước tiếp: `/testkit:run`.
