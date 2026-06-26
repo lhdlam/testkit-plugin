@@ -32,5 +32,14 @@ check "allow non-gated skill" "$(run run-and-heal)" 0
 rm docs/.testkit-target
 check "fail-open without .testkit-target" "$(run generate-script)" 0
 
+# 6. desktop layout: artifacts in docs/ (no TESTKIT_ROOT) → gate probes docs/
+unset TESTKIT_ROOT
+rm -rf "$tmp"/*; mkdir -p docs
+echo "desktop-pyside6" > docs/.testkit-target
+printf '# scenarios\n> Review: PENDING\n' > docs/scenarios.md
+check "desktop: probe docs/ + block PENDING" "$(run generate-script)" 1
+printf '# scenarios\n> Review: APPROVED\n' > docs/scenarios.md
+check "desktop: probe docs/ + allow APPROVED" "$(run generate-script)" 0
+
 echo "---"; echo "PASS=$PASS FAIL=$FAIL"
 [[ "$FAIL" -eq 0 ]]

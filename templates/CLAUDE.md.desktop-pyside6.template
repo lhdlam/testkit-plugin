@@ -1,0 +1,19 @@
+# Quy ước viết test cho app PySide6 (desktop-pyside6)
+
+- Framework: pytest + pytest-qt. Ép qt_api = pyside6 trong pytest.ini.
+- Tương tác qua qtbot (mouseClick, keyClicks, addWidget).
+- TUYỆT ĐỐI KHÔNG dùng time.sleep — chờ bằng qtbot.waitSignal / qtbot.waitUntil.
+- Tìm widget bằng objectName: window.findChild(QType, "objectName").
+  Widget thiếu objectName → ghi docs/missing-object-names.md đề xuất bổ sung,
+  KHÔNG tìm theo chỉ số/thứ tự con (rất dễ gãy).
+- Mẫu Screen Object: mỗi cửa sổ/dialog 1 class trong tests/screens/.
+- Hộp thoại MODAL (QMessageBox, QFileDialog) chặn event loop → PHẢI monkeypatch thay vì mở thật.
+- Cô lập trạng thái: dùng tmp_path cho file, patch QSettings, mock DB/network.
+- Mỗi test tạo cửa sổ mới và addWidget để qtbot tự dọn; test độc lập, không phụ thuộc thứ tự.
+- Test phải chạy được headless (QT_QPA_PLATFORM=offscreen / xvfb).
+- Mỗi test gắn comment ID test case (vd # TC-LOGIN-01).
+- Khi nghi app có bug: KHÔNG sửa test cho xanh — ghi docs/bugs.md để tester xác nhận.
+
+## testkit pipeline
+Chạy theo pha /testkit:analyze → cases → scenarios → script → run → ci.
+Artifacts ở docs/. Mỗi artifact phải được người review (> Review: APPROVED) trước khi sang pha sau.

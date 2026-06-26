@@ -1,0 +1,30 @@
+import os
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QLineEdit, QPushButton, QLabel
+
+
+class LoginScreen:
+    """Screen Object mẫu — agent dựa vào đây để sinh Screen Object cho màn hình khác.
+    Tìm widget bằng objectName, KHÔNG dò theo chỉ số/thứ tự con.
+    """
+
+    def __init__(self, window, qtbot):
+        self.window = window
+        self.qtbot = qtbot
+        self.email = window.findChild(QLineEdit, "emailInput")
+        self.password = window.findChild(QLineEdit, "passwordInput")
+        self.login_btn = window.findChild(QPushButton, "loginButton")
+        self.error = window.findChild(QLabel, "errorLabel")
+
+    def _slowmo(self):
+        # Bật bằng UI_SLOWMO=500 để mắt người kịp nhìn khi debug/demo (không ảnh hưởng CI headless).
+        ms = int(os.environ.get("UI_SLOWMO", "0"))
+        if ms:
+            self.qtbot.wait(ms)
+
+    def login(self, email, password):
+        self.email.clear()
+        self.password.clear()
+        self.qtbot.keyClicks(self.email, email); self._slowmo()
+        self.qtbot.keyClicks(self.password, password); self._slowmo()
+        self.qtbot.mouseClick(self.login_btn, Qt.LeftButton); self._slowmo()

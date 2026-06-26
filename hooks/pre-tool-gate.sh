@@ -38,10 +38,15 @@ case "$skill" in
     *) exit 0 ;;
 esac
 
-ROOT="${TESTKIT_ROOT:-e2e-tests/docs}"
-
-# Only enforce inside an initialized testkit project.
-[[ -f "$ROOT/.testkit-target" ]] || exit 0
+# Resolve the artifacts root. Web targets use e2e-tests/docs/, desktop uses docs/.
+# Honor TESTKIT_ROOT override, else probe known locations for .testkit-target.
+ROOT=""
+for cand in "${TESTKIT_ROOT:-}" "e2e-tests/docs" "docs"; do
+    [[ -n "$cand" && -f "$cand/.testkit-target" ]] || continue
+    ROOT="$cand"; break
+done
+# Not an initialized testkit project → fail-open.
+[[ -n "$ROOT" ]] || exit 0
 
 ARTIFACT="$ROOT/$required"
 

@@ -4,8 +4,10 @@ Tài liệu này hướng dẫn dùng testkit để **AI agent tự viết bộ 
 theo đường đi qua 6 pha. Bạn (tester) là **người gác cổng**: ở mỗi pha bạn review artifact rồi mới
 cho agent đi tiếp. Agent viết test, **Playwright chạy test**.
 
-> Phiên bản hiện tại hiện thực đầy đủ target **web-playwright** (web app có source code, test trỏ
-> vào URL Staging/UAT). Các target khác (desktop, black-box…) đang trên lộ trình — xem README.
+> Phiên bản hiện tại hiện thực đầy đủ 2 target: **web-playwright** (web app, test trỏ URL Staging/UAT)
+> và **desktop-pyside6** (app PySide6, test in-process bằng pytest-qt). Hướng dẫn bên dưới đi theo
+> ví dụ web; với desktop, các pha y hệt nhưng artifacts nằm ở `docs/`, runner là `pytest`, "selector"
+> là `objectName` — chi tiết trong `profiles/desktop-pyside6.md`. Target khác (from-docs, blackbox) trên lộ trình.
 
 ---
 

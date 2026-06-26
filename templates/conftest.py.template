@@ -1,0 +1,19 @@
+import pytest
+from app.main_window import MainWindow
+
+
+@pytest.fixture
+def main_window(qtbot):
+    """Tạo cửa sổ chính mới cho mỗi test; qtbot tự dọn dẹp (test độc lập)."""
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    return window
+
+
+@pytest.fixture(autouse=True)
+def isolate_settings(tmp_path, monkeypatch):
+    """Cô lập trạng thái: QSettings/ file ghi vào thư mục tạm, không nhiễm chéo giữa các test."""
+    monkeypatch.setenv("HOME", str(tmp_path))          # tách file cấu hình người dùng
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / ".config"))
+    # Nếu app dùng đường dẫn DB/cấu hình riêng → patch thêm tại đây.

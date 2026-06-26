@@ -1,0 +1,8 @@
+[pytest]
+qt_api = pyside6
+testpaths = tests
+addopts = -q
+markers =
+    smoke: nhóm smoke test (critical path)
+    regression: nhóm regression đầy đủ
+    edge: nhóm edge case

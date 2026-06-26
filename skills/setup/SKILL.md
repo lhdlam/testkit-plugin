@@ -49,9 +49,13 @@ Tạo `pytest.ini` (`qt_api = pyside6`), thư mục `tests/{screens,fixtures}`, 
 
 ## Bước 4 — Ghi target & khởi tạo state
 
+Artifacts root theo target: **web-*** → `e2e-tests/docs`; **desktop-pyside6** → `docs` (test chung repo app).
+Override bằng `TESTKIT_ROOT`. Hook tự dò cả hai vị trí.
+
 ```bash
-mkdir -p "${TESTKIT_ROOT:-e2e-tests/docs}"
-printf '%s\n' "<target>" > "${TESTKIT_ROOT:-e2e-tests/docs}/.testkit-target"
+ROOT="${TESTKIT_ROOT:-e2e-tests/docs}"   # desktop-pyside6: ROOT=docs
+mkdir -p "$ROOT"
+printf '%s\n' "<target>" > "$ROOT/.testkit-target"
 ```
 
 ## Đầu ra
