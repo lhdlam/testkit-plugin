@@ -1,0 +1,29 @@
+import { Page, Locator } from '@playwright/test';
+
+// Page Object mẫu — agent dựa vào đây để sinh POM cho các màn hình khác.
+// Selector ưu tiên getByRole > getByLabel > getByTestId. goto() dùng đường dẫn TƯƠNG ĐỐI.
+export class LoginPage {
+  readonly page: Page;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+  readonly errorMessage: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Mật khẩu');
+    this.loginButton = page.getByRole('button', { name: 'Đăng nhập' });
+    this.errorMessage = page.getByRole('alert');
+  }
+
+  async goto() {
+    await this.page.goto('/login');   // baseURL từ .env, KHÔNG hardcode
+  }
+
+  async login(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+}

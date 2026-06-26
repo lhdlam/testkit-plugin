@@ -63,13 +63,27 @@ PreToolUse hook cưỡng chế → **các gate là advisory** (agent tự giác)
 /testkit:ci          → Phase 6: workflow CI
 ```
 
-Tăng trưởng: `/testkit:new-feature` — chỉ sinh test cho 1 feature (qua git diff hoặc mô tả).
+> Hướng dẫn từng bước chi tiết cho tester: xem [USAGE.md](USAGE.md).
 
 ## Trạng thái & gate
 
 Artifact sống trong `${TESTKIT_ROOT:-e2e-tests/docs}/`. Mỗi artifact có dòng cuối
 `> Review: PENDING|APPROVED`. Trên Claude Code, `pre-tool-gate.sh` chặn pha sau tới khi
 pha trước `APPROVED`. Trên Cursor là advisory.
+
+## Trạng thái phát triển (roadmap)
+
+| Mốc | Nội dung | Trạng thái |
+|---|---|---|
+| **M1** | Target `web-playwright` end-to-end (6 pha + gate + templates + test) | ✅ Xong |
+| M2 | Target `desktop-pyside6` (pytest-qt, monkeypatch modal, headless) | ⬜ Kế hoạch |
+| M3 | Target `web-from-docs` + `web-blackbox` (RTM, ui-map qua MCP) | ⬜ Kế hoạch |
+| M4 | Cursor bridge đầy đủ (mirror `.cursor/rules/` tự động) | 🟡 Một phần (template sẵn) |
+| M5 | Subagents: `coverage-auditor`, `failure-classifier`, `selector-stability`, `test-integrity` | ⬜ Kế hoạch |
+| M6 | `/testkit:new-feature` (incremental qua git diff / mô tả) + coverage dashboard | ⬜ Kế hoạch |
+
+> Hiện chỉ profile `web-playwright` được hiện thực đầy đủ. Các target/subagent/command khác trong
+> bảng kiến trúc là lộ trình — `profiles/` và `agents/` sẽ được bổ sung ở các mốc sau.
 
 ## License
 
