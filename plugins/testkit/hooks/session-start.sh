@@ -7,7 +7,10 @@ set -uo pipefail
 for ROOT in "${TESTKIT_ROOT:-}" "e2e-tests/docs" "docs"; do
     [[ -n "$ROOT" && -f "$ROOT/.testkit-target" ]] || continue
     target="$(tr -d '[:space:]' < "$ROOT/.testkit-target" 2>/dev/null || echo '')"
-    [[ -n "$target" ]] && echo "[testkit] target = $target (artifacts in $ROOT/). Run /testkit:analyze → cases → scenarios → script → run → ci."
+    lang="${TESTKIT_LANG:-}"
+    [[ -z "$lang" && -f "$ROOT/.testkit-lang" ]] && lang="$(tr -d '[:space:]' < "$ROOT/.testkit-lang" 2>/dev/null || echo '')"
+    [[ -z "$lang" ]] && lang="vi"
+    [[ -n "$target" ]] && echo "[testkit] target = $target | lang = $lang (artifacts in $ROOT/). Run /testkit:analyze → cases → scenarios → script → run → ci."
     exit 0
 done
 

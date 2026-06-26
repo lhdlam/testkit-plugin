@@ -8,6 +8,8 @@ license: MIT
 
 Mục tiêu: test **xanh ổn định, không flaky** — và KHÔNG che giấu bug thật.
 
+> **Ngôn ngữ:** `bugs.md`/`env-issues.md` + báo cáo viết theo `lang` (`.testkit-lang`/`TESTKIT_LANG`, mặc định `vi`).
+
 ## Lệnh chạy (theo target)
 - web-*: `TEST_ENV=staging npx playwright test --reporter=list` (đọc trace: `npx playwright show-trace`).
 - desktop: `QT_QPA_PLATFORM=offscreen pytest -q` (Linux không offscreen: `xvfb-run --auto-servernum pytest -q`).

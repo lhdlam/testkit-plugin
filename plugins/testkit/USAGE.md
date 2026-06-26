@@ -66,8 +66,14 @@ chỗ bạn kiểm soát chất lượng — đừng duyệt cho có.
 ## 2. Đi qua pipeline (ví dụ: module Login)
 
 ### Phase 0 — `/testkit:init`
-Agent hỏi/đoán target (chọn **web-playwright**), scaffold `e2e-tests/`, cài Playwright + dotenv,
-sinh `CLAUDE.md` (quy ước viết test), `playwright.config.ts`, và `.cursor/rules/` nếu dùng Cursor.
+Agent hỏi/đoán target (chọn **web-playwright**), **hỏi ngôn ngữ (en/vi, mặc định vi)**, scaffold `e2e-tests/`,
+cài Playwright + dotenv, sinh `CLAUDE.md` (quy ước viết test, kèm directive ngôn ngữ), `playwright.config.ts`,
+và `.cursor/rules/` nếu dùng Cursor.
+
+> **Ngôn ngữ (en/vi):** lựa chọn lúc init quyết định ngôn ngữ của **tài liệu sinh ra** (feature-map,
+> test-cases, scenarios, bugs...) và **cách agent trả lời bạn**. Lưu trong `.testkit-lang`. Đổi bất kỳ lúc
+> nào: sửa file đó thành `en`/`vi`, hoặc `export TESTKIT_LANG=en`, hoặc nói thẳng "trả lời tiếng Anh".
+> Code/định danh/từ khoá framework luôn giữ tiếng Anh.
 
 Sau đó **bạn điền** thông tin môi trường:
 ```bash

@@ -15,6 +15,11 @@ Khi user gõ `/testkit:<name>`:
 2. Làm theo nội dung (đa số wrap một skill cùng tên trong `<plugin>/skills/<name>/SKILL.md`).
 3. Đọc `<plugin>/profiles/<target>.md` để biết luật của target hiện tại.
 
+## Ngôn ngữ (en/vi)
+Viết MỌI artifact + MỌI câu trả lời theo `lang` đọc từ `.testkit-lang` (hoặc `TESTKIT_LANG`, mặc định `vi`).
+KHÔNG dịch code/định danh/từ khoá framework (getByRole, qtbot, TC-LOGIN-01, @smoke). User yêu cầu ngôn ngữ
+khác trong câu hỏi thì ưu tiên theo user.
+
 ## Quy ước (xem CLAUDE.md để biết bản đầy đủ)
 - Agent viết test, framework chạy test. Selector bền vững. Test độc lập, tự tạo/tự dọn dữ liệu.
 - KHÔNG green-washing: nghi bug → ghi docs/bugs.md, không sửa test cho xanh.

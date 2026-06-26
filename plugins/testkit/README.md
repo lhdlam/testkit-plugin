@@ -68,6 +68,13 @@ feature mới (scope qua git diff hoặc mô tả), không quét lại cả repo
 
 > Hướng dẫn từng bước chi tiết cho tester: xem [USAGE.md](USAGE.md).
 
+## Ngôn ngữ (en/vi)
+
+`/testkit:init` hỏi ngôn ngữ cho **tài liệu sinh ra** và **giao tiếp với agent** (`vi` mặc định, hoặc `en`),
+lưu trong `${TESTKIT_ROOT}/.testkit-lang` và baked vào `CLAUDE.md`. Ưu tiên: yêu cầu trực tiếp của user >
+`TESTKIT_LANG` env > `.testkit-lang` > `vi`. Code, định danh (`TC-LOGIN-01`), từ khoá framework luôn giữ
+tiếng Anh. Đổi bất kỳ lúc nào bằng cách sửa `.testkit-lang` hoặc `export TESTKIT_LANG=en`.
+
 ## Trạng thái & gate
 
 Artifact sống trong `${TESTKIT_ROOT:-e2e-tests/docs}/`. Mỗi artifact có dòng cuối

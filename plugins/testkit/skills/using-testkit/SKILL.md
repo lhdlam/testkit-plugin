@@ -21,6 +21,25 @@ pytest-qt) **chạy** test. Bạn (agent) đi qua một pipeline 6 pha, mỗi ph
 4. **KHÔNG bịa.** Không bịa yêu cầu (bám code/tài liệu/UI thật), không đoán selector.
 5. **User instructions > skill.** CLAUDE.md / yêu cầu trực tiếp của user luôn thắng.
 
+## Ngôn ngữ (en/vi)
+
+testkit hỗ trợ 2 ngôn ngữ cho **tài liệu sinh ra** và **giao tiếp hỏi-đáp**. Thứ tự ưu tiên khi xác định `lang`:
+
+1. Yêu cầu trực tiếp của user trong câu hỏi ("trả lời bằng tiếng Anh") — cao nhất.
+2. Biến môi trường `TESTKIT_LANG` (`en` | `vi`).
+3. File `${TESTKIT_ROOT}/.testkit-lang` (do `/testkit:init` ghi; probe `e2e-tests/docs` rồi `docs`).
+4. Mặc định: `vi`.
+
+**Phạm vi áp dụng `lang`:**
+- **MỌI artifact** (feature-map, test-cases, rtm, scenarios, ui-map, bugs, env-issues, open-questions...) viết bằng `lang`.
+- **MỌI câu trả lời/giải thích/câu hỏi** của agent với user viết bằng `lang`.
+- Tiêu đề cột bảng, mô tả test case, Expected Result, nhãn phân loại lỗi → theo `lang`.
+
+**KHÔNG dịch (luôn giữ nguyên):** code, tên biến/hàm/class, từ khoá framework (`getByRole`, `qtbot`, `expect`),
+tên file, lệnh shell, mã định danh (`TC-LOGIN-01`, `REQ-012`, tag `@smoke`). Tên test theo convention trong CLAUDE.md.
+
+Đổi ngôn ngữ bất kỳ lúc nào: sửa `.testkit-lang` (1 dòng `en` hoặc `vi`) hoặc `export TESTKIT_LANG=en`.
+
 ## Pipeline & skill tương ứng
 
 | Pha | Skill | Artifact | Command |

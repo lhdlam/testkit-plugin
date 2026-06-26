@@ -18,6 +18,15 @@ Hỏi user (AskUserQuestion) nếu chưa rõ; hoặc auto-detect:
 
 **Đọc `${TESTKIT_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/profiles/<target>.md`** — nó quyết định toàn bộ các pha sau.
 
+## Bước 1b — Chọn ngôn ngữ (en/vi)
+
+Hỏi user (AskUserQuestion) ngôn ngữ cho **tài liệu sinh ra + giao tiếp hỏi-đáp**:
+- `vi` — Tiếng Việt (mặc định)
+- `en` — English
+
+Ghi nhớ lựa chọn này; nó được dùng ở Bước 3 (CLAUDE.md) và Bước 4 (.testkit-lang), và mọi pha sau tuân theo
+(xem `using-testkit` → "Ngôn ngữ"). Nếu user không quan tâm → mặc định `vi`.
+
 ## Bước 2 — Scaffold theo layout của profile
 
 **web-* targets:**
@@ -44,6 +53,9 @@ Tạo `pytest.ini` (`qt_api = pyside6`), thư mục `tests/{screens,fixtures}`, 
 
 1. Đọc template `${TESTKIT_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/templates/CLAUDE.md.<target>.template`,
    điền theo project, ghi ra `CLAUDE.md` ở gốc dự án test.
+   - **Theo `lang` đã chọn:** nếu `lang=en`, dịch nội dung template sang tiếng Anh khi ghi CLAUDE.md (template gốc là tiếng Việt); nếu `vi`, giữ nguyên.
+   - Thêm vào đầu CLAUDE.md một dòng directive: `- Ngôn ngữ tài liệu & giao tiếp: <lang> (đổi trong .testkit-lang).`
+     (en: `- Output & chat language: <lang> (change in .testkit-lang).`) — để mọi phiên Claude tự áp dụng vì CLAUDE.md luôn được đọc.
 2. **Cursor**: copy template `${TESTKIT_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/templates/cursor-rules.testkit.mdc.template`
    → `.cursor/rules/testkit.mdc` (frontmatter `alwaysApply: true`). File này gộp cả quy ước + slash bridge
    (user gõ `/testkit:X` → đọc `commands/X.md`) + nhắc gate là **advisory** trên Cursor. Đồng bộ phần "Quy ước"
@@ -59,10 +71,12 @@ Override bằng `TESTKIT_ROOT`. Hook tự dò cả hai vị trí.
 ROOT="${TESTKIT_ROOT:-e2e-tests/docs}"   # desktop-pyside6: ROOT=docs
 mkdir -p "$ROOT"
 printf '%s\n' "<target>" > "$ROOT/.testkit-target"
+printf '%s\n' "<lang>"   > "$ROOT/.testkit-lang"     # en | vi (mặc định vi)
 ```
 
 ## Đầu ra
-Dự án sẵn sàng + `CLAUDE.md` + (Cursor) `.cursor/rules/` + config runner + `.testkit-target`.
-Báo user các thông tin còn thiếu cần cung cấp: URL Staging/UAT, tài khoản test, (from-docs) thư mục tài liệu.
+Dự án sẵn sàng + `CLAUDE.md` (kèm directive ngôn ngữ) + (Cursor) `.cursor/rules/` + config runner +
+`.testkit-target` + `.testkit-lang`.
+Báo user (bằng `lang` đã chọn) các thông tin còn thiếu: URL Staging/UAT, tài khoản test, (from-docs) thư mục tài liệu.
 
 → Bước tiếp: `/testkit:analyze`.

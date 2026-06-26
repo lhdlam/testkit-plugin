@@ -9,6 +9,8 @@ license: MIT
 Mục tiêu: hiểu ứng dụng (luồng, input/output, validation, phân quyền) → `feature-map.md`.
 **KHÔNG viết test ở pha này.**
 
+> **Ngôn ngữ:** viết artifact + trả lời theo `lang` (`.testkit-lang`/`TESTKIT_LANG`, mặc định `vi`) — xem `using-testkit`.
+
 ## Đọc profile trước
 Đọc `profiles/<target>.md` (target lấy từ `${TESTKIT_ROOT:-e2e-tests/docs}/.testkit-target`).
 Nguồn hiểu biết tùy target:
