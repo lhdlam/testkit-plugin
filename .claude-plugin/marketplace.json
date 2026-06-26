@@ -9,12 +9,7 @@
     {
       "name": "testkit",
       "description": "AI test-automation toolkit. Declarative 6-phase pipeline + pluggable target profiles (web-playwright, web-from-docs, web-blackbox, desktop-pyside6). Agent writes tests, Playwright/pytest runs them. For testers. Claude Code (enforced) + Cursor (advisory).",
-      "source": {
-        "source": "git-subdir",
-        "url": "https://github.com/lhdlam/testkit-plugin.git",
-        "path": ".",
-        "ref": "main"
-      },
+      "source": ".",
       "category": "testing",
       "author": { "name": "lhdlam" },
       "homepage": "https://github.com/lhdlam/testkit-plugin"
