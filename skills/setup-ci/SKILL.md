@@ -24,8 +24,11 @@ Workflow `.github/workflows/desktop-tests.yml`:
   với `QT_QPA_PLATFORM=offscreen`. Windows/macOS runner có desktop → `pytest` thẳng.
 - Cài deps từ `requirements-dev.txt`. Fail pipeline nếu có test đỏ.
 
-## Lấy template
-Đọc `${TESTKIT_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/templates/ci-<target>.yml.template`, điền theo project, ghi vào `.github/workflows/`.
+## Lấy template (resolve theo họ runner)
+- target `web-*` (playwright/from-docs/blackbox) → `templates/ci-web.yml.template`
+- target `desktop-pyside6` → `templates/ci-desktop-pyside6.yml.template`
+
+Đọc `${TESTKIT_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/templates/<file>`, điền theo project, ghi vào `.github/workflows/`.
 
 ## Kết thúc
 Báo user: cấu hình Secrets nào cần đặt (BASE_URL, TEST_USER_*), lịch chạy đề xuất. Pipeline hoàn tất.

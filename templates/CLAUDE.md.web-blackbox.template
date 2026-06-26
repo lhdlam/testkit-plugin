@@ -1,0 +1,16 @@
+# Quy ước viết test cho dự án này (web-blackbox)
+
+- KHÔNG có source code, KHÔNG có tài liệu đáng tin → mọi hiểu biết & selector lấy từ khám phá
+  Staging thật qua Playwright MCP. KHÔNG đoán selector, KHÔNG bịa luồng.
+- Khi khám phá Staging: CHỈ khám phá, KHÔNG tạo dữ liệu rác / thao tác phá hoại.
+- Kiến thức domain của tester là tối quan trọng — bổ sung luồng cần kiểm ở mỗi điểm review.
+- Test chạy trên môi trường DEPLOY: goto() đường dẫn tương đối, baseURL từ .env, KHÔNG hardcode URL/credential.
+- Page Object Model; selector ưu tiên getByRole > getByLabel > getByTestId.
+- Mỗi test gắn comment ID test case (vd // TC-LOGIN-01). Mỗi test độc lập.
+- Môi trường dùng chung: tự tạo & dọn dữ liệu (timestamp), không phá dữ liệu người khác.
+- Nghi app có bug → ghi e2e-tests/docs/bugs.md, KHÔNG sửa test cho xanh.
+- Lỗi do môi trường (Staging down/mạng/data drift): ghi e2e-tests/docs/env-issues.md, KHÔNG sửa test.
+
+## testkit pipeline
+Chạy theo pha /testkit:analyze → cases → scenarios → script → run → ci. Artifacts ở e2e-tests/docs/.
+Mỗi artifact phải > Review: APPROVED trước khi sang pha sau.

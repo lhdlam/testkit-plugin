@@ -31,6 +31,7 @@ Cài Playwright MCP (then chốt cho black-box/from-docs):
 ```bash
 claude mcp add playwright npx @playwright/mcp@latest --scope project   # tạo .mcp.json (commit)
 ```
+**web-from-docs**: tạo thêm `e2e-tests/input/docs/` và nhắc user bỏ TẤT CẢ tài liệu dự án (pdf/docx/md/slide) vào đó.
 
 **desktop-pyside6:**
 ```bash

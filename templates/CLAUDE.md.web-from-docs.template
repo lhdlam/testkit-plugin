@@ -1,0 +1,17 @@
+# Quy ước viết test cho dự án này (web-from-docs)
+
+- Nguồn yêu cầu: input/docs/ (toàn bộ tài liệu dự án).
+- Sinh test case BÁM SÁT tài liệu. KHÔNG bịa yêu cầu không có trong tài liệu.
+  Nếu tài liệu thiếu/mâu thuẫn → ghi e2e-tests/docs/open-questions.md cho con người, KHÔNG tự suy diễn.
+- Mỗi test case phải truy vết được về nguồn (tên tài liệu + mục/yêu cầu) trong rtm.md.
+- KHÔNG có source code → mọi selector lấy từ khám phá Staging thật qua Playwright MCP, KHÔNG đoán.
+- Test chạy trên môi trường DEPLOY: goto() đường dẫn tương đối, baseURL từ .env, KHÔNG hardcode URL/credential.
+- Mỗi test gắn comment ID test case + nguồn yêu cầu (vd // TC-005 ← REQ-012 ← SRS §4.2).
+- Page Object Model; selector ưu tiên getByRole > getByLabel > getByTestId.
+- Mỗi test độc lập. Môi trường dùng chung: tự tạo & dọn dữ liệu (timestamp), không phá dữ liệu người khác.
+- Khi sản phẩm chạy khác tài liệu: KHÔNG sửa test cho khớp sản phẩm, ghi e2e-tests/docs/bugs.md.
+- Lỗi do môi trường (Staging down/mạng/data drift): ghi e2e-tests/docs/env-issues.md, KHÔNG sửa test.
+
+## testkit pipeline
+Chạy theo pha /testkit:analyze → cases → scenarios → script → run → ci. Artifacts ở e2e-tests/docs/.
+GIẢI open-questions.md TRƯỚC khi sinh test case. Mỗi artifact phải > Review: APPROVED trước khi sang pha sau.
