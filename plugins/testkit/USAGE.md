@@ -17,7 +17,10 @@ cho agent đi tiếp. Agent viết test, **Playwright chạy test**.
 - **Node.js 18+** (`node --version`).
 - **URL môi trường deploy**: `STAGING_URL` (và `UAT_URL` nếu có). testkit KHÔNG dựng app ở local.
 - **Tài khoản test riêng** cho automation trên Staging (tách khỏi tài khoản người thật).
-- (Khuyến nghị) **Playwright MCP** để agent mở Staging xác thực selector.
+- (Khuyến nghị) **Playwright MCP** để agent mở Staging xác thực selector. KHÔNG cần để *chạy* test —
+  chỉ để agent tìm/verify selector. **Bắt buộc** cho `web-from-docs`/`web-blackbox`, khuyến nghị cho
+  `web-playwright`, không dùng cho desktop. Cài nhanh: `/testkit:mcp` (hoặc chạy
+  `scripts/install-playwright-mcp.sh`).
 
 ### Cài plugin
 

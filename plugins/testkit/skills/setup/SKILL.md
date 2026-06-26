@@ -36,10 +36,12 @@ npm init playwright@latest        # chọn TypeScript, thư mục tests, thêm G
 npm i -D dotenv
 ```
 Tạo `e2e-tests/docs/`, `.env.staging`/`.env.uat`/`.env.example`, `.gitignore` (bỏ `.env.*`, `node_modules`, `playwright-report`, `tests/fixtures/.auth/`).
-Cài Playwright MCP (then chốt cho black-box/from-docs):
+Cài Playwright MCP (then chốt cho black-box/from-docs; khuyến nghị cho web-playwright) — dùng quick-installer:
 ```bash
-claude mcp add playwright npx @playwright/mcp@latest --scope project   # tạo .mcp.json (commit)
+bash "${TESTKIT_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/scripts/install-playwright-mcp.sh" --scope project
+# Cursor: thêm --cursor   |   pin version: --version 0.0.x
 ```
+(Tương đương `claude mcp add playwright npx @playwright/mcp@latest --scope project` + verify.) Bỏ qua nếu target là desktop-pyside6.
 **web-from-docs**: tạo thêm `e2e-tests/input/docs/` và nhắc user bỏ TẤT CẢ tài liệu dự án (pdf/docx/md/slide) vào đó.
 
 **desktop-pyside6:**

@@ -52,6 +52,7 @@ tên file, lệnh shell, mã định danh (`TC-LOGIN-01`, `REQ-012`, tag `@smoke
 | 5 Chạy/heal | `run-and-heal` | test xanh + `bugs.md`/`env-issues.md` | `/testkit:run` |
 | 6 CI | `setup-ci` | workflow CI | `/testkit:ci` |
 | ↻ Incremental | `new-feature` | artifact + test cho 1 feature (`*-feat-xxxx`) | `/testkit:new-feature` |
+| ⚙ Helper | (script) | cài Playwright MCP (web: discover/verify selector) | `/testkit:mcp` |
 
 ## Target profile
 
