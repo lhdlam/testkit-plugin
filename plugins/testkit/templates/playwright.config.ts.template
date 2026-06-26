@@ -11,6 +11,9 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    // Watch/demo: SLOWMO=500 npx playwright test --headed --workers=1
+    // Mặc định 0 → không ảnh hưởng chạy headless/CI.
+    launchOptions: { slowMo: Number(process.env.SLOWMO) || 0 },
   },
   retries: 2,                             // Staging chập chờn hơn local
   reporter: [['html'], ['list']],

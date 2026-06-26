@@ -131,6 +131,18 @@ Với mỗi test fail, agent **phân loại trước khi sửa**:
 
 Lặp `/testkit:run` tới khi xanh ổn định.
 
+### (Tùy chọn) `/testkit:watch` — xem UI thao tác thật
+Khi muốn **nhìn test chạy** để demo hoặc soát case (cần máy có màn hình):
+```bash
+# web — Playwright UI mode (tốt nhất để soát coverage):
+cd e2e-tests && TEST_ENV=staging npx playwright test --ui
+# web — mở trình duyệt thật, chậm, 1 luồng:
+TEST_ENV=staging SLOWMO=500 npx playwright test --headed --workers=1 --grep @smoke
+# desktop — hiển thị app + slow-mo:
+UI_SLOWMO=500 pytest -s tests/test_login.py
+```
+CI thì vẫn luôn headless — watch chỉ để debug/demo.
+
 ### Phase 6 — `/testkit:ci`
 Agent sinh `.github/workflows/e2e-tests.yml` trỏ Staging: smoke mỗi deploy, full regression nightly.
 Bạn đặt Secrets trên CI: `STAGING_BASE_URL`, `TEST_USER_EMAIL`, `TEST_USER_PASSWORD`.
