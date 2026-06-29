@@ -1,0 +1,1250 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>testkit — Hướng dẫn sử dụng</title>
+    <style>
+      /* ──────────────────────────────────────────────────────────
+         Tokens — Mint (light) + Abyss (dark) · bản sắc riêng testkit
+         tông teal/mint lạnh (gợi "pass") thay cho cam ấm
+         ────────────────────────────────────────────────────────── */
+      :root {
+        --bg: #f4f8f7;
+        --bg-elev: #ffffff;
+        --bg-subtle: #e7efed;
+        --bg-window: #dde8e5;
+        --fg: #122019;
+        --fg-muted: #46574f;
+        --fg-subtle: #84968e;
+        --border: #d6e2de;
+        --border-strong: #b4c6c0;
+        --accent: #0d8a72;
+        --accent-fg: #ffffff;
+        --code-bg: #eef5f3;
+        --code-fg: #122019;
+        --code-key: #0d8a72;
+        --code-str: #9a5a14;
+        --code-num: #a4502c;
+        --code-com: #84968e;
+        --code-prompt: #0d8a72;
+        --shadow-1: 0 1px 2px rgba(8, 40, 33, 0.05);
+        --shadow-2: 0 4px 14px rgba(8, 40, 33, 0.08);
+        --shadow-3: 0 16px 48px rgba(8, 40, 33, 0.12);
+        --traffic-red: #ff5f56;
+        --traffic-yellow: #ffbd2e;
+        --traffic-green: #27c93f;
+        --bg-nav: rgba(244, 248, 247, 0.85);
+        --accent-soft: rgba(13, 138, 114, 0.09);
+      }
+      [data-theme="dark"] {
+        --bg: #0c1413;
+        --bg-elev: #121d1a;
+        --bg-subtle: #18241f;
+        --bg-window: #080f0d;
+        --fg: #eaf4f0;
+        --fg-muted: #9ab0a9;
+        --fg-subtle: #677a73;
+        --border: #233330;
+        --border-strong: #324640;
+        --accent: #2dd4a7;
+        --accent-fg: #07120e;
+        --code-bg: #080f0d;
+        --code-fg: #eaf4f0;
+        --code-key: #2dd4a7;
+        --code-str: #e3b878;
+        --code-num: #f0a481;
+        --code-com: #677a73;
+        --code-prompt: #2dd4a7;
+        --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-2: 0 4px 12px rgba(0, 0, 0, 0.5);
+        --shadow-3: 0 16px 48px rgba(0, 0, 0, 0.6);
+        --bg-nav: rgba(12, 20, 19, 0.85);
+        --accent-soft: rgba(45, 212, 167, 0.13);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family:
+          "Geist", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: "ss01", "cv11";
+      }
+      .mono,
+      pre,
+      code {
+        font-family:
+          "Geist Mono", "JetBrains Mono", "Fira Code", "SF Mono", Menlo, Consolas,
+          monospace;
+        font-feature-settings: "calt" 0;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* Use case panels ─────────────────────────────────────────── */
+      .panel {
+        display: none;
+      }
+      .panel.active {
+        display: block;
+      }
+      .panel-head {
+        margin-bottom: 16px;
+      }
+      .panel-head h2 {
+        margin: 0 0 4px;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .panel-head p {
+        margin: 0;
+        color: var(--fg-muted);
+        font-size: 13.5px;
+      }
+      .panel-head p + p {
+        margin-top: 8px;
+      }
+      .panel-head p.callout {
+        background: var(--bg-subtle);
+        border-left: 3px solid var(--accent);
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 12px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: var(--bg-subtle);
+        border: 1px solid var(--border);
+        color: var(--fg);
+        font-size: 11.5px;
+        font-weight: 500;
+        padding: 4px 9px;
+        border-radius: 999px;
+      }
+      .chip.accent {
+        background: var(--accent);
+        color: var(--accent-fg);
+        border-color: transparent;
+      }
+      .chip.muted {
+        color: var(--fg-muted);
+      }
+
+      /* Phase + Terminal block ──────────────────────────────────── */
+      .phase {
+        margin: 20px 0;
+      }
+      .phase-title {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin: 0 0 8px;
+        font-size: 14px;
+        font-weight: 600;
+        flex-wrap: wrap;
+      }
+      .phase-num {
+        color: var(--accent);
+        font-family: "Geist Mono", monospace;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .phase-desc {
+        color: var(--fg-muted);
+        font-weight: 400;
+        font-size: 12.5px;
+      }
+      .term {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-2);
+      }
+      .term-bar {
+        background: var(--bg-window);
+        border-bottom: 1px solid var(--border);
+        padding: 9px 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .lights {
+        display: inline-flex;
+        gap: 6px;
+        margin-right: 10px;
+      }
+      .light {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: var(--traffic-red);
+      }
+      .light:nth-child(2) {
+        background: var(--traffic-yellow);
+      }
+      .light:nth-child(3) {
+        background: var(--traffic-green);
+      }
+      .term-title {
+        font-family: "Geist Mono", monospace;
+        font-size: 11.5px;
+        color: var(--fg-muted);
+      }
+      .term-body {
+        padding: 14px 16px 16px;
+        font-family: "Geist Mono", monospace;
+        font-size: 12.5px;
+        line-height: 1.65;
+        color: var(--code-fg);
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Geist Mono", monospace;
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--fg-subtle);
+        margin-bottom: 6px;
+      }
+      .label.input {
+        color: var(--code-prompt);
+      }
+      .label.output {
+        color: var(--code-key);
+      }
+      .label.gate {
+        color: var(--accent);
+      }
+      .skill-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: var(--bg-subtle);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 2px 7px;
+        font-family: "Geist Mono", monospace;
+        font-size: 10.5px;
+        color: var(--fg);
+        margin-left: 6px;
+      }
+      .skill-chip.gate {
+        background: var(--accent);
+        color: var(--accent-fg);
+        border-color: transparent;
+      }
+      hr.sep {
+        border: 0;
+        border-top: 1px dashed var(--border);
+        margin: 12px 0;
+      }
+      .tprompt {
+        color: var(--code-prompt);
+        font-weight: 600;
+      }
+      .tcmd {
+        color: var(--code-fg);
+      }
+      .tflag {
+        color: var(--code-key);
+      }
+      .tstr {
+        color: var(--code-str);
+      }
+      .tnum {
+        color: var(--code-num);
+      }
+      .tcom {
+        color: var(--code-com);
+        font-style: italic;
+      }
+      .tok-add {
+        color: var(--code-str);
+      }
+      .tok-rm {
+        color: #d35a4f;
+      }
+      .tok-warn {
+        color: #f1d09e;
+      }
+      .tok-bad {
+        color: #ff7066;
+      }
+      .tok-ok {
+        color: var(--code-str);
+      }
+      .filebox {
+        background: var(--bg-subtle);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px 12px;
+        margin: 8px 0;
+        font-family: "Geist Mono", monospace;
+        font-size: 11.5px;
+        color: var(--fg-muted);
+      }
+      .filebox .fname {
+        color: var(--code-key);
+      }
+
+      @media (max-width: 720px) {
+        .term-body {
+          font-size: 11.5px;
+        }
+      }
+
+      /* ─── LAYOUT: topnav + sidebar + main ─────────────── */
+      .topnav {
+        position: sticky; top: 0; z-index: 20;
+        background: var(--bg-nav);
+        backdrop-filter: saturate(180%) blur(8px);
+        -webkit-backdrop-filter: saturate(180%) blur(8px);
+        border-bottom: 1px solid var(--border);
+      }
+      .topnav-inner {
+        max-width: 1280px; margin: 0 auto;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 10px 24px; gap: 16px;
+      }
+      .brand {
+        display: flex; align-items: center; gap: 8px;
+        font-weight: 700; font-size: 15px; color: var(--fg);
+        text-decoration: none;
+      }
+      .brand:hover { text-decoration: none; }
+      .brand .dot-mark {
+        display: inline-block; width: 16px; height: 16px;
+        border-radius: 50%; background: transparent;
+        border: 4px solid var(--accent);
+      }
+      .brand .sub { font-weight: 400; color: var(--fg-muted); font-size: 13px; }
+      .nav-actions { display: flex; align-items: center; gap: 10px; }
+      .nav-actions a, .nav-actions .toggle {
+        background: transparent; color: var(--fg-muted);
+        border: 1px solid var(--border); border-radius: 6px;
+        padding: 5px 10px; font-size: 12px; cursor: pointer;
+        text-decoration: none;
+      }
+      .nav-actions a:hover, .nav-actions .toggle:hover {
+        border-color: var(--border-strong); color: var(--fg); text-decoration: none;
+      }
+      .nav-actions a.primary {
+        background: var(--accent); color: #fff; border-color: var(--accent);
+      }
+      .nav-actions a.primary:hover { opacity: .9; color: #fff; }
+
+      .layout {
+        max-width: 1280px; margin: 0 auto;
+        display: grid; grid-template-columns: 250px 1fr;
+        gap: 40px; padding: 32px 24px 80px;
+      }
+      .sidebar {
+        position: sticky; top: 76px; align-self: start;
+        max-height: calc(100vh - 96px); overflow-y: auto;
+        padding-right: 8px; padding-bottom: 24px;
+      }
+      .sidebar::-webkit-scrollbar { width: 6px; }
+      .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+      .sb-group { margin: 0 0 18px; }
+      .sb-group-title {
+        font-size: 11px; font-weight: 600; text-transform: uppercase;
+        color: var(--fg-subtle); letter-spacing: 0.08em;
+        margin: 0 0 4px; padding: 4px 10px;
+      }
+      .sidebar a {
+        display: block; padding: 5px 10px; margin: 1px 0;
+        border-radius: 5px; color: var(--fg); font-size: 13.5px;
+        text-decoration: none; line-height: 1.4;
+      }
+      .sidebar a:hover {
+        background: var(--bg-subtle); color: var(--accent);
+        text-decoration: none;
+      }
+      .sidebar a:focus:not(:focus-visible) { outline: none; }
+      .sidebar .uc-link.active {
+        background: var(--accent-soft); color: var(--accent); font-weight: 600;
+      }
+      .sidebar .uc-num { color: var(--fg-subtle); font-size: 12px; margin-right: 6px; }
+      .sidebar .uc-link.active .uc-num { color: var(--accent); }
+      .sidebar .step-list {
+        list-style: none; margin: 2px 0 6px; padding: 0 0 4px 14px;
+        border-left: 1px solid var(--border);
+        display: none;
+      }
+      .sidebar .uc-link.active + .step-list { display: block; }
+      .sidebar .step-list a {
+        padding: 3px 8px; font-size: 12.5px; color: var(--fg-muted);
+        border-radius: 4px;
+      }
+      .sidebar .step-list a:hover { color: var(--accent); }
+      .sidebar .step-list a.active {
+        color: var(--accent); font-weight: 600;
+        background: var(--accent-soft);
+      }
+
+      .content { min-width: 0; }
+      .hero-v2 { padding: 4px 0 16px; margin-bottom: 8px; }
+      .hero-v2 .eyebrow {
+        display: inline-block; font-size: 11px; font-weight: 600;
+        color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em;
+        padding: 3px 9px; background: var(--accent-soft);
+        border-radius: 999px; margin-bottom: 14px;
+      }
+      .hero-v2 h1 {
+        font-size: 32px; font-weight: 700; margin: 0 0 14px;
+        letter-spacing: -0.02em; line-height: 1.15;
+      }
+      .hero-v2 .lede {
+        font-size: 16px; color: var(--fg-muted); margin: 0 0 8px;
+        line-height: 1.55; max-width: 760px;
+      }
+      .hero-v2 .lede code { font-size: 0.92em; }
+      .hero-v2 .lede-small { font-size: 13.5px; color: var(--fg-muted); }
+
+      /* prose helpers ───────────────────────────────────────────── */
+      .prose { max-width: 820px; }
+      .prose h3 { font-size: 16px; font-weight: 700; margin: 24px 0 6px; }
+      .prose p { color: var(--fg-muted); font-size: 14px; margin: 8px 0; }
+      .prose ul { color: var(--fg-muted); font-size: 14px; padding-left: 22px; }
+      .prose li { margin: 5px 0; }
+      .prose code { font-size: 0.9em; background: var(--bg-subtle); padding: 1px 5px; border-radius: 4px; }
+      table.t { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13.5px; }
+      table.t th, table.t td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+      table.t thead th { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--fg-muted); font-weight: 600; }
+      table.t td code { font-size: 12px; }
+
+      .footer-v2 {
+        margin-top: 56px; padding: 20px 0;
+        border-top: 1px solid var(--border);
+        font-size: 13px; color: var(--fg-muted);
+        display: flex; gap: 20px; flex-wrap: wrap; align-items: center;
+      }
+      .footer-v2 a { color: var(--fg-muted); }
+      .footer-v2 a:hover { color: var(--accent); }
+      .footer-v2 .meta-tag { margin-left: auto; color: var(--fg-subtle); font-size: 12px; }
+
+      @media (max-width: 960px) {
+        .layout { grid-template-columns: 1fr; gap: 24px; padding: 20px 16px 60px; }
+        .sidebar {
+          position: static; max-height: none; overflow: visible;
+          border-bottom: 1px solid var(--border); padding-bottom: 16px;
+        }
+      }
+      @media (max-width: 600px) {
+        .hero-v2 h1 { font-size: 26px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topnav">
+      <div class="topnav-inner">
+        <a href="#uc1" class="brand">
+          <span class="dot-mark"></span>
+          testkit <span class="sub">/ hướng dẫn sử dụng</span>
+        </a>
+        <div class="nav-actions">
+          <a href="https://github.com/lhdlam/testkit-plugin" target="_blank" rel="noopener" class="primary">GitHub</a>
+          <button id="themeBtn" class="toggle" type="button" title="Đổi sáng/tối">☾ / ☀</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+
+      <!-- ─────────────── SIDEBAR ─────────────── -->
+      <aside class="sidebar" aria-label="Use cases nav">
+        <div class="sb-group">
+          <div class="sb-group-title">Bắt đầu</div>
+          <a class="uc-link" data-target="uc0" href="#uc0">
+            <span class="uc-num">0.</span>Trước khi bắt đầu &amp; cài đặt
+          </a>
+          <a class="uc-link" data-target="ucm" href="#ucm">
+            <span class="uc-num">★</span>Mô hình tinh thần: 6 pha, mỗi pha 1 cổng
+          </a>
+        </div>
+        <div class="sb-group">
+          <div class="sb-group-title">Trường hợp sử dụng</div>
+          <a class="uc-link active" data-target="uc1" href="#uc1">
+            <span class="uc-num">1.</span>Pipeline đầy đủ (web-playwright)
+          </a>
+          <ul class="step-list" data-for="uc1">
+            <li><a href="#uc1-s0">Phase 0 · /testkit:init — scaffold + config</a></li>
+            <li><a href="#uc1-s1">Phase 1 · /testkit:analyze — 🚦 feature-map</a></li>
+            <li><a href="#uc1-s2">Phase 2 · /testkit:cases — 🚦 test-cases + RTM</a></li>
+            <li><a href="#uc1-s3">Phase 3 · /testkit:scenarios — 🚦 ui-map + scenarios</a></li>
+            <li><a href="#uc1-s4">Phase 4 · /testkit:script — 🚦 POM + spec + auth</a></li>
+            <li><a href="#uc1-s5">Phase 5 · /testkit:run — chạy + phân loại fail</a></li>
+            <li><a href="#uc1-s6">Phase 6 · /testkit:ci — workflow CI</a></li>
+          </ul>
+          <a class="uc-link" data-target="uc2" href="#uc2">
+            <span class="uc-num">2.</span>Desktop app (desktop-pyside6)
+          </a>
+          <a class="uc-link" data-target="uc3" href="#uc3">
+            <span class="uc-num">3.</span>Feature mới (incremental)
+          </a>
+          <a class="uc-link" data-target="uc4" href="#uc4">
+            <span class="uc-num">4.</span>Xem test chạy thật (watch)
+          </a>
+        </div>
+        <div class="sb-group">
+          <div class="sb-group-title">Tham khảo</div>
+          <a class="uc-link" data-target="ucref" href="#ucref">
+            <span class="uc-num">★</span>Luật vàng · lệnh nhanh · sự cố
+          </a>
+          <a class="uc-link" data-target="uctgt" href="#uctgt">
+            <span class="uc-num">★</span>Target profiles &amp; artifacts
+          </a>
+        </div>
+        <div class="sb-group">
+          <div class="sb-group-title">Liên kết</div>
+          <a href="https://github.com/lhdlam/testkit-plugin" target="_blank" rel="noopener">GitHub →</a>
+          <a href="https://github.com/lhdlam/testkit-plugin/blob/main/plugins/testkit/USAGE.md" target="_blank" rel="noopener">USAGE.md →</a>
+          <a href="https://github.com/lhdlam/testkit-plugin/blob/main/plugins/testkit/README.md" target="_blank" rel="noopener">README →</a>
+        </div>
+      </aside>
+
+      <!-- ─────────────── MAIN ─────────────── -->
+      <main class="content">
+
+        <section class="hero-v2">
+          <span class="eyebrow">Tài liệu · Hướng dẫn cho tester</span>
+          <h1>testkit — AI tự viết bộ test automation</h1>
+          <p class="lede">
+            <b>Triết lý:</b> <b>agent viết &amp; bảo trì test, Playwright/pytest chạy test.</b>
+            Bạn (tester) là <b>người gác cổng</b>: ở mỗi pha bạn review artifact rồi mới cho agent đi tiếp.
+            Quy trình đi qua <b>6 pha</b>, mỗi pha kết thúc bằng một artifact + một điểm review của con người.
+          </p>
+          <p class="lede lede-small">
+            Dùng sidebar bên trái để chuyển trường hợp sử dụng, hoặc click từng bước (step) để nhảy nhanh.
+            Mỗi bước có <b>Tại sao · Bạn làm · Bạn thấy</b> để người mới follow được.
+          </p>
+        </section>
+
+      <!-- ──────────── UC 0 — PREREQUISITES ──────────── -->
+      <section id="uc0" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Trước khi bắt đầu &amp; cài đặt plugin</h2>
+          <p>
+            testkit chạy trên <b>Claude Code</b> (gate cưỡng chế) và <b>Cursor</b> (gate advisory).
+            Agent viết test; framework chạy test trỏ tới <b>URL môi trường deploy</b> (Staging/UAT) —
+            testkit <i>không</i> dựng app ở local.
+          </p>
+          <p class="callout">
+            Phiên bản hiện tại hiện thực đầy đủ 2 target: <b>web-playwright</b> (web app, test trỏ URL
+            Staging/UAT) và <b>desktop-pyside6</b> (app PySide6, test in-process bằng pytest-qt).
+            Hướng dẫn chính đi theo ví dụ web; xem UC2 cho desktop.
+          </p>
+        </div>
+        <div class="prose">
+          <h3>0. Cần chuẩn bị</h3>
+          <ul>
+            <li><b>Claude Code</b> (hoặc Cursor) cài plugin testkit.</li>
+            <li><b>Node.js 18+</b> (<code>node --version</code>).</li>
+            <li><b>URL môi trường deploy</b>: <code>STAGING_URL</code> (và <code>UAT_URL</code> nếu có). testkit KHÔNG dựng app ở local.</li>
+            <li><b>Tài khoản test riêng</b> cho automation trên Staging (tách khỏi tài khoản người thật).</li>
+            <li>(Khuyến nghị) <b>Playwright MCP</b> để agent mở Staging xác thực selector. KHÔNG cần để <i>chạy</i> test —
+              chỉ để agent tìm/verify selector. <b>Bắt buộc</b> cho <code>web-from-docs</code>/<code>web-blackbox</code>,
+              khuyến nghị cho <code>web-playwright</code>, không dùng cho desktop. Cài nhanh: <code>/testkit:mcp</code>.</li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Cài đặt</span> Claude Code &amp; Cursor
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">claude-code · cài plugin testkit</span>
+            </div>
+            <div class="term-body">
+<span class="label input">▶ Claude Code</span>
+<span class="tprompt">$</span> <span class="tcmd">/plugin add marketplace github:lhdlam/testkit-plugin</span>
+<span class="tprompt">$</span> <span class="tcmd">/plugin install testkit@lhdlam</span>
+
+<span class="label output">▼ Cursor</span>
+testkit sinh <span class="tcmd">.cursor/rules/</span> ở bước init từ cùng template với CLAUDE.md.
+<span class="tok-warn">⚠</span> Trên Cursor <span class="tflag">gate là advisory</span> (không bị chặn cứng) — bạn cần tự
+   kiểm "đã review chưa" trước khi sang pha sau. Slash <span class="tcmd">/testkit:X</span> xử qua rule bridge.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ──────────── UC MENTAL MODEL — 6 PHASES ──────────── -->
+      <section id="ucm" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Mô hình tinh thần: 6 pha, mỗi pha 1 cổng review</h2>
+          <p>
+            6 pha giống nhau cho mọi nền tảng; khác biệt gói trong <code>profiles/&lt;target&gt;.md</code>.
+            Mỗi pha tạo ra <i>một artifact</i> và có <i>một điểm review của con người</i> trước khi sang pha sau.
+          </p>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Pipeline</span> Từ init đến CI
+            <span class="phase-desc">— 🚦 = bạn review trước khi sang pha sau</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">testkit · 6-phase pipeline</span>
+            </div>
+            <div class="term-body">
+<span class="tcmd">/testkit:init</span>      Phase 0  Setup: scaffold + CLAUDE.md + config          <span class="tcom">(không cần review)</span>
+      │
+<span class="tcmd">/testkit:analyze</span>   Phase 1  Hiểu app → feature-map.md                     <span class="tflag">🚦 bạn review</span>
+      │
+<span class="tcmd">/testkit:cases</span>     Phase 2  Sinh test case + rtm.md                       <span class="tflag">🚦 bạn review</span>
+      │
+<span class="tcmd">/testkit:scenarios</span> Phase 3  Map selector thật + kịch bản E2E              <span class="tflag">🚦 bạn review</span>
+      │
+<span class="tcmd">/testkit:script</span>    Phase 4  Sinh Page Object + *.spec.ts + auth           <span class="tflag">🚦 bạn đọc assertion</span>
+      │
+<span class="tcmd">/testkit:run</span>       Phase 5  Chạy + phân loại fail + self-heal             <span class="tcom">(lặp tới khi xanh)</span>
+      │
+<span class="tcmd">/testkit:ci</span>        Phase 6  Sinh workflow CI                              <span class="tcom">(xong)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Cơ chế cổng</span> PENDING → APPROVED
+            <span class="phase-desc">— bạn đổi tay dòng cuối artifact để mở pha sau</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">e2e-tests/docs/*.md · review gate</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># Mỗi artifact trong e2e-tests/docs/ kết thúc bằng một dòng:</span>
+<span class="tprompt">&gt;</span> <span class="tcmd">Review:</span> <span class="tok-warn">PENDING</span>
+
+<span class="tcom"># Sau khi bạn đọc và đồng ý, ĐỔI TAY thành:</span>
+<span class="tprompt">&gt;</span> <span class="tcmd">Review:</span> <span class="tok-ok">APPROVED</span>
+
+<span class="tcom"># Trên Claude Code, nếu pha trước còn PENDING thì hook pre-tool-gate
+# sẽ CHẶN pha sau và nhắc bạn. Đây chính là chỗ bạn kiểm soát chất
+# lượng — đừng duyệt cho có. Trên Cursor gate là advisory (tự giác).</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ──────────── UC 1 — FULL PIPELINE (web-playwright) ──────────── -->
+      <section id="uc1" class="panel active" role="tabpanel">
+        <div class="panel-head">
+          <h2>Pipeline đầy đủ (web-playwright) — ví dụ module Login</h2>
+          <p>
+            Đi trọn 6 pha cho một web app: agent đọc code → hiểu app → sinh test case → map selector thật →
+            sinh test code Playwright (TypeScript, Page Object) → chạy &amp; tự chữa → sinh CI. Test trỏ URL
+            <b>Staging/UAT</b>; auth đăng nhập 1 lần rồi tái dùng phiên.
+          </p>
+          <p class="callout">
+            <b>Bắt đầu nhỏ:</b> làm trọn module login (analyze → … → run xanh) trước khi nhân rộng.
+            Vừa kiểm chứng quy trình, vừa cho agent một "mẫu" để bắt chước cho các module sau.
+          </p>
+          <div class="meta">
+            <span class="chip accent">web-playwright</span>
+            <span class="chip">Playwright / TS</span>
+            <span class="chip">Page Object</span>
+            <span class="chip muted">test trỏ Staging URL</span>
+          </div>
+        </div>
+
+        <!-- Phase 0 — init -->
+        <div class="phase" id="uc1-s0">
+          <h3 class="phase-title">
+            <span class="phase-num">Phase 0</span> <code class="mono">/testkit:init</code> — scaffold + config
+            <span class="phase-desc">— chọn target · hỏi ngôn ngữ (en/vi) · scaffold e2e-tests/ · cài Playwright + dotenv · sinh CLAUDE.md</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">claude-code · setup (không cần review)</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># ─ Tại sao bước này? ──────────────────────────────────────
+# init dựng khung dự án test 1 lần: chọn target, sinh quy ước
+# viết test (CLAUDE.md), config runner. Ngôn ngữ chọn ở đây
+# quyết định ngôn ngữ TÀI LIỆU SINH RA và cách agent trả lời bạn.
+# ──────────────────────────────────────────────────────────</span>
+
+<span class="label input">▶ Bạn làm</span><span class="skill-chip">/testkit:init</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:init</span>
+
+<span class="label gate">▼ Cổng — chọn target + ngôn ngữ (AskUserQuestion)</span>
+  ┌─ Target nào? ────────────────────────────────────────────┐
+  │  (•) web-playwright   — web app, test trỏ URL Staging     │
+  │  ( ) desktop-pyside6  — app PySide6, pytest-qt in-process │
+  └──────────────────────────────────────────────────────────┘
+  ┌─ Ngôn ngữ tài liệu &amp; giao tiếp? ─────────────────────────┐
+  │  (•) vi (mặc định)    ( ) en                              │
+  └──────────────────────────────────────────────────────────┘
+
+<span class="label output">▼ Bạn thấy</span>
+  <span class="tok-add">A</span> e2e-tests/                      scaffold dự án test
+  <span class="tok-add">A</span> e2e-tests/CLAUDE.md             quy ước viết test + directive ngôn ngữ
+  <span class="tok-add">A</span> e2e-tests/playwright.config.ts  config runner (storageState, TEST_ENV)
+  <span class="tok-add">A</span> .testkit-lang                   lưu lựa chọn ngôn ngữ (vi/en)
+  <span class="tok-add">A</span> .cursor/rules/                  nếu dùng Cursor
+  <span class="tok-ok">✓</span> cài Playwright + dotenv
+
+<span class="tcom"># Sau đó BẠN ĐIỀN thông tin môi trường (KHÔNG commit — đã trong .gitignore):</span>
+<span class="tcmd">e2e-tests/.env.staging</span>
+  <span class="tflag">BASE_URL</span>=<span class="tstr">https://staging.example.com</span>
+  <span class="tflag">TEST_USER_EMAIL</span>=<span class="tstr">automation@example.com</span>
+  <span class="tflag">TEST_USER_PASSWORD</span>=<span class="tstr">••••••</span>
+            </div>
+          </div>
+          <div class="filebox">
+            <b>Ngôn ngữ (en/vi):</b> đổi bất kỳ lúc nào — sửa <span class="fname">.testkit-lang</span> thành
+            <code>en</code>/<code>vi</code>, hoặc <code>export TESTKIT_LANG=en</code>, hoặc nói thẳng "trả lời tiếng Anh".
+            Code / định danh (<code>TC-LOGIN-01</code>) / từ khoá framework luôn giữ tiếng Anh.
+          </div>
+        </div>
+
+        <!-- Phase 1 — analyze -->
+        <div class="phase" id="uc1-s1">
+          <h3 class="phase-title">
+            <span class="phase-num">Phase 1</span> <code class="mono">/testkit:analyze</code> — hiểu app
+            <span class="skill-chip gate">🚦 review</span>
+            <span class="phase-desc">— đọc source read-only (không build/run) → feature-map.md</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">analyze-target · read-only</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># ─ Tại sao bước này? ──────────────────────────────────────
+# Test phải bám hành vi THẬT của app, không bịa. analyze đọc-only
+# để dựng bản đồ tính năng: route, form, validation, flow, edge
+# case, điểm phân quyền — input cho mọi pha sau.
+# ──────────────────────────────────────────────────────────</span>
+
+<span class="label input">▶ Bạn làm</span><span class="skill-chip">/testkit:analyze</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:analyze</span>
+
+<span class="label output">▼ Bạn thấy</span>
+  <span class="tok-add">A</span> e2e-tests/docs/feature-map.md
+       route/màn hình · form &amp; validation · user flow · edge case · phân quyền
+  <span class="tprompt">&gt;</span> <span class="tcmd">Review:</span> <span class="tok-warn">PENDING</span>
+
+<span class="label gate">🚦 Bạn review</span>
+  Bổ sung luật nghiệp vụ NGẦM mà code không thể hiện.
+  Xong đổi <span class="tok-warn">PENDING</span> → <span class="tok-ok">APPROVED</span> ở dòng cuối file.
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 2 — cases -->
+        <div class="phase" id="uc1-s2">
+          <h3 class="phase-title">
+            <span class="phase-num">Phase 2</span> <code class="mono">/testkit:cases</code> — test case + RTM
+            <span class="skill-chip gate">🚦 review</span>
+            <span class="phase-desc">— Positive / Negative / Boundary / Permission + ma trận truy vết</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">generate-cases · gated bởi feature-map APPROVED</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># ─ Tại sao bước này? ──────────────────────────────────────
+# Biến hiểu biết thành test case có cấu trúc, và dùng RTM (ma
+# trận truy vết) để KHÔNG SÓT yêu cầu nào. Mỗi test case ↔ một
+# yêu cầu trong feature-map.
+# ──────────────────────────────────────────────────────────</span>
+
+<span class="label input">▶ Bạn làm</span><span class="skill-chip">/testkit:cases</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:cases</span>
+
+<span class="label output">▼ Bạn thấy</span>
+  <span class="tok-add">A</span> e2e-tests/docs/test-cases.md   Positive · Negative · Boundary · Permission
+  <span class="tok-add">A</span> e2e-tests/docs/rtm.md          yêu cầu ↔ test case (truy vết)
+
+<span class="label gate">🚦 Bạn review 2 chiều</span>
+  <span class="tok-ok">Chống bịa:</span>  test case có bám feature-map không (mục "Đề xuất ngoài phạm vi" để riêng)
+  <span class="tok-ok">Chống sót:</span>  mở rtm.md xem yêu cầu nào CHƯA có test case, bổ sung
+  → đổi sang <span class="tok-ok">APPROVED</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 3 — scenarios -->
+        <div class="phase" id="uc1-s3">
+          <h3 class="phase-title">
+            <span class="phase-num">Phase 3</span> <code class="mono">/testkit:scenarios</code> — selector thật + kịch bản
+            <span class="skill-chip gate">🚦 review</span>
+            <span class="phase-desc">— xác thực selector qua Playwright MCP → ui-map.md · gom thành scenarios.md</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">map-and-scenario · mở Staging qua MCP</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># ─ Tại sao bước này? ──────────────────────────────────────
+# Selector đoán mò = test flaky. Agent mở Staging thật qua
+# Playwright MCP để XÁC THỰC selector; test case không khớp UI
+# → untestable.md. Rồi gom thành kịch bản E2E (Smoke/Regression/Edge).
+# ──────────────────────────────────────────────────────────</span>
+
+<span class="label input">▶ Bạn làm</span><span class="skill-chip">/testkit:scenarios</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:scenarios</span>
+
+<span class="label output">▼ Bạn thấy</span>
+  <span class="tok-add">A</span> e2e-tests/docs/ui-map.md       selector thật đã verify trên Staging
+  <span class="tok-add">A</span> e2e-tests/docs/scenarios.md    kịch bản E2E: Smoke · Regression · Edge
+  <span class="tok-warn">M</span> e2e-tests/docs/untestable.md   test case không khớp UI (nếu có)
+
+<span class="label gate">🚦 Bạn review</span>
+  Kịch bản đúng hành trình thật chưa; xử lý mục "Tài liệu lệch sản phẩm" (nếu có).
+  → đổi sang <span class="tok-ok">APPROVED</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 4 — script -->
+        <div class="phase" id="uc1-s4">
+          <h3 class="phase-title">
+            <span class="phase-num">Phase 4</span> <code class="mono">/testkit:script</code> — sinh test code
+            <span class="skill-chip gate">🚦 đọc assertion</span>
+            <span class="phase-desc">— Page Object + auth.setup.ts (đăng nhập 1 lần) + *.spec.ts (tag + traceability)</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">generate-script · gated bởi scenarios APPROVED</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># ─ Tại sao bước này? ──────────────────────────────────────
+# Biến kịch bản thành test code chạy được. Page Object tách
+# selector khỏi logic; auth.setup đăng nhập 1 LẦN rồi lưu phiên
+# (storageState) → các test sau nhanh. Mỗi checkpoint = 1 expect.
+# ──────────────────────────────────────────────────────────</span>
+
+<span class="label input">▶ Bạn làm</span><span class="skill-chip">/testkit:script</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:script</span>
+
+<span class="label output">▼ Bạn thấy</span>
+  <span class="tok-add">A</span> tests/pages/*.ts        Page Object (selector tập trung)
+  <span class="tok-add">A</span> tests/auth.setup.ts     đăng nhập 1 lần → lưu storageState
+  <span class="tok-add">A</span> tests/e2e/*.spec.ts     mỗi checkpoint = 1 expect · tag <span class="tflag">@smoke</span> · <span class="tcom">// TC-LOGIN-01</span>
+  <span class="tok-ok">✓</span> chạy thử 1 luồng smoke để xác nhận selector khớp
+
+<span class="label gate">🚦 Bạn đọc lại assertion</span>
+  Kiểm assertion có đúng nghiệp vụ không (không chỉ "không crash").
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 5 — run -->
+        <div class="phase" id="uc1-s5">
+          <h3 class="phase-title">
+            <span class="phase-num">Phase 5</span> <code class="mono">/testkit:run</code> — chạy + phân loại fail
+            <span class="phase-desc">— lặp tới khi xanh ổn định · phân loại TRƯỚC khi sửa · không green-washing</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">run-and-heal · TEST_ENV=staging</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># ─ Tại sao bước này? ──────────────────────────────────────
+# Test đỏ là TÍN HIỆU, không phải lỗi cần che. Với mỗi fail,
+# agent PHÂN LOẠI rồi mới quyết định: bug app → ghi bugs.md (KHÔNG
+# sửa test); chỉ selector/timing/data mới được sửa test.
+# ──────────────────────────────────────────────────────────</span>
+
+<span class="label input">▶ Bạn làm</span><span class="skill-chip">/testkit:run</span>
+<span class="tprompt">$</span> <span class="tcmd">cd e2e-tests &amp;&amp; TEST_ENV=staging npx playwright test</span>
+
+<span class="label output">▼ Phân loại fail (agent làm trước khi sửa)</span>
+  Bug ứng dụng         → <span class="tok-bad">KHÔNG sửa test</span> · ghi docs/bugs.md cho bạn xác nhận
+  Môi trường (down/data drift) → không sửa test · docs/env-issues.md
+  Selector sai / Timing → sửa test (web-first assertion, KHÔNG sleep cứng)
+  Test data            → tự sinh dữ liệu riêng (timestamp) · tự dọn
+
+<span class="tcom"># Lặp /testkit:run tới khi xanh ổn định.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 6 — ci -->
+        <div class="phase" id="uc1-s6">
+          <h3 class="phase-title">
+            <span class="phase-num">Phase 6</span> <code class="mono">/testkit:ci</code> — workflow CI
+            <span class="phase-desc">— GitHub Actions trỏ Staging: smoke mỗi deploy · full regression nightly</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">setup-ci · headless trên CI</span>
+            </div>
+            <div class="term-body">
+<span class="label input">▶ Bạn làm</span><span class="skill-chip">/testkit:ci</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:ci</span>
+
+<span class="label output">▼ Bạn thấy</span>
+  <span class="tok-add">A</span> .github/workflows/e2e-tests.yml
+       smoke mỗi deploy · full regression nightly · luôn headless
+
+<span class="tcom"># Bạn đặt Secrets trên CI:</span>
+  <span class="tflag">STAGING_BASE_URL</span> · <span class="tflag">TEST_USER_EMAIL</span> · <span class="tflag">TEST_USER_PASSWORD</span>
+
+✅ <span class="tflag">Pipeline hoàn chỉnh</span> — bộ test chạy tự động mỗi deploy.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ──────────── UC 2 — DESKTOP ──────────── -->
+      <section id="uc2" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Desktop app — target <code>desktop-pyside6</code></h2>
+          <p>
+            Các pha <b>y hệt</b> pipeline web, nhưng artifacts nằm ở <code>docs/</code>, runner là
+            <code>pytest</code> (pytest-qt, test in-process), và "selector" là <code>objectName</code>.
+            Không cần Playwright MCP. Chi tiết trong <code>profiles/desktop-pyside6.md</code>.
+          </p>
+        </div>
+        <div class="prose">
+          <table class="t">
+            <thead><tr><th>Khía cạnh</th><th>web-playwright</th><th>desktop-pyside6</th></tr></thead>
+            <tbody>
+              <tr><td>Thực thi</td><td>URL Staging/UAT</td><td>in-process (pytest-qt)</td></tr>
+              <tr><td>Runner</td><td>Playwright / TypeScript</td><td>pytest / Python</td></tr>
+              <tr><td>Selector</td><td><code>getByRole/Label/TestId</code></td><td><code>objectName</code></td></tr>
+              <tr><td>Object pattern</td><td>Page Object</td><td>Screen Object</td></tr>
+              <tr><td>Artifacts</td><td><code>e2e-tests/docs/</code></td><td><code>docs/</code></td></tr>
+              <tr><td>Playwright MCP</td><td>khuyến nghị</td><td>không dùng</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Chạy</span> pytest-qt (headless / có UI)
+            <span class="phase-desc">— CI luôn headless · UI_SLOWMO để xem app thao tác thật</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">pytest · desktop-pyside6</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># chạy bình thường (headless)</span>
+<span class="tprompt">$</span> <span class="tcmd">pytest tests/</span>
+
+<span class="tcom"># hiển thị app + slow-mo để soi từng thao tác</span>
+<span class="tprompt">$</span> <span class="tflag">UI_SLOWMO</span>=<span class="tnum">500</span> <span class="tcmd">pytest -s tests/test_login.py</span>
+
+<span class="tcom"># Modal/dialog xử bằng monkeypatch (xem profiles/desktop-pyside6.md).</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ──────────── UC 3 — INCREMENTAL ──────────── -->
+      <section id="uc3" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Feature mới (incremental) — <code>/testkit:new-feature</code></h2>
+          <p>
+            Khi project đã có bộ test, chỉ sinh/cập nhật test cho <b>MỘT feature mới</b> — scope qua
+            <b>git diff</b> (nhánh/tag <code>feat-xxxx</code>) hoặc một mô tả — <i>không</i> quét lại cả repo,
+            <i>không</i> đụng test cũ.
+          </p>
+        </div>
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Incremental</span> Mini-pipeline cho 1 feature
+            <span class="phase-desc">— analyze → cases → scenarios → script chỉ trong phạm vi diff</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">new-feature · scope qua git diff / mô tả</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># ─ Tại sao bước này? ──────────────────────────────────────
+# Rescan cả repo mỗi lần thêm feature = lãng phí + dễ làm hỏng
+# test đang xanh. new-feature đóng khung phạm vi vào đúng vùng
+# code đổi, rồi đi mini-pipeline chỉ cho feature đó.
+# ──────────────────────────────────────────────────────────</span>
+
+<span class="label input">▶ Bạn làm</span><span class="skill-chip">/testkit:new-feature</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:new-feature</span> <span class="tstr">--diff feat-export-csv</span>
+<span class="tcom"># hoặc mô tả: /testkit:new-feature "thêm nút export CSV ở trang report"</span>
+
+<span class="label output">▼ Bạn thấy</span>
+  scope    chỉ file/route trong diff (không quét cả repo)
+  <span class="tok-add">A</span> cập nhật feature-map / test-cases / rtm cho feature mới
+  <span class="tok-add">A</span> sinh spec mới · giữ nguyên test cũ
+  <span class="tflag">🚦</span> vẫn qua các cổng review như pipeline đầy đủ
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ──────────── UC 4 — WATCH ──────────── -->
+      <section id="uc4" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Xem test chạy thật — <code>/testkit:watch</code></h2>
+          <p>
+            Khi muốn <b>nhìn test chạy</b> để demo hoặc soát case (cần máy có màn hình). CI thì vẫn luôn
+            headless — watch chỉ để debug/demo.
+          </p>
+        </div>
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Watch</span> UI mode · headed · slow-mo
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">watch · chỉ để debug/demo</span>
+            </div>
+            <div class="term-body">
+<span class="label output">▼ web — Playwright UI mode (tốt nhất để soát coverage)</span>
+<span class="tprompt">$</span> <span class="tcmd">cd e2e-tests &amp;&amp; TEST_ENV=staging npx playwright test --ui</span>
+
+<span class="label output">▼ web — mở trình duyệt thật, chậm, 1 luồng</span>
+<span class="tprompt">$</span> <span class="tflag">TEST_ENV</span>=staging <span class="tflag">SLOWMO</span>=<span class="tnum">500</span> <span class="tcmd">npx playwright test --headed --workers=1 --grep @smoke</span>
+
+<span class="label output">▼ desktop — hiển thị app + slow-mo</span>
+<span class="tprompt">$</span> <span class="tflag">UI_SLOWMO</span>=<span class="tnum">500</span> <span class="tcmd">pytest -s tests/test_login.py</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ──────────── UC REF — RULES / COMMANDS / TROUBLESHOOTING ──────────── -->
+      <section id="ucref" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Luật vàng · lệnh nhanh · sự cố thường gặp</h2>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title"><span class="phase-num">Luật vàng</span> Đừng phá</h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">2 luật vàng</span>
+            </div>
+            <div class="term-body">
+<span class="tflag">1. KHÔNG green-washing.</span>
+   Test đỏ vì app sai → đó là test làm đúng việc. Đừng để agent "sửa test cho
+   xanh". Quy ước này nằm sẵn trong CLAUDE.md; thấy agent định làm yếu assertion → DỪNG.
+
+<span class="tflag">2. Dữ liệu tự sinh, tự dọn.</span>
+   Staging dùng chung → mỗi test tạo dữ liệu riêng (email có timestamp), không
+   đụng dữ liệu người khác. Flaky do data drift chữa bằng cách này, KHÔNG bằng tăng timeout.
+            </div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title"><span class="phase-num">Lệnh nhanh</span> Chạy suite</h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">cd e2e-tests</span>
+            </div>
+            <div class="term-body">
+<span class="tprompt">$</span> <span class="tflag">TEST_ENV</span>=staging <span class="tcmd">npx playwright test</span>                 <span class="tcom"># full</span>
+<span class="tprompt">$</span> <span class="tflag">TEST_ENV</span>=staging <span class="tcmd">npx playwright test --grep @smoke</span>   <span class="tcom"># chỉ smoke (critical path)</span>
+<span class="tprompt">$</span> <span class="tflag">TEST_ENV</span>=uat      <span class="tcmd">npx playwright test</span>                 <span class="tcom"># đổi môi trường bằng 1 biến</span>
+<span class="tprompt">$</span> <span class="tcmd">npx playwright show-report</span>                            <span class="tcom"># xem báo cáo HTML</span>
+<span class="tprompt">$</span> <span class="tcmd">npx playwright show-trace</span>                             <span class="tcom"># mổ xẻ 1 test fail</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="prose">
+          <h3>Sự cố thường gặp</h3>
+          <table class="t">
+            <thead><tr><th>Triệu chứng</th><th>Nguyên nhân &amp; xử lý</th></tr></thead>
+            <tbody>
+              <tr><td><code>/testkit:cases</code> bị chặn</td><td><code>feature-map.md</code> còn <code>&gt; Review: PENDING</code> → review &amp; đổi <code>APPROVED</code></td></tr>
+              <tr><td>Agent đoán selector lung tung</td><td>Chưa cài Playwright MCP → cài để agent xác thực selector trên Staging thật</td></tr>
+              <tr><td>Test xanh local, đỏ CI</td><td>Thiếu Secrets trên CI, hoặc thiếu <code>npx playwright install --with-deps</code></td></tr>
+              <tr><td>Đăng nhập lại mỗi test, chậm</td><td><code>auth.setup.ts</code> chưa chạy / config chưa trỏ <code>storageState</code> — xem <code>playwright.config.ts</code></td></tr>
+              <tr><td>Test phá dữ liệu người khác trên Staging</td><td>Vi phạm luật "tự sinh/tự dọn" — ép agent tạo dữ liệu riêng, tránh test xoá hàng loạt</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ──────────── UC TARGETS ──────────── -->
+      <section id="uctgt" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Target profiles &amp; artifacts</h2>
+          <p>
+            6 pha giống nhau cho mọi nền tảng; khác biệt gói trong <code>profiles/&lt;target&gt;.md</code>.
+            Mỗi pha tạo 1 artifact, mỗi artifact có dòng cuối <code>&gt; Review: PENDING|APPROVED</code>.
+          </p>
+        </div>
+        <div class="prose">
+          <h3>4 target</h3>
+          <table class="t">
+            <thead><tr><th>Target</th><th>Test gì</th><th>Selector</th><th>Runner</th><th>Thực thi</th><th>Trạng thái</th></tr></thead>
+            <tbody>
+              <tr><td><code>web-playwright</code></td><td>đọc code</td><td>code/live</td><td>Playwright/TS</td><td>URL Staging</td><td>✅</td></tr>
+              <tr><td><code>web-from-docs</code></td><td>tài liệu + RTM</td><td>DOM live (MCP)</td><td>Playwright/TS</td><td>URL Staging</td><td>✅</td></tr>
+              <tr><td><code>web-blackbox</code></td><td>explore live</td><td>DOM live (MCP)</td><td>Playwright/TS</td><td>URL Staging</td><td>✅</td></tr>
+              <tr><td><code>desktop-pyside6</code></td><td>đọc code</td><td><code>objectName</code></td><td>pytest-qt</td><td>in-process</td><td>✅</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Artifacts theo pha</h3>
+          <table class="t">
+            <thead><tr><th>Pha</th><th>Lệnh</th><th>Artifact</th><th>Cổng</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><code>/testkit:analyze</code></td><td><code>feature-map.md</code></td><td>🚦 review</td></tr>
+              <tr><td>2</td><td><code>/testkit:cases</code></td><td><code>test-cases.md</code> + <code>rtm.md</code></td><td>🚦 review</td></tr>
+              <tr><td>3</td><td><code>/testkit:scenarios</code></td><td><code>ui-map.md</code> + <code>scenarios.md</code></td><td>🚦 review</td></tr>
+              <tr><td>4</td><td><code>/testkit:script</code></td><td>POM + <code>*.spec.ts</code> + auth</td><td>🚦 review</td></tr>
+              <tr><td>5</td><td><code>/testkit:run</code></td><td><code>bugs.md</code> / <code>env-issues.md</code></td><td>—</td></tr>
+              <tr><td>6</td><td><code>/testkit:ci</code></td><td>workflow CI</td><td>—</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Subagents (anti-cheat &amp; chất lượng)</h3>
+          <ul>
+            <li><code>test-integrity</code> — quét diff test tìm green-washing (assertion bị làm yếu/xoá, skip, timeout phình).</li>
+            <li><code>selector-stability</code> — bắt selector brittle (XPath/CSS/nth) hoặc thiếu <code>objectName</code>.</li>
+            <li><code>coverage-auditor</code> — dựng/kiểm RTM, báo yêu cầu chưa có test.</li>
+            <li><code>failure-classifier</code> — phân loại mỗi fail (Bug | Selector | Timing | Data | Env | Doc-drift), route bug → <code>bugs.md</code>.</li>
+          </ul>
+        </div>
+      </section>
+
+        <footer class="footer-v2">
+          <a href="https://github.com/lhdlam/testkit-plugin" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/lhdlam/testkit-plugin/blob/main/plugins/testkit/USAGE.md" target="_blank" rel="noopener">USAGE.md</a>
+          <a href="https://github.com/lhdlam/testkit-plugin/blob/main/plugins/testkit/README.md" target="_blank" rel="noopener">README</a>
+          <span class="meta-tag">testkit · AI test-automation toolkit · MIT</span>
+        </footer>
+
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        const ucLinks = document.querySelectorAll(".sidebar .uc-link");
+        const stepLinks = document.querySelectorAll(".sidebar .step-list a");
+        const panels = document.querySelectorAll(".panel");
+
+        function activate(targetUc) {
+          ucLinks.forEach((l) => {
+            l.classList.toggle("active", l.dataset.target === targetUc);
+          });
+          panels.forEach((p) => p.classList.toggle("active", p.id === targetUc));
+        }
+
+        // UC link click: switch panel, scroll to top
+        ucLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            activate(link.dataset.target);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            history.replaceState(null, "", "#" + link.dataset.target);
+          });
+        });
+
+        // Step link click: activate parent UC first, then scroll to step
+        stepLinks.forEach((a) => {
+          a.addEventListener("click", (e) => {
+            e.preventDefault();
+            const hash = a.getAttribute("href"); // #ucN-sN
+            const m = hash.match(/^#(uc[a-z0-9]+)/);
+            if (!m) return;
+            activate(m[1]);
+            requestAnimationFrame(() => {
+              const t = document.querySelector(hash);
+              if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+            history.replaceState(null, "", hash);
+          });
+        });
+
+        // Init: read URL hash and activate matching UC
+        (function initFromHash() {
+          const hash = location.hash;
+          if (!hash) return;
+          const m = hash.match(/^#(uc[a-z0-9]+)/);
+          if (!m) return;
+          activate(m[1]);
+          setTimeout(() => {
+            const t = document.querySelector(hash);
+            if (t) t.scrollIntoView({ block: "start" });
+          }, 50);
+        })();
+
+        // Theme toggle
+        const themeBtn = document.getElementById("themeBtn");
+        const root = document.documentElement;
+        const KEY = "testkit.usage.theme";
+        const stored = localStorage.getItem(KEY);
+        if (stored) root.setAttribute("data-theme", stored);
+        themeBtn?.addEventListener("click", () => {
+          const cur = root.getAttribute("data-theme") || "light";
+          const next = cur === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          localStorage.setItem(KEY, next);
+        });
+
+        // Step active tracking via IntersectionObserver
+        if ("IntersectionObserver" in window) {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((e) => {
+                if (!e.isIntersecting) return;
+                const id = e.target.id;
+                stepLinks.forEach((a) => {
+                  a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+                });
+              });
+            },
+            { rootMargin: "-100px 0px -65% 0px" }
+          );
+          document.querySelectorAll(".panel .phase[id]").forEach((el) => io.observe(el));
+        }
+      })();
+    </script>
+  </body>
+</html>
