@@ -10,9 +10,6 @@ and [USAGE](plugins/testkit/USAGE.md).
 📖 **[Mở hướng dẫn sử dụng →](https://lhdlam.github.io/testkit-plugin/)**
 — trang hướng dẫn giao diện đẹp (GitHub Pages), đi qua đủ 6 pha của pipeline.
 
-> Nguồn: [`docs/index.html`](docs/index.html). Để bật trang: **Settings → Pages → Source:
-> `Deploy from a branch` → `main` / thư mục `/docs`**. Sau ~1 phút truy cập URL ở trên.
-> (Mở trực tiếp file `.html` trên github.com chỉ thấy mã nguồn — phải qua Pages mới render.)
 
 ## Install (Claude Code)
 
