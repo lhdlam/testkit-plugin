@@ -54,6 +54,9 @@ tên file, lệnh shell, mã định danh (`TC-LOGIN-01`, `REQ-012`, tag `@smoke
 | ↻ Incremental | `new-feature` | artifact + test cho 1 feature (`*-feat-xxxx`) | `/testkit:new-feature` |
 | ⚙ Helper | (script) | cài Playwright MCP (web: discover/verify selector) | `/testkit:mcp` |
 | 👁 Watch | `watch` | chạy test hiển thị (headed) cho người xem/demo/soát case | `/testkit:watch` |
+| ❓ Q&A | `question` | hỏi đáp tài liệu/code/artifact — mọi câu trả lời kèm reference | `/testkit:question` |
+| 🎯 TC-script | `case-script` | sinh script cho TC-ID cụ thể (gate: test-cases APPROVED) | `/testkit:tc <TC-ID>` |
+| ✅ Nghiệm thu | `review-dev` | review output dev theo test case → verdict từng TC + dev-review.md | `/testkit:review-dev <scope>` |
 
 ## Target profile
 

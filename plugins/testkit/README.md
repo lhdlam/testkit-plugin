@@ -66,6 +66,20 @@ PreToolUse hook cưỡng chế → **các gate là advisory** (agent tự giác)
 **Tăng trưởng (incremental):** `/testkit:new-feature` — khi project đã có bộ test, chỉ sinh test cho 1
 feature mới (scope qua git diff hoặc mô tả), không quét lại cả repo, không đụng test cũ.
 
+**Công cụ cho tester (ngoài pipeline):**
+
+| Command | Việc |
+|---|---|
+| `/testkit:question <câu hỏi>` | Hỏi đáp tài liệu/code/artifact — mọi câu trả lời **kèm reference** (`[SRS §4.2]`, `[test-cases.md → TC-x]`, `[file:line]`); không nguồn = không khẳng định |
+| `/testkit:tc <TC-ID...>` | Sinh script cho **TC-ID cụ thể** (đường tắt, không cần scenarios) — đánh dấu `[automated]` trong rtm.md |
+| `/testkit:review-dev <scope>` | **Nghiệm thu output của dev theo test case**: verdict từng TC (Pass/Fail/Blocked/Untestable) → `dev-review.md`, Fail → `bugs.md` |
+| `/testkit:watch` | Chạy test hiển thị (headed) để demo/soát case |
+| `/testkit:mcp` | Cài nhanh Playwright MCP |
+
+**Dual-input (tài liệu + code):** khi project có cả 2, Phase 1 dùng tài liệu làm nguồn YÊU CẦU (REQ-xxx),
+code làm nguồn HIỆN THỰC, và **cross-check hai chiều** — chỗ "Tài liệu ≠ Code" được ghi vào
+`open-questions.md` cho con người phân xử trước khi sinh test case.
+
 > Hướng dẫn từng bước chi tiết cho tester: xem [USAGE.md](USAGE.md).
 
 ## Ngôn ngữ (en/vi)

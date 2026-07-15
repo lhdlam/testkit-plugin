@@ -515,6 +515,9 @@
           <a class="uc-link" data-target="uc4" href="#uc4">
             <span class="uc-num">4.</span>Xem test chạy thật (watch)
           </a>
+          <a class="uc-link" data-target="uc5" href="#uc5">
+            <span class="uc-num">5.</span>Công cụ tester (question · tc · review-dev)
+          </a>
         </div>
         <div class="sb-group">
           <div class="sb-group-title">Tham khảo</div>
@@ -1052,6 +1055,110 @@ testkit sinh <span class="tcmd">.cursor/rules/</span> ở bước init từ cùn
         </div>
       </section>
 
+      <!-- ──────────── UC 5 — TESTER TOOLS (question · tc · review-dev · dual-input) ──────────── -->
+      <section id="uc5" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Công cụ tester hàng ngày — đọc tài liệu · viết test case · nghiệm thu dev</h2>
+          <p>
+            Ba lệnh dùng ngoài pipeline, cho công việc hằng ngày của tester: <b>hỏi đáp có trích dẫn</b>
+            (<code>/testkit:question</code>), <b>sinh script theo TC-ID</b> (<code>/testkit:tc</code>),
+            và <b>nghiệm thu output của dev theo test case</b> (<code>/testkit:review-dev</code>).
+          </p>
+          <p class="callout">
+            <b>Dual-input (tài liệu + code):</b> khi project có cả 2 nguồn, <code>/testkit:analyze</code> dùng
+            <b>tài liệu</b> làm nguồn <b>YÊU CẦU</b> (REQ-xxx) và <b>code</b> làm nguồn <b>HIỆN THỰC</b>, rồi
+            <b>cross-check hai chiều</b>: chỗ "Tài liệu ≠ Code" được ghi vào <code>open-questions.md</code>
+            (bug tiềm ẩn hoặc tài liệu lỗi thời) cho con người phân xử <i>trước khi</i> sinh test case.
+          </p>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Q&amp;A</span> /testkit:question — trả lời KÈM reference
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">question · không nguồn = không khẳng định</span>
+            </div>
+            <div class="term-body">
+<span class="label input">▶ Bạn hỏi</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:question mật khẩu yêu cầu tối thiểu bao nhiêu ký tự?</span>
+
+<span class="label output">▼ Agent trả lời — mọi ý khẳng định kèm nguồn</span>
+Tối thiểu 8 ký tự, ≥1 số và 1 ký tự đặc biệt <span class="tflag">[SRS.docx §3.4 "Password policy"]</span>.
+Đã cover bởi <span class="tflag">[test-cases.md → TC-REG-04, TC-REG-05]</span>.
+<span class="tok-warn">⚠</span> Code hiện chỉ check độ dài ≥8 <span class="tflag">[app/validators.ts:31]</span> — lệch tài liệu
+   → đề xuất ghi <span class="tcmd">open-questions.md</span>.
+
+<span class="label output">▼ Quy tắc</span>
+· Tra theo thứ tự: tài liệu → artifacts (test-cases/rtm…) → code → test code
+· Không có trong nguồn → nói thẳng "tài liệu không đề cập", KHÔNG suy diễn
+· Mâu thuẫn giữa nguồn → nêu cả 2 phía kèm reference, để con người phân xử
+            </div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">TC → script</span> /testkit:tc — automate đúng case bạn chọn
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">tc · gate: test-cases.md APPROVED</span>
+            </div>
+            <div class="term-body">
+<span class="label input">▶ Chỉ định TC-ID (một, nhiều, hoặc nhóm)</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:tc TC-LOGIN-02</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:tc TC-LOGIN-*</span>
+
+<span class="label output">▼ Agent làm gì</span>
+1. Trích Steps/Expected/Precondition của TC từ <span class="tcmd">test-cases.md</span> (phải APPROVED)
+2. Resolve selector THẬT: ui-map.md → hoặc khám phá qua Playwright MCP / objectName (KHÔNG đoán)
+3. Tái dùng Page/Screen Object; thêm 1 test / TC, truy vết <span class="tflag">// TC-LOGIN-02 ← REQ-003</span>
+4. Chạy thử đúng test đó: <span class="tcmd">npx playwright test -g "TC-LOGIN-02"</span>
+5. Đánh dấu <span class="tflag">[automated]</span> vào rtm.md → theo dõi tiến độ automate theo case
+
+<span class="tok-warn">⚠</span> Hành vi thật khác Expected Result → KHÔNG bẻ assertion theo sản phẩm, ghi <span class="tcmd">bugs.md</span>.
+            </div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Nghiệm thu</span> /testkit:review-dev — review output dev theo test case
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">review-dev · dùng được cả khi CHƯA automate</span>
+            </div>
+            <div class="term-body">
+<span class="label input">▶ Dev bàn giao tính năng → nghiệm thu theo scope</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:review-dev login</span>        <span class="tflag"># hoặc TC-LOGIN-*</span>
+
+<span class="label output">▼ Agent đi qua TỪNG test case trên sản phẩm thật</span>
+· web: Playwright MCP mở Staging, làm đúng Steps, so với Expected Result
+· desktop: đọc code bàn giao + quick check pytest-qt
+· TC đã <span class="tflag">[automated]</span> → chạy script thay vì thao tác lại
+
+<span class="label output">▼ Verdict từng TC → dev-review-login.md</span>
+<span class="tok-ok">✅ Pass</span>      hành vi khớp Expected Result
+<span class="tok-bad">❌ Fail</span>      lệch Expected → ghi chi tiết + <span class="tcmd">bugs.md</span> (repro, expected vs actual)
+<span class="tok-warn">⛔ Blocked</span>   không đi tới được bước test (lỗi khác chặn / thiếu data)
+<span class="tok-warn">⚠ Untestable</span> UI/flow thực tế khác test case → cập nhật case hoặc hỏi lại
+
+Tổng: N case — X Pass / Y Fail / Z Blocked / W Untestable
+<span class="tok-warn">⚠</span> KHÔNG hạ Expected Result cho khớp sản phẩm — đó là quyết định của tester/BA.
+
+<span class="label output">▼ Sau nghiệm thu</span>
+Fail → dev sửa → chạy lại đúng các TC đó · Pass đủ → <span class="tcmd">/testkit:tc</span> để automate case chưa có script
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ──────────── UC REF — RULES / COMMANDS / TROUBLESHOOTING ──────────── -->
       <section id="ucref" class="panel" role="tabpanel">
         <div class="panel-head">
@@ -1090,6 +1197,11 @@ testkit sinh <span class="tcmd">.cursor/rules/</span> ở bước init từ cùn
 <span class="tprompt">$</span> <span class="tflag">TEST_ENV</span>=uat      <span class="tcmd">npx playwright test</span>                 <span class="tcom"># đổi môi trường bằng 1 biến</span>
 <span class="tprompt">$</span> <span class="tcmd">npx playwright show-report</span>                            <span class="tcom"># xem báo cáo HTML</span>
 <span class="tprompt">$</span> <span class="tcmd">npx playwright show-trace</span>                             <span class="tcom"># mổ xẻ 1 test fail</span>
+
+<span class="label output">▼ Công cụ tester (UC5)</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:question mật khẩu yêu cầu gì?</span>   <span class="tcom"># trả lời KÈM reference [SRS §x] [TC-y] [file:line]</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:tc TC-LOGIN-02</span>                  <span class="tcom"># sinh script cho đúng TC đó (cần test-cases APPROVED)</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:review-dev login</span>                <span class="tcom"># nghiệm thu output dev theo test case → dev-review.md</span>
             </div>
           </div>
         </div>

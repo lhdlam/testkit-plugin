@@ -41,5 +41,15 @@ check "desktop: probe docs/ + block PENDING" "$(run generate-script)" 1
 printf '# scenarios\n> Review: APPROVED\n' > docs/scenarios.md
 check "desktop: probe docs/ + allow APPROVED" "$(run generate-script)" 0
 
+# 7. case-script (/testkit:tc) gated by test-cases.md
+check "block case-script when test-cases missing" "$(run testkit:case-script)" 1
+printf '# tc\n> Review: PENDING\n' > docs/test-cases.md
+check "block case-script when test-cases PENDING" "$(run case-script)" 1
+printf '# tc\n> Review: APPROVED\n' > docs/test-cases.md
+check "allow case-script when test-cases APPROVED" "$(run case-script)" 0
+
+# 8. review-dev gated by test-cases.md (already APPROVED here)
+check "allow review-dev when test-cases APPROVED" "$(run review-dev)" 0
+
 echo "---"; echo "PASS=$PASS FAIL=$FAIL"
 [[ "$FAIL" -eq 0 ]]

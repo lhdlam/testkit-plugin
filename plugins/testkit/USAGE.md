@@ -143,6 +143,16 @@ UI_SLOWMO=500 pytest -s tests/test_login.py
 ```
 CI thì vẫn luôn headless — watch chỉ để debug/demo.
 
+### (Tùy chọn) Công cụ tester hàng ngày
+```bash
+/testkit:question mật khẩu yêu cầu gì?   # trả lời KÈM reference [SRS §x] [TC-y] [file:line]
+/testkit:tc TC-LOGIN-02                  # sinh script cho đúng TC đó (cần test-cases APPROVED)
+/testkit:review-dev login                # nghiệm thu output dev theo test case → dev-review.md
+```
+- `question`: không tìm thấy trong nguồn → nói thẳng, không suy diễn; mâu thuẫn → nêu cả 2 phía.
+- `tc`: đánh dấu `[automated]` vào `rtm.md` để theo dõi tiến độ automate theo case.
+- `review-dev`: verdict từng TC (Pass/Fail/Blocked/Untestable); Fail → `bugs.md`; dùng được cả khi chưa automate.
+
 ### Phase 6 — `/testkit:ci`
 Agent sinh `.github/workflows/e2e-tests.yml` trỏ Staging: smoke mỗi deploy, full regression nightly.
 Bạn đặt Secrets trên CI: `STAGING_BASE_URL`, `TEST_USER_EMAIL`, `TEST_USER_PASSWORD`.

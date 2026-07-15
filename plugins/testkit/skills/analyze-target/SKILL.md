@@ -18,6 +18,18 @@ Nguồn hiểu biết tùy target:
 - **web-from-docs**: đọc toàn bộ `docs/` (mọi định dạng), trích yêu cầu REQ-xxx có nguồn.
 - **web-blackbox**: dùng Playwright MCP mở `{STAGING_URL}` khám phá UI (chỉ khám phá, không tạo data rác).
 
+## Dual-input (có CẢ tài liệu lẫn code) — khuyến nghị khi đủ 2 nguồn
+
+Nếu project có cả **tài liệu** (`input/docs/` hoặc thư mục user chỉ) và **source code** (mọi target `*-code`):
+1. **Tài liệu = nguồn sự thật về YÊU CẦU** (test gì): trích REQ-xxx gắn nguồn (tài liệu + mục) như from-docs.
+2. **Code = nguồn sự thật về HIỆN THỰC** (validation rule chính xác, route, state, objectName).
+3. **Cross-check hai chiều** — giá trị lớn nhất của dual-input:
+   - Tài liệu nói X, code làm Y → ghi `open-questions.md` mục **"Tài liệu ≠ Code"** (kèm reference cả 2 phía).
+     Đây có thể là bug tiềm ẩn hoặc tài liệu lỗi thời — con người phân xử TRƯỚC khi sinh test case.
+   - Code có hành vi tài liệu không nhắc (validation ngầm, edge case) → liệt kê mục "Phát hiện từ code"
+     trong feature-map để tester quyết có đưa vào phạm vi test không.
+4. Trong `feature-map.md`, mỗi yêu cầu ghi rõ nguồn: `[doc]`, `[code]`, hoặc `[doc+code]` (khớp nhau).
+
 ## Sinh `feature-map.md`
 Liệt kê:
 1. Màn hình/route (web) hoặc cửa sổ/dialog (desktop) + mục đích từng cái

@@ -35,6 +35,8 @@ case "$skill" in
     generate-cases)   required="feature-map.md" ;;
     map-and-scenario) required="test-cases.md" ;;
     generate-script)  required="scenarios.md" ;;
+    case-script)      required="test-cases.md" ;;   # /testkit:tc — lighter path, still needs approved cases
+    review-dev)       required="test-cases.md" ;;   # acceptance review needs an approved yardstick
     *) exit 0 ;;
 esac
 
