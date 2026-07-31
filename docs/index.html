@@ -518,6 +518,9 @@
           <a class="uc-link" data-target="uc5" href="#uc5">
             <span class="uc-num">5.</span>Công cụ tester (question · tc · review-dev)
           </a>
+          <a class="uc-link" data-target="uc6" href="#uc6">
+            <span class="uc-num">6.</span>Chẩn đoán &amp; sửa bug (fixbug)
+          </a>
         </div>
         <div class="sb-group">
           <div class="sb-group-title">Tham khảo</div>
@@ -1159,6 +1162,112 @@ Fail → dev sửa → chạy lại đúng các TC đó · Pass đủ → <span 
         </div>
       </section>
 
+      <!-- ──────────── UC 6 — FIXBUG ──────────── -->
+      <section id="uc6" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Chẩn đoán &amp; sửa bug — <code>/testkit:fixbug</code></h2>
+          <p>
+            Từ mô tả 1 bug (hoặc một <code>BUG-ID</code> đã có trong <code>bugs.md</code>): agent
+            <b>định vị nguyên nhân gốc</b> trong code + tài liệu (kèm reference), <b>hỏi bạn</b> những gì
+            còn mơ hồ, rồi <b>sửa code app</b> và <b>luôn để lại 1 regression test</b> tái hiện bug
+            (đỏ trước fix, xanh sau).
+          </p>
+          <p class="callout">
+            ⚠️ <b>Đây là command DUY NHẤT của testkit chạm vào code sản phẩm</b> (mở rộng có chủ đích sang
+            dev-side). An toàn nằm ở <b>human gate bắt buộc</b>: agent DỪNG lại hỏi bạn + trình hướng sửa,
+            và <b>không sửa một dòng code nào</b> trước khi bạn duyệt. Vẫn cấm green-washing: sửa <b>app</b>
+            cho test xanh, KHÔNG làm yếu test.
+          </p>
+          <div class="meta">
+            <span class="chip accent">dev-side</span>
+            <span class="chip">human gate</span>
+            <span class="chip">regression test</span>
+            <span class="chip muted">không cần test-cases APPROVED</span>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Đầu vào</span> mô tả tự do hoặc BUG-ID
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">fixbug · 2 kiểu đầu vào</span>
+            </div>
+            <div class="term-body">
+<span class="label input">▶ Kiểu 1 — mô tả tự do (vừa phát hiện bug)</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:fixbug</span> <span class="tstr">"login sai mật khẩu vẫn vào được dashboard, đáng ra phải báo lỗi"</span>
+
+<span class="label input">▶ Kiểu 2 — BUG-ID đã log từ /testkit:run hoặc /testkit:review-dev</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:fixbug</span> <span class="tstr">BUG-LOGIN-03</span>
+<span class="tcom"># agent tự load nguyên entry (repro, expected vs actual, TC/REQ) từ bugs.md</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Luồng</span> 6 bước · gate ở bước 2
+            <span class="skill-chip gate">🚦 bạn trả lời trước khi sửa</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">fixbug · systematic-debugging + no green-wash</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># ─ Tại sao human gate? ────────────────────────────────────
+# fixbug được phép sửa code app — nên rủi ro cao hơn mọi command
+# khác. Chốt an toàn: agent PHẢI dừng hỏi bạn + trình hướng sửa,
+# chỉ sau khi bạn duyệt mới đụng code. Bạn vẫn là người gác cổng.
+# ──────────────────────────────────────────────────────────</span>
+
+<span class="tflag">1. Khoanh vùng</span>   expected vs actual · tìm REQ trong spec <span class="tflag">[SRS §x]</span> + code <span class="tflag">[file:line]</span>
+                cross-check code↔spec↔bug → root-cause hypothesis <span class="tcom">(kèm reference, không bịa)</span>
+      │
+<span class="label gate">2. 🚦 HỎI BẠN (GATE) — agent DỪNG ở đây</span>
+   ❓ câu hỏi cho chỗ mơ hồ (hành vi kỳ vọng? REQ nào chuẩn? env/data tái hiện?)
+   ▸ trình: root cause + <span class="tflag">hướng sửa</span> + <span class="tflag">file sẽ đổi</span> + <span class="tflag">blast radius/rủi ro</span>
+   <span class="tok-bad">⛔ KHÔNG đụng code trước khi bạn trả lời + duyệt</span>
+      │  <span class="tcom">(bạn duyệt ↓)</span>
+<span class="tflag">3. Sửa code</span>     sửa <span class="tok-ok">root cause</span>, diff tối thiểu, theo CLAUDE.md
+      │
+<span class="tflag">4. Regression</span>   test tái hiện bug: <span class="tok-bad">đỏ</span> trên code cũ → <span class="tok-ok">xanh</span> sau fix
+                tag <span class="tflag">@regression @bug-&lt;id&gt;</span> · truy vết <span class="tcom">// BUG-LOGIN-03 ← REQ-012</span> · gắn rtm.md
+      │
+<span class="tflag">5. Xác minh</span>     chạy <span class="tcmd">--grep @bug-&lt;id&gt;</span> + test liên quan · đỏ→xanh, không vỡ test khác
+                <span class="tok-warn">⚠</span> còn đỏ = CHƯA xong, không tuyên bố đã fix
+      │
+<span class="tflag">6. Ghi nhận</span>    <span class="tok-add">A</span> bug-fix-&lt;id&gt;.md <span class="tprompt">&gt;</span> <span class="tcmd">Review:</span> <span class="tok-warn">PENDING</span> · cập nhật <span class="tcmd">bugs.md</span> → <span class="tok-ok">Fixed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Van an toàn</span> lỗi ở tài liệu → KHÔNG sửa code
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">fixbug · tôn trọng ranh giới tester dù được phép sửa code</span>
+            </div>
+            <div class="term-body">
+<span class="label output">▼ Nếu "bug" thực ra là spec sai/lỗi thời (code đúng)</span>
+Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
+  <span class="tok-add">A</span> ghi <span class="tcmd">open-questions.md</span> + đề xuất cập nhật tài liệu
+  ▸ để BA/tester phân xử — agent nêu rõ điều này ngay ở bước 2
+
+<span class="label output">▼ Khác biệt với các command khác</span>
+· <span class="tcmd">/testkit:run</span> phân loại fail → chỉ <span class="tflag">ghi</span> bugs.md, không sửa app
+· <span class="tcmd">/testkit:review-dev</span> nghiệm thu → Fail <span class="tflag">ghi</span> bugs.md, không sửa app
+· <span class="tcmd">/testkit:fixbug</span> <span class="tok-ok">đóng vòng lặp</span>: từ bugs.md → sửa app + regression test
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ──────────── UC REF — RULES / COMMANDS / TROUBLESHOOTING ──────────── -->
       <section id="ucref" class="panel" role="tabpanel">
         <div class="panel-head">
@@ -1202,6 +1311,7 @@ Fail → dev sửa → chạy lại đúng các TC đó · Pass đủ → <span 
 <span class="tprompt">$</span> <span class="tcmd">/testkit:question mật khẩu yêu cầu gì?</span>   <span class="tcom"># trả lời KÈM reference [SRS §x] [TC-y] [file:line]</span>
 <span class="tprompt">$</span> <span class="tcmd">/testkit:tc TC-LOGIN-02</span>                  <span class="tcom"># sinh script cho đúng TC đó (cần test-cases APPROVED)</span>
 <span class="tprompt">$</span> <span class="tcmd">/testkit:review-dev login</span>                <span class="tcom"># nghiệm thu output dev theo test case → dev-review.md</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:fixbug BUG-LOGIN-03</span>             <span class="tcom"># chẩn đoán → hỏi bạn (gate) → sửa code app + regression test</span>
             </div>
           </div>
         </div>
@@ -1252,6 +1362,7 @@ Fail → dev sửa → chạy lại đúng các TC đó · Pass đủ → <span 
               <tr><td>4</td><td><code>/testkit:script</code></td><td>POM + <code>*.spec.ts</code> + auth</td><td>🚦 review</td></tr>
               <tr><td>5</td><td><code>/testkit:run</code></td><td><code>bugs.md</code> / <code>env-issues.md</code></td><td>—</td></tr>
               <tr><td>6</td><td><code>/testkit:ci</code></td><td>workflow CI</td><td>—</td></tr>
+              <tr><td>↻</td><td><code>/testkit:fixbug</code></td><td>code app đã sửa + regression test + <code>bug-fix-&lt;id&gt;.md</code></td><td>🚦 hỏi bạn trước khi sửa</td></tr>
             </tbody>
           </table>
 
