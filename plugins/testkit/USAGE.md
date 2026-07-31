@@ -148,10 +148,14 @@ CI thì vẫn luôn headless — watch chỉ để debug/demo.
 /testkit:question mật khẩu yêu cầu gì?   # trả lời KÈM reference [SRS §x] [TC-y] [file:line]
 /testkit:tc TC-LOGIN-02                  # sinh script cho đúng TC đó (cần test-cases APPROVED)
 /testkit:review-dev login                # nghiệm thu output dev theo test case → dev-review.md
+/testkit:fixbug BUG-LOGIN-03             # chẩn đoán → hỏi bạn (gate) → sửa code app + regression test
 ```
 - `question`: không tìm thấy trong nguồn → nói thẳng, không suy diễn; mâu thuẫn → nêu cả 2 phía.
 - `tc`: đánh dấu `[automated]` vào `rtm.md` để theo dõi tiến độ automate theo case.
 - `review-dev`: verdict từng TC (Pass/Fail/Blocked/Untestable); Fail → `bugs.md`; dùng được cả khi chưa automate.
+- `fixbug`: **command duy nhất sửa code app**. Luôn DỪNG hỏi bạn + trình hướng sửa trước khi đụng code;
+  luôn để lại 1 regression test (`@bug-<id>`) đỏ-trước-xanh-sau; KHÔNG green-wash (sửa app, không làm yếu test).
+  Nhận cả mô tả tự do lẫn `BUG-ID` từ `bugs.md`. Lỗi thực ra ở tài liệu → không sửa code, ghi `open-questions.md`.
 
 ### Phase 6 — `/testkit:ci`
 Agent sinh `.github/workflows/e2e-tests.yml` trỏ Staging: smoke mỗi deploy, full regression nightly.
