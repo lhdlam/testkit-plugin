@@ -73,6 +73,7 @@ feature mới (scope qua git diff hoặc mô tả), không quét lại cả repo
 | `/testkit:question <câu hỏi>` | Hỏi đáp tài liệu/code/artifact — mọi câu trả lời **kèm reference** (`[SRS §4.2]`, `[test-cases.md → TC-x]`, `[file:line]`); không nguồn = không khẳng định |
 | `/testkit:tc <TC-ID...>` | Sinh script cho **TC-ID cụ thể** (đường tắt, không cần scenarios) — đánh dấu `[automated]` trong rtm.md |
 | `/testkit:review-dev <scope>` | **Nghiệm thu output của dev theo test case**: verdict từng TC (Pass/Fail/Blocked/Untestable) → `dev-review.md`, Fail → `bugs.md` |
+| `/testkit:fixbug <bug\|BUG-ID>` | **Chẩn đoán & sửa bug**: phân tích code+spec (kèm reference) → hỏi tester (human gate) → **sửa code app** + regression test (`@bug-<id>`, đỏ trước/xanh sau) → `bug-fix-<id>.md`, cập nhật `bugs.md`. *Command duy nhất chạm code app; không green-wash.* |
 | `/testkit:watch` | Chạy test hiển thị (headed) để demo/soát case |
 | `/testkit:mcp` | Cài nhanh Playwright MCP |
 
@@ -105,6 +106,7 @@ pha trước `APPROVED`. Trên Cursor là advisory.
 | **M4** | Cursor bridge (mirror `.cursor/rules/` từ template ở bước init) | ✅ Xong |
 | **M5** | Subagents: `coverage-auditor`, `failure-classifier`, `selector-stability`, `test-integrity` | ✅ Xong |
 | **M6** | `/testkit:new-feature` (incremental qua git diff / mô tả) | ✅ Xong |
+| **M7** | `/testkit:fixbug` (chẩn đoán → gate hỏi tester → sửa code app + regression test) | ✅ Xong |
 | M6+ | Coverage dashboard (HTML từ rtm + kết quả chạy) | ⬜ Kế hoạch |
 
 > Cả 4 target + 4 subagent + incremental mode đã hiện thực đầy đủ. Còn lại trên lộ trình:

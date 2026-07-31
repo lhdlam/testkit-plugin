@@ -21,6 +21,10 @@ pytest-qt) **chạy** test. Bạn (agent) đi qua một pipeline 6 pha, mỗi ph
 4. **KHÔNG bịa.** Không bịa yêu cầu (bám code/tài liệu/UI thật), không đoán selector.
 5. **User instructions > skill.** CLAUDE.md / yêu cầu trực tiếp của user luôn thắng.
 
+> **Ngoại lệ duy nhất của luật #1:** `/testkit:fixbug` được phép **sửa code app** (dev-side) — nhưng chỉ
+> sau một **human gate bắt buộc** (hỏi tester + duyệt hướng) và vẫn cấm green-washing (sửa app, không
+> làm yếu test). Mọi command khác giữ nguyên: agent viết test, framework chạy test.
+
 ## Ngôn ngữ (en/vi)
 
 testkit hỗ trợ 2 ngôn ngữ cho **tài liệu sinh ra** và **giao tiếp hỏi-đáp**. Thứ tự ưu tiên khi xác định `lang`:
@@ -57,6 +61,7 @@ tên file, lệnh shell, mã định danh (`TC-LOGIN-01`, `REQ-012`, tag `@smoke
 | ❓ Q&A | `question` | hỏi đáp tài liệu/code/artifact — mọi câu trả lời kèm reference | `/testkit:question` |
 | 🎯 TC-script | `case-script` | sinh script cho TC-ID cụ thể (gate: test-cases APPROVED) | `/testkit:tc <TC-ID>` |
 | ✅ Nghiệm thu | `review-dev` | review output dev theo test case → verdict từng TC + dev-review.md | `/testkit:review-dev <scope>` |
+| 🐞 Fix bug | `fixbug` | chẩn đoán → hỏi tester (gate) → **sửa code app** + regression test → bug-fix-<id>.md | `/testkit:fixbug <bug\|BUG-ID>` |
 
 ## Target profile
 
