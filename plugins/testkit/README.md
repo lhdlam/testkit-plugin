@@ -11,6 +11,16 @@
 4. **Không green-washing:** nghi app có bug thì ghi `bugs.md`, KHÔNG sửa test cho xanh.
 5. **Selector bền vững:** web `getByRole/Label/TestId`; desktop `objectName`.
 6. **Bắt đầu nhỏ:** làm trọn 1 module (vd login) rồi nhân rộng.
+7. **Code sạch để bàn giao khách:** code sinh ra **không comment** (không comment truy vết/giải thích,
+   không dấu ngày, không tên khách) và **không mã định danh tự đặt** (TC-xx, REQ-xx, BUG-xx, OQ-xx).
+   Test case nhận diện bằng **Module + tiêu đề mô tả**; **tên test chính là tiêu đề đó**. Truy vết sống
+   trong `rtm.md`, không nhúng vào code. Trích dẫn **nguồn thật** (`SRS §4.2`, `file:line`) vẫn giữ —
+   đó là tham chiếu có thật, không phải mã bịa.
+8. **NGHIÊM CẤM comment tiếng Việt trong code.** Không ngoại lệ — tài liệu viết tiếng Việt, CODE thì không.
+9. **Dọn rác khi gặp (cleanup-on-sight):** khi làm tính năng mới / sửa bug, thấy mã định danh cũ
+   (TC-xx, REQ-xx, BUG-xx, OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách
+   ở **BẤT KỲ đâu** → **XOÁ NGAY** trong cùng lần sửa.
+   Không giới hạn phạm vi, không hỏi lại, không để "dọn sau".
 
 ## Kiến trúc: 1 pipeline + target profile cắm vào
 
@@ -71,9 +81,9 @@ feature mới (scope qua git diff hoặc mô tả), không quét lại cả repo
 | Command | Việc |
 |---|---|
 | `/testkit:question <câu hỏi>` | Hỏi đáp tài liệu/code/artifact — mọi câu trả lời **kèm reference** (`[SRS §4.2]`, `[test-cases.md → TC-x]`, `[file:line]`); không nguồn = không khẳng định |
-| `/testkit:tc <TC-ID...>` | Sinh script cho **TC-ID cụ thể** (đường tắt, không cần scenarios) — đánh dấu `[automated]` trong rtm.md |
+| `/testkit:tc <module \| tiêu đề>` | Sinh script cho **test case cụ thể** (đường tắt, không cần scenarios) — đánh dấu `[automated]` trong rtm.md |
 | `/testkit:review-dev <scope>` | **Nghiệm thu output của dev theo test case**: verdict từng TC (Pass/Fail/Blocked/Untestable) → `dev-review.md`, Fail → `bugs.md` |
-| `/testkit:fixbug <bug\|BUG-ID>` | **Chẩn đoán & sửa bug**: phân tích code+spec (kèm reference) → hỏi tester (human gate) → **sửa code app** + regression test (`@bug-<id>`, đỏ trước/xanh sau) → `bug-fix-<id>.md`, cập nhật `bugs.md`. *Command duy nhất chạm code app; không green-wash.* |
+| `/testkit:fixbug <mô tả bug>` | **Chẩn đoán & sửa bug**: phân tích code+spec (kèm reference) → hỏi tester (human gate) → **sửa code app** + regression test (`@regression`, đỏ trước/xanh sau) → `bug-fix-<slug>.md`, cập nhật `bugs.md`. *Command duy nhất chạm code app; không green-wash.* |
 | `/testkit:watch` | Chạy test hiển thị (headed) để demo/soát case |
 | `/testkit:mcp` | Cài nhanh Playwright MCP |
 
@@ -87,7 +97,7 @@ code làm nguồn HIỆN THỰC, và **cross-check hai chiều** — chỗ "Tài
 
 `/testkit:init` hỏi ngôn ngữ cho **tài liệu sinh ra** và **giao tiếp với agent** (`vi` mặc định, hoặc `en`),
 lưu trong `${TESTKIT_ROOT}/.testkit-lang` và baked vào `CLAUDE.md`. Ưu tiên: yêu cầu trực tiếp của user >
-`TESTKIT_LANG` env > `.testkit-lang` > `vi`. Code, định danh (`TC-LOGIN-01`), từ khoá framework luôn giữ
+`TESTKIT_LANG` env > `.testkit-lang` > `vi`. Code và từ khoá framework (`@smoke`, `getByRole`) luôn giữ
 tiếng Anh. Đổi bất kỳ lúc nào bằng cách sửa `.testkit-lang` hoặc `export TESTKIT_LANG=en`.
 
 ## Trạng thái & gate

@@ -35,7 +35,7 @@ defect — never recommend weakening the test to make it pass.**
 
 ## Output
 Use IDs `F1`, `F2`, …. For each failing test:
-- `test`: test name / id (and TC-id if commented)
+- `test`: test file + test name
 - `class`: one of the taxonomy classes
 - `confidence`: 90+ unambiguous; 70-90 heuristic; lower → escalate to human
 - `route`: `bugs.md` | `env-issues.md` | `fix-test`

@@ -35,7 +35,8 @@ e2e-tests/
 ## Quy ước bắt buộc (đưa vào CLAUDE.md) — trọng tâm chống bịa
 - Nguồn yêu cầu: `input/docs/`. Sinh test case BÁM SÁT tài liệu, **KHÔNG bịa** yêu cầu không có trong tài liệu.
   Thiếu/mâu thuẫn → ghi `docs/open-questions.md`, KHÔNG tự suy diễn.
-- Mỗi test case truy vết về nguồn (tài liệu + mục) trong `rtm.md`. Comment trong code: `// TC-005 ← REQ-012 ← SRS §4.2`.
+- Mỗi test case truy vết về nguồn (tài liệu + mục) trong `rtm.md`. Truy vết sống trong TÀI LIỆU —
+  code KHÔNG chứa comment hay mã định danh.
 - KHÔNG có source code → mọi selector lấy từ khám phá Staging thật qua Playwright MCP, KHÔNG đoán.
 - Test trỏ DEPLOY: `goto()` tương đối, `baseURL` từ `.env`, KHÔNG hardcode URL/credential.
 - POM; selector `getByRole > getByLabel > getByTestId`. Test độc lập, tự tạo/tự dọn dữ liệu.
@@ -53,7 +54,7 @@ Case ngoài tài liệu → mục "Đề xuất ngoài tài liệu" cho tester d
 
 ## Phase 3 — map-and-scenario (đối chiếu UI thật)
 Playwright MCP mở `{STAGING_URL}`, đăng nhập `.env.staging`, đi qua từng test case trên UI THẬT → `ui-map.md`
-(TC-ID → selector/route bền vững). Case không khớp UI → `untestable.md`: `[Tính năng chưa deploy | UI đã đổi | Tài liệu lệch sản phẩm]`.
+(Module / Tiêu đề test case → selector/route bền vững). Case không khớp UI → `untestable.md`: `[Tính năng chưa deploy | UI đã đổi | Tài liệu lệch sản phẩm]`.
 > Mục **"Tài liệu lệch sản phẩm"** rất giá trị: tài liệu lỗi thời HOẶC sản phẩm có bug → báo team.
 
 ## Phase 4–6

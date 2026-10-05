@@ -13,14 +13,15 @@ verdict cho từng case — báo cáo nghiệm thu khách quan thay vì "nhìn q
 > review-dev đi qua **test case** trực tiếp trên sản phẩm — dùng được cả khi CHƯA automate case nào.
 
 ## Đầu vào
-- Phạm vi: feature/module hoặc danh sách TC-ID (vd `/testkit:review-dev login` hay `TC-LOGIN-*`).
+- Phạm vi: tên feature/module hoặc tiêu đề test case (vd `/testkit:review-dev login`).
   Không chỉ định → hỏi lại, đừng review cả hệ thống một lượt.
 - `test-cases.md` đã `> Review: APPROVED` (case chưa duyệt thì chưa có chuẩn để nghiệm thu).
 - Sản phẩm đã deploy (web: URL Staging/UAT) hoặc code branch dev bàn giao (desktop).
 
 ## Các bước
 
-1. **Lấy danh sách TC trong phạm vi** từ `test-cases.md` (+ `rtm.md` để biết REQ nguồn).
+1. **Lấy danh sách test case trong phạm vi** từ `test-cases.md` (+ `rtm.md` để biết yêu cầu nguồn).
+   Test case được gọi bằng **Module + Tiêu đề**, KHÔNG dùng mã định danh tự đặt.
 
 2. **Đi qua từng TC trên sản phẩm thật:**
    - **web-***: Playwright MCP mở Staging, thực hiện đúng Steps của TC, so kết quả với Expected Result.
@@ -39,17 +40,17 @@ verdict cho từng case — báo cáo nghiệm thu khách quan thay vì "nhìn q
 
 4. **Sinh báo cáo `dev-review-<scope>.md`** trong artifacts root:
    ```
-   # Dev review: <scope> — <ngày>
-   | TC | Tiêu đề | Verdict | Ghi chú / Bug ref |
-   |----|---------|---------|-------------------|
+   # Dev review: <scope>
+   | Module | Tiêu đề test case | Verdict | Ghi chú / Bug ref |
+   |--------|-------------------|---------|-------------------|
    Tổng: N case — X Pass / Y Fail / Z Blocked / W Untestable
    > Review: PENDING
    ```
-   Fail/Untestable phải có ghi chú đủ để dev tái hiện. Kết luận trung thực — **KHÔNG hạ Expected
+   Fail/Untestable phải có ghi chú đủ để dev tái hiện. KHÔNG thêm dấu ngày / tên khách vào báo cáo. Kết luận trung thực — **KHÔNG hạ Expected
    Result cho khớp sản phẩm** (đó là quyết định của tester/BA, ghi nhận trong bugs.md).
 
 5. **Nhắc bước sau:** tester duyệt báo cáo; Fail → dev sửa → chạy lại review-dev đúng các TC đó;
-   Pass đủ → có thể `/testkit:tc <TC-ID...>` để automate các case chưa có script.
+   Pass đủ → có thể `/testkit:tc <module | tiêu đề>` để automate các case chưa có script.
 
 ## Đầu ra
 `dev-review-<scope>.md` (verdict từng TC) + `bugs.md` entries cho mọi Fail + đề xuất cập nhật case cho Untestable.

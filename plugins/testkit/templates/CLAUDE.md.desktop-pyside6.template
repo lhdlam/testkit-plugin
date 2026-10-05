@@ -11,7 +11,16 @@
 - Cô lập trạng thái: dùng tmp_path cho file, patch QSettings, mock DB/network.
 - Mỗi test tạo cửa sổ mới và addWidget để qtbot tự dọn; test độc lập, không phụ thuộc thứ tự.
 - Test phải chạy được headless (QT_QPA_PLATFORM=offscreen / xvfb).
-- Mỗi test gắn comment ID test case (vd # TC-LOGIN-01).
+- Tên test CHÍNH LÀ mô tả test case (vd test_dang_nhap_that_bai_khi_sai_mat_khau).
+- **CODE SẠCH (bàn giao khách): KHÔNG viết comment trong code.** Không comment truy vết, không comment
+  giải thích. Code tự diễn đạt qua tên biến/hàm/test rõ nghĩa.
+- **KHÔNG tự đặt mã định danh** (TC-xx, REQ-xx, BUG-xx, OQ-xx). Test case nhận diện bằng
+  Module + tiêu đề mô tả. Trích dẫn nguồn THẬT (tài liệu §mục, file:line) chỉ nằm trong tài liệu,
+  không nằm trong code.
+- **NGHIÊM CẤM comment tiếng Việt trong code** — không ngoại lệ. Tài liệu vẫn viết tiếng Việt, CODE thì không.
+- **Dọn rác khi gặp:** khi làm tính năng mới / sửa bug, thấy mã định danh cũ (TC-xx, REQ-xx, BUG-xx,
+  OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách ở **BẤT KỲ đâu** → **XOÁ NGAY**
+  trong cùng lần sửa. Không giới hạn phạm vi, không hỏi lại, không để "dọn sau".
 - Khi nghi app có bug: KHÔNG sửa test cho xanh — ghi docs/bugs.md để tester xác nhận.
 
 ## testkit pipeline

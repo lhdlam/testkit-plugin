@@ -15,8 +15,12 @@ Nếu chưa → DỪNG, nhắc user duyệt Phase 1 trước. (Claude Code: hook
 ## Sinh `test-cases.md`
 Bảng mỗi test case:
 ```
-| ID | REQ nguồn | Module | Tiêu đề | Loại | Precondition | Steps | Expected Result | Priority |
+| Module | Tiêu đề | Loại | Nguồn | Precondition | Steps | Expected Result | Priority |
 ```
+> **KHÔNG tự đặt mã định danh** (TC-xx, REQ-xx). Một test case được nhận diện bằng cặp
+> **Module + Tiêu đề** — tiêu đề phải mô tả rõ hành vi và **duy nhất trong module**
+> (vd `Login / đăng nhập thất bại khi sai mật khẩu`). Cột **Nguồn** ghi trích dẫn **có thật**
+> (vd `SRS §4.2`, `app/auth.ts:31`, hoặc tên mục trong feature-map) — đây là tham chiếu, không phải mã bịa.
 - Loại: `Positive | Negative | Boundary | Permission | Error-handling` (desktop thêm `State`: enabled/disabled, điều hướng, modal).
 - Phủ: happy path mọi luồng chính; negative (sai định dạng, bỏ trống bắt buộc, vượt giới hạn);
   boundary (min/max, ký tự đặc biệt); permission (truy cập trái phép, hết phiên).
@@ -26,8 +30,10 @@ Bảng mỗi test case:
 
 ## Sinh `rtm.md` (ma trận truy vết)
 ```
-| REQ/Mục | Mô tả ngắn | Nguồn | Test case phủ | Trạng thái phủ |
+| Yêu cầu | Nguồn | Test case phủ (Module / Tiêu đề) | Trạng thái phủ |
 ```
+Cột **Yêu cầu** gọi bằng tiêu đề mô tả (vd "Chính sách mật khẩu"), **Nguồn** là trích dẫn có thật
+(vd `SRS §4.2`). Truy vết sống trong tài liệu này — **không** nhúng vào code.
 Đánh dấu rõ mục nào **CHƯA có test case** (gap) để tester thấy độ phủ khách quan.
 
 > RTM là công cụ chống-sót then chốt — đừng bỏ qua.

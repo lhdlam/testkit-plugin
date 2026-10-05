@@ -6,7 +6,7 @@ tags: [testkit, review, acceptance, dev]
 ---
 
 Invoke the `review-dev` skill using the Skill tool, passing the scope the user gave (a feature/module
-name or TC-ID list, e.g. `login` or `TC-LOGIN-*`).
+name, or a test case title, e.g. `login`).
 
 The skill walks each in-scope test case on the real product (web: live Staging via Playwright MCP;
 desktop: delivered code + quick pytest-qt checks), assigns a per-TC verdict, and writes

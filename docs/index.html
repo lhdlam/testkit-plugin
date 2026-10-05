@@ -739,7 +739,7 @@ testkit sinh <span class="tcmd">.cursor/rules/</span> ở bước init từ cùn
           <div class="filebox">
             <b>Ngôn ngữ (en/vi):</b> đổi bất kỳ lúc nào — sửa <span class="fname">.testkit-lang</span> thành
             <code>en</code>/<code>vi</code>, hoặc <code>export TESTKIT_LANG=en</code>, hoặc nói thẳng "trả lời tiếng Anh".
-            Code / định danh (<code>TC-LOGIN-01</code>) / từ khoá framework luôn giữ tiếng Anh.
+            Code / từ khoá framework (<code>@smoke</code>, <code>getByRole</code>) luôn giữ tiếng Anh.
           </div>
         </div>
 
@@ -870,7 +870,7 @@ testkit sinh <span class="tcmd">.cursor/rules/</span> ở bước init từ cùn
 <span class="label output">▼ Bạn thấy</span>
   <span class="tok-add">A</span> tests/pages/*.ts        Page Object (selector tập trung)
   <span class="tok-add">A</span> tests/auth.setup.ts     đăng nhập 1 lần → lưu storageState
-  <span class="tok-add">A</span> tests/e2e/*.spec.ts     mỗi checkpoint = 1 expect · tag <span class="tflag">@smoke</span> · <span class="tcom">// TC-LOGIN-01</span>
+  <span class="tok-add">A</span> tests/e2e/*.spec.ts     mỗi checkpoint = 1 expect · tag <span class="tflag">@smoke</span> · <span class="tcom">tên test = tiêu đề case</span>
   <span class="tok-ok">✓</span> chạy thử 1 luồng smoke để xác nhận selector khớp
 
 <span class="label gate">🚦 Bạn đọc lại assertion</span>
@@ -1064,7 +1064,7 @@ testkit sinh <span class="tcmd">.cursor/rules/</span> ở bước init từ cùn
           <h2>Công cụ tester hàng ngày — đọc tài liệu · viết test case · nghiệm thu dev</h2>
           <p>
             Ba lệnh dùng ngoài pipeline, cho công việc hằng ngày của tester: <b>hỏi đáp có trích dẫn</b>
-            (<code>/testkit:question</code>), <b>sinh script theo TC-ID</b> (<code>/testkit:tc</code>),
+            (<code>/testkit:question</code>), <b>sinh script theo test case</b> (<code>/testkit:tc</code>),
             và <b>nghiệm thu output của dev theo test case</b> (<code>/testkit:review-dev</code>).
           </p>
           <p class="callout">
@@ -1090,7 +1090,7 @@ testkit sinh <span class="tcmd">.cursor/rules/</span> ở bước init từ cùn
 
 <span class="label output">▼ Agent trả lời — mọi ý khẳng định kèm nguồn</span>
 Tối thiểu 8 ký tự, ≥1 số và 1 ký tự đặc biệt <span class="tflag">[SRS.docx §3.4 "Password policy"]</span>.
-Đã cover bởi <span class="tflag">[test-cases.md → TC-REG-04, TC-REG-05]</span>.
+Đã cover bởi <span class="tflag">[test-cases.md → Register / mật khẩu dưới 8 ký tự bị từ chối]</span>.
 <span class="tok-warn">⚠</span> Code hiện chỉ check độ dài ≥8 <span class="tflag">[app/validators.ts:31]</span> — lệch tài liệu
    → đề xuất ghi <span class="tcmd">open-questions.md</span>.
 
@@ -1112,15 +1112,15 @@ Tối thiểu 8 ký tự, ≥1 số và 1 ký tự đặc biệt <span class="tf
               <span class="term-title">tc · gate: test-cases.md APPROVED</span>
             </div>
             <div class="term-body">
-<span class="label input">▶ Chỉ định TC-ID (một, nhiều, hoặc nhóm)</span>
-<span class="tprompt">$</span> <span class="tcmd">/testkit:tc TC-LOGIN-02</span>
-<span class="tprompt">$</span> <span class="tcmd">/testkit:tc TC-LOGIN-*</span>
+<span class="label input">▶ Chỉ định test case (theo module hoặc tiêu đề)</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:tc Login</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:tc</span> <span class="tstr">"đăng nhập thất bại khi sai mật khẩu"</span>
 
 <span class="label output">▼ Agent làm gì</span>
 1. Trích Steps/Expected/Precondition của TC từ <span class="tcmd">test-cases.md</span> (phải APPROVED)
 2. Resolve selector THẬT: ui-map.md → hoặc khám phá qua Playwright MCP / objectName (KHÔNG đoán)
-3. Tái dùng Page/Screen Object; thêm 1 test / TC, truy vết <span class="tflag">// TC-LOGIN-02 ← REQ-003</span>
-4. Chạy thử đúng test đó: <span class="tcmd">npx playwright test -g "TC-LOGIN-02"</span>
+3. Tái dùng Page/Screen Object; thêm 1 test / case, <span class="tflag">tên test = tiêu đề case</span> (không comment)
+4. Chạy thử đúng test đó: <span class="tcmd">npx playwright test -g "đăng nhập thất bại khi sai mật khẩu"</span>
 5. Đánh dấu <span class="tflag">[automated]</span> vào rtm.md → theo dõi tiến độ automate theo case
 
 <span class="tok-warn">⚠</span> Hành vi thật khác Expected Result → KHÔNG bẻ assertion theo sản phẩm, ghi <span class="tcmd">bugs.md</span>.
@@ -1139,7 +1139,7 @@ Tối thiểu 8 ký tự, ≥1 số và 1 ký tự đặc biệt <span class="tf
             </div>
             <div class="term-body">
 <span class="label input">▶ Dev bàn giao tính năng → nghiệm thu theo scope</span>
-<span class="tprompt">$</span> <span class="tcmd">/testkit:review-dev login</span>        <span class="tflag"># hoặc TC-LOGIN-*</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:review-dev login</span>        <span class="tflag"># hoặc tiêu đề một test case</span>
 
 <span class="label output">▼ Agent đi qua TỪNG test case trên sản phẩm thật</span>
 · web: Playwright MCP mở Staging, làm đúng Steps, so với Expected Result
@@ -1167,7 +1167,7 @@ Fail → dev sửa → chạy lại đúng các TC đó · Pass đủ → <span 
         <div class="panel-head">
           <h2>Chẩn đoán &amp; sửa bug — <code>/testkit:fixbug</code></h2>
           <p>
-            Từ mô tả 1 bug (hoặc một <code>BUG-ID</code> đã có trong <code>bugs.md</code>): agent
+            Từ mô tả 1 bug (hoặc tiêu đề một mục đã có trong <code>bugs.md</code>): agent
             <b>định vị nguyên nhân gốc</b> trong code + tài liệu (kèm reference), <b>hỏi bạn</b> những gì
             còn mơ hồ, rồi <b>sửa code app</b> và <b>luôn để lại 1 regression test</b> tái hiện bug
             (đỏ trước fix, xanh sau).
@@ -1188,7 +1188,7 @@ Fail → dev sửa → chạy lại đúng các TC đó · Pass đủ → <span 
 
         <div class="phase">
           <h3 class="phase-title">
-            <span class="phase-num">Đầu vào</span> mô tả tự do hoặc BUG-ID
+            <span class="phase-num">Đầu vào</span> mô tả tự do hoặc tiêu đề mục trong bugs.md
           </h3>
           <div class="term">
             <div class="term-bar">
@@ -1199,8 +1199,8 @@ Fail → dev sửa → chạy lại đúng các TC đó · Pass đủ → <span 
 <span class="label input">▶ Kiểu 1 — mô tả tự do (vừa phát hiện bug)</span>
 <span class="tprompt">$</span> <span class="tcmd">/testkit:fixbug</span> <span class="tstr">"login sai mật khẩu vẫn vào được dashboard, đáng ra phải báo lỗi"</span>
 
-<span class="label input">▶ Kiểu 2 — BUG-ID đã log từ /testkit:run hoặc /testkit:review-dev</span>
-<span class="tprompt">$</span> <span class="tcmd">/testkit:fixbug</span> <span class="tstr">BUG-LOGIN-03</span>
+<span class="label input">▶ Kiểu 2 — tiêu đề mục đã log từ /testkit:run hoặc /testkit:review-dev</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:fixbug</span> <span class="tstr">"đăng nhập được dù sai mật khẩu"</span>
 <span class="tcom"># agent tự load nguyên entry (repro, expected vs actual, TC/REQ) từ bugs.md</span>
             </div>
           </div>
@@ -1234,12 +1234,12 @@ Fail → dev sửa → chạy lại đúng các TC đó · Pass đủ → <span 
 <span class="tflag">3. Sửa code</span>     sửa <span class="tok-ok">root cause</span>, diff tối thiểu, theo CLAUDE.md
       │
 <span class="tflag">4. Regression</span>   test tái hiện bug: <span class="tok-bad">đỏ</span> trên code cũ → <span class="tok-ok">xanh</span> sau fix
-                tag <span class="tflag">@regression @bug-&lt;id&gt;</span> · truy vết <span class="tcom">// BUG-LOGIN-03 ← REQ-012</span> · gắn rtm.md
+                tag <span class="tflag">@regression</span> · <span class="tcom">tên test = hành vi đúng mà bug đã phá</span> · gắn rtm.md
       │
-<span class="tflag">5. Xác minh</span>     chạy <span class="tcmd">--grep @bug-&lt;id&gt;</span> + test liên quan · đỏ→xanh, không vỡ test khác
+<span class="tflag">5. Xác minh</span>     chạy <span class="tcmd">-g "&lt;tên test&gt;"</span> + test liên quan · đỏ→xanh, không vỡ test khác
                 <span class="tok-warn">⚠</span> còn đỏ = CHƯA xong, không tuyên bố đã fix
       │
-<span class="tflag">6. Ghi nhận</span>    <span class="tok-add">A</span> bug-fix-&lt;id&gt;.md <span class="tprompt">&gt;</span> <span class="tcmd">Review:</span> <span class="tok-warn">PENDING</span> · cập nhật <span class="tcmd">bugs.md</span> → <span class="tok-ok">Fixed</span>
+<span class="tflag">6. Ghi nhận</span>    <span class="tok-add">A</span> bug-fix-&lt;slug&gt;.md <span class="tprompt">&gt;</span> <span class="tcmd">Review:</span> <span class="tok-warn">PENDING</span> · cập nhật <span class="tcmd">bugs.md</span> → <span class="tok-ok">Fixed</span>
             </div>
           </div>
         </div>
@@ -1279,7 +1279,7 @@ Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
           <div class="term">
             <div class="term-bar">
               <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
-              <span class="term-title">2 luật vàng</span>
+              <span class="term-title">5 luật vàng</span>
             </div>
             <div class="term-body">
 <span class="tflag">1. KHÔNG green-washing.</span>
@@ -1289,6 +1289,23 @@ Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
 <span class="tflag">2. Dữ liệu tự sinh, tự dọn.</span>
    Staging dùng chung → mỗi test tạo dữ liệu riêng (email có timestamp), không
    đụng dữ liệu người khác. Flaky do data drift chữa bằng cách này, KHÔNG bằng tăng timeout.
+
+<span class="tflag">3. Code sạch để bàn giao khách.</span>
+   Code sinh ra <span class="tok-bad">KHÔNG comment</span> (không comment truy vết/giải thích, không dấu ngày,
+   không tên khách) và <span class="tok-bad">KHÔNG mã định danh tự đặt</span> (TC-xx, REQ-xx, BUG-xx, OQ-xx).
+   Test case nhận diện bằng <span class="tok-ok">Module + tiêu đề mô tả</span>; <span class="tok-ok">tên test CHÍNH LÀ tiêu đề đó</span>.
+   Truy vết sống trong <span class="tcmd">rtm.md</span>, không nhúng vào code.
+   Trích dẫn <span class="tflag">nguồn thật</span> (<span class="tflag">SRS §4.2</span>, <span class="tflag">file:line</span>) vẫn giữ — trong TÀI LIỆU,
+   vì đó là tham chiếu có thật, không phải mã bịa.
+
+<span class="tflag">4. NGHIÊM CẤM comment tiếng Việt trong code.</span>
+   Không ngoại lệ. Tài liệu/artifact vẫn viết tiếng Việt theo lang — <span class="tok-bad">CODE thì không</span>.
+
+<span class="tflag">5. Dọn rác khi gặp (cleanup-on-sight).</span>
+   Khi làm tính năng mới / sửa bug, thấy <span class="tok-bad">mã định danh cũ</span>
+   (TC-xx, REQ-xx, BUG-xx, OQ-xx), <span class="tok-bad">comment tiếng Việt</span>, comment thừa,
+   ghi chú ngày/tên khách ở <span class="tok-bad">BẤT KỲ đâu</span> → <span class="tok-bad">XOÁ NGAY</span>
+   trong cùng lần sửa. <span class="tok-warn">Không giới hạn phạm vi</span>, không hỏi lại, không để "dọn sau".
             </div>
           </div>
         </div>
@@ -1309,9 +1326,9 @@ Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
 
 <span class="label output">▼ Công cụ tester (UC5)</span>
 <span class="tprompt">$</span> <span class="tcmd">/testkit:question mật khẩu yêu cầu gì?</span>   <span class="tcom"># trả lời KÈM reference [SRS §x] [TC-y] [file:line]</span>
-<span class="tprompt">$</span> <span class="tcmd">/testkit:tc TC-LOGIN-02</span>                  <span class="tcom"># sinh script cho đúng TC đó (cần test-cases APPROVED)</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:tc Login</span>                        <span class="tcom"># sinh script cho test case của module (cần test-cases APPROVED)</span>
 <span class="tprompt">$</span> <span class="tcmd">/testkit:review-dev login</span>                <span class="tcom"># nghiệm thu output dev theo test case → dev-review.md</span>
-<span class="tprompt">$</span> <span class="tcmd">/testkit:fixbug BUG-LOGIN-03</span>             <span class="tcom"># chẩn đoán → hỏi bạn (gate) → sửa code app + regression test</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:fixbug "sai mật khẩu vẫn vào được"</span>  <span class="tcom"># chẩn đoán → hỏi bạn (gate) → sửa code + regression test</span>
             </div>
           </div>
         </div>
@@ -1362,7 +1379,7 @@ Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
               <tr><td>4</td><td><code>/testkit:script</code></td><td>POM + <code>*.spec.ts</code> + auth</td><td>🚦 review</td></tr>
               <tr><td>5</td><td><code>/testkit:run</code></td><td><code>bugs.md</code> / <code>env-issues.md</code></td><td>—</td></tr>
               <tr><td>6</td><td><code>/testkit:ci</code></td><td>workflow CI</td><td>—</td></tr>
-              <tr><td>↻</td><td><code>/testkit:fixbug</code></td><td>code app đã sửa + regression test + <code>bug-fix-&lt;id&gt;.md</code></td><td>🚦 hỏi bạn trước khi sửa</td></tr>
+              <tr><td>↻</td><td><code>/testkit:fixbug</code></td><td>code app đã sửa + regression test + <code>bug-fix-&lt;slug&gt;.md</code></td><td>🚦 hỏi bạn trước khi sửa</td></tr>
             </tbody>
           </table>
 

@@ -17,10 +17,17 @@ Khi user gõ `/testkit:<name>`:
 
 ## Ngôn ngữ (en/vi)
 Viết MỌI artifact + MỌI câu trả lời theo `lang` đọc từ `.testkit-lang` (hoặc `TESTKIT_LANG`, mặc định `vi`).
-KHÔNG dịch code/định danh/từ khoá framework (getByRole, qtbot, TC-LOGIN-01, @smoke). User yêu cầu ngôn ngữ
+KHÔNG dịch code/từ khoá framework (getByRole, qtbot, @smoke). User yêu cầu ngôn ngữ
 khác trong câu hỏi thì ưu tiên theo user.
 
 ## Quy ước (xem CLAUDE.md để biết bản đầy đủ)
 - Agent viết test, framework chạy test. Selector bền vững. Test độc lập, tự tạo/tự dọn dữ liệu.
 - KHÔNG green-washing: nghi bug → ghi docs/bugs.md, không sửa test cho xanh.
-- KHÔNG bịa yêu cầu / không đoán selector. Truy vết test ↔ test case ↔ yêu cầu.
+- KHÔNG bịa yêu cầu / không đoán selector. Truy vết test ↔ test case ↔ yêu cầu (sống trong tài liệu).
+- **CODE SẠCH: KHÔNG viết comment trong code sinh ra** (bàn giao khách).
+- **KHÔNG tự đặt mã định danh** (TC-xx, REQ-xx, BUG-xx, OQ-xx) — dùng tiêu đề mô tả; trích nguồn thật
+  (tài liệu §mục, file:line) chỉ trong tài liệu.
+- **NGHIÊM CẤM comment tiếng Việt trong code** — không ngoại lệ. Tài liệu vẫn viết tiếng Việt, CODE thì không.
+- **Dọn rác khi gặp:** khi làm tính năng mới / sửa bug, thấy mã định danh cũ (TC-xx, REQ-xx, BUG-xx,
+  OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách ở **BẤT KỲ đâu** → **XOÁ NGAY**
+  trong cùng lần sửa. Không giới hạn phạm vi, không hỏi lại, không để "dọn sau".

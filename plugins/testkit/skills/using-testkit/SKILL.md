@@ -20,6 +20,20 @@ pytest-qt) **chạy** test. Bạn (agent) đi qua một pipeline 6 pha, mỗi ph
 3. **KHÔNG green-washing.** Nghi app có bug → ghi `bugs.md`, tuyệt đối không sửa test/assertion cho xanh.
 4. **KHÔNG bịa.** Không bịa yêu cầu (bám code/tài liệu/UI thật), không đoán selector.
 5. **User instructions > skill.** CLAUDE.md / yêu cầu trực tiếp của user luôn thắng.
+6. **Code sạch để bàn giao khách.** Code sinh ra (test, fix, scaffold) **KHÔNG chứa comment** — không
+   comment truy vết, không comment giải thích, không dấu ngày/tên khách. **KHÔNG tự đặt mã định danh**
+   (TC-xx, REQ-xx, BUG-xx, OQ-xx): test case nhận diện bằng **Module + tiêu đề mô tả**, và **tên test
+   chính là tiêu đề đó**. Truy vết sống trong `rtm.md` (ánh xạ qua file + tên test), KHÔNG nhúng vào code.
+   Vẫn **trích dẫn nguồn thật** (`SRS §4.2`, `app/auth.ts:31`) trong **tài liệu** — đó là tham chiếu có
+   thật, không phải mã tự bịa.
+7. **NGHIÊM CẤM comment tiếng Việt trong code.** Không có ngoại lệ. Phát hiện ở đâu → **XOÁ ngay**.
+   (Tài liệu/artifact vẫn viết tiếng Việt theo `lang` — lệnh cấm này chỉ áp cho CODE.)
+8. **Dọn rác khi gặp (cleanup-on-sight).** Trong lúc làm tính năng mới hoặc sửa bug, nếu gặp trong code:
+   - mã định danh tự đặt (`TC-xx`, `REQ-xx`, `BUG-xx`, `OQ-xx`) → **XOÁ ngay**, không giữ, không đổi sang mã khác;
+   - **comment tiếng Việt** → **XOÁ ngay**;
+   - comment truy vết/giải thích thừa, ghi chú ngày, tên khách → **XOÁ ngay**.
+   **Gặp ở ĐÂU thì xoá ở ĐÓ — không giới hạn phạm vi, không hỏi lại, không để "dọn sau".** Thấy trong
+   file đang mở, file vô tình đọc qua, hay bất kỳ chỗ nào khác trong repo → xoá luôn ngay lần sửa đó.
 
 > **Ngoại lệ duy nhất của luật #1:** `/testkit:fixbug` được phép **sửa code app** (dev-side) — nhưng chỉ
 > sau một **human gate bắt buộc** (hỏi tester + duyệt hướng) và vẫn cấm green-washing (sửa app, không
@@ -40,7 +54,7 @@ testkit hỗ trợ 2 ngôn ngữ cho **tài liệu sinh ra** và **giao tiếp h
 - Tiêu đề cột bảng, mô tả test case, Expected Result, nhãn phân loại lỗi → theo `lang`.
 
 **KHÔNG dịch (luôn giữ nguyên):** code, tên biến/hàm/class, từ khoá framework (`getByRole`, `qtbot`, `expect`),
-tên file, lệnh shell, mã định danh (`TC-LOGIN-01`, `REQ-012`, tag `@smoke`). Tên test theo convention trong CLAUDE.md.
+tên file, lệnh shell, tag framework (`@smoke`). Tên test theo convention trong CLAUDE.md.
 
 Đổi ngôn ngữ bất kỳ lúc nào: sửa `.testkit-lang` (1 dòng `en` hoặc `vi`) hoặc `export TESTKIT_LANG=en`.
 
@@ -59,9 +73,9 @@ tên file, lệnh shell, mã định danh (`TC-LOGIN-01`, `REQ-012`, tag `@smoke
 | ⚙ Helper | (script) | cài Playwright MCP (web: discover/verify selector) | `/testkit:mcp` |
 | 👁 Watch | `watch` | chạy test hiển thị (headed) cho người xem/demo/soát case | `/testkit:watch` |
 | ❓ Q&A | `question` | hỏi đáp tài liệu/code/artifact — mọi câu trả lời kèm reference | `/testkit:question` |
-| 🎯 TC-script | `case-script` | sinh script cho TC-ID cụ thể (gate: test-cases APPROVED) | `/testkit:tc <TC-ID>` |
+| 🎯 TC-script | `case-script` | sinh script cho test case cụ thể (gate: test-cases APPROVED) | `/testkit:tc <module \| tiêu đề>` |
 | ✅ Nghiệm thu | `review-dev` | review output dev theo test case → verdict từng TC + dev-review.md | `/testkit:review-dev <scope>` |
-| 🐞 Fix bug | `fixbug` | chẩn đoán → hỏi tester (gate) → **sửa code app** + regression test → bug-fix-<id>.md | `/testkit:fixbug <bug\|BUG-ID>` |
+| 🐞 Fix bug | `fixbug` | chẩn đoán → hỏi tester (gate) → **sửa code app** + regression test → bug-fix-<slug>.md | `/testkit:fixbug <mô tả bug>` |
 
 ## Target profile
 

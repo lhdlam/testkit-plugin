@@ -1,6 +1,6 @@
 ---
 name: fixbug
-description: Diagnose and fix ONE application bug — analyze the bug against code + spec (with source citations), ask the tester clarifying questions at a hard human gate, then fix the app code and add a regression test that reproduces the bug (red before, green after). Use via /testkit:fixbug <bug content | BUG-ID>. The one testkit command that edits the app under test.
+description: Diagnose and fix ONE application bug — analyze the bug against code + spec (with source citations), ask the tester clarifying questions at a hard human gate, then fix the app code and add a regression test that reproduces the bug (red before, green after). Use via /testkit:fixbug <mô tả bug>. The one testkit command that edits the app under test.
 license: MIT
 ---
 
@@ -21,20 +21,30 @@ không tái phát.
 2. **KHÔNG green-washing.** Sửa **APP** cho test xanh — KHÔNG bao giờ làm yếu/xoá assertion hay hạ
    Expected để khớp app sai. Regression test phải **thật sự** tái hiện bug: đỏ trước fix, xanh sau fix.
 3. **KHÔNG bịa.** Mọi nhận định về hành vi đúng/sai đều kèm reference (`[SRS §x]`, `[file:line]`,
-   `[bugs.md → BUG-ID]`). Không định vị được nguyên nhân → nói thẳng và hỏi, đừng đoán bừa.
+   `[bugs.md → <tiêu đề bug>]`). Không định vị được nguyên nhân → nói thẳng và hỏi, đừng đoán bừa.
 4. **Sửa root cause, không vá triệu chứng.** Diff nhỏ nhất, theo convention trong `CLAUDE.md`.
 5. **Lỗi ở tài liệu, không phải code → không sửa code.** Nếu spec lỗi thời/mâu thuẫn khiến "bug" thực ra
    là kỳ vọng sai, ghi `open-questions.md` và để tester/BA phân xử — đừng sửa app cho khớp một spec sai.
-6. **Ngôn ngữ:** giao tiếp + artifact theo `lang` (`.testkit-lang` / `TESTKIT_LANG`, mặc định `vi`).
-   Code, định danh (`BUG-LOGIN-03`, `REQ-012`, tag `@regression`), từ khoá framework giữ tiếng Anh.
+6. **Code sạch (bàn giao khách).** Code sửa ra và regression test **KHÔNG chứa comment** — không comment
+   truy vết, không comment giải thích, không ghi chú ngày/tên khách. **KHÔNG tự đặt mã định danh**
+   (BUG-xx, TC-xx, REQ-xx): bug được gọi bằng **tiêu đề mô tả**. Trích dẫn nguồn thật (`SRS §4.2`,
+   `app/auth.ts:31`) chỉ nằm trong tài liệu, không nằm trong code.
+7. **NGHIÊM CẤM comment tiếng Việt trong code** — không ngoại lệ. Gặp là **XOÁ ngay**.
+8. **Dọn rác khi gặp (cleanup-on-sight).** Thấy mã định danh cũ (`TC-xx`/`REQ-xx`/`BUG-xx`/`OQ-xx`),
+   comment tiếng Việt, comment thừa, ghi chú ngày/tên khách ở **BẤT KỲ đâu** — trong vùng đang sửa, file
+   đọc qua, hay chỗ khác trong repo → **XOÁ ngay trong cùng diff**, không hỏi lại, không giới hạn phạm vi.
+9. **Ngôn ngữ:** giao tiếp + artifact theo `lang` (`.testkit-lang` / `TESTKIT_LANG`, mặc định `vi`).
+   Code và từ khoá framework (tag `@regression`, `getByRole`) giữ tiếng Anh.
 
 ## Bước 0 — Đầu vào & nhận dạng
-- Arg = **nội dung bug** (mô tả tự do) HOẶC **`BUG-ID`** đã có trong `bugs.md`. Không có arg → hỏi lại
+- Arg = **mô tả bug** (tự do), hoặc **tiêu đề một mục đã có trong `bugs.md`**. Không có arg → hỏi lại
   nội dung bug, đừng tự chọn bug.
 - Đọc `${TESTKIT_ROOT:-e2e-tests/docs}/.testkit-target` và `profiles/<target>.md` (nguồn yêu cầu, nguồn
   selector, runner, cách thực thi). Đọc `.testkit-lang`.
-- Nếu arg là BUG-ID → load nguyên entry trong `bugs.md` (repro, expected vs actual, TC/REQ). Nếu là mô
-  tả tự do → suy ra `bug-id` dạng `BUG-<MODULE>-nn` (module lấy từ màn hình/tính năng liên quan).
+- Nếu arg khớp một mục trong `bugs.md` → load nguyên mục đó (repro, expected vs actual, test case liên
+  quan). Khớp nhiều mục mơ hồ → liệt kê và hỏi lại.
+- **KHÔNG tự sinh mã bug.** Bug được nhận diện bằng **tiêu đề mô tả ngắn** (vd
+  "đăng nhập được dù sai mật khẩu"); tên file artifact dùng slug kebab của tiêu đề đó.
 
 ## Bước 1 — Định vị & khoanh vùng nguyên nhân (KHÔNG sửa gì)
 Áp dụng tinh thần systematic-debugging: hiểu trước khi sửa.
@@ -73,36 +83,40 @@ DỪNG. Không tiếp Bước 3 tới khi user trả lời câu hỏi và duyệ
 Sinh test tái hiện bug theo convention của `generate-script` + `profiles/<target>.md`:
 - Test **phải đỏ trước fix, xanh sau fix** — nêu rõ điều này trong mô tả/summary; nếu không thể làm nó
   đỏ trên code cũ thì nó chưa tái hiện đúng bug, xem lại root cause.
-- **web**: thêm vào `tests/e2e/` (hoặc file module tương ứng), tag `@regression` + `@bug-<id>`, comment
-  truy vết `// BUG-LOGIN-03 / REQ-012`. Selector bền vững (`getByRole/Label/TestId`).
-- **desktop-pyside6**: `@pytest.mark.regression`, đăng ký marker trong `pytest.ini`, comment `# BUG-...`;
-  selector qua `objectName`; modal → `monkeypatch`.
-- Gắn truy vết vào `rtm.md`: BUG-id ↔ REQ ↔ test (đánh dấu `[automated]`).
+- **Tên test = mô tả hành vi đúng mà bug đã phá** (vd `test('không cho đăng nhập khi sai mật khẩu', ...)`),
+  KHÔNG mã bug, KHÔNG comment.
+- **web**: thêm vào `tests/e2e/` (hoặc file module tương ứng), tag `@regression`.
+  Selector bền vững (`getByRole/Label/TestId`).
+- **desktop-pyside6**: `@pytest.mark.regression`, đăng ký marker trong `pytest.ini`; tên hàm test
+  snake_case theo mô tả; selector qua `objectName`; modal → `monkeypatch`.
+- Gắn truy vết vào `rtm.md`: yêu cầu (kèm nguồn thật) ↔ test (file + tên test, đánh dấu `[automated]`).
 - (Khuyến nghị) dispatch subagent `test-integrity` trên diff test để chắc không có green-washing
   (assertion bị làm yếu, expected sửa cho khớp actual).
 
 ## Bước 5 — Xác minh (evidence trước khi tuyên bố)
 - Chạy đúng regression test + test liên quan:
-  - web: `TEST_ENV=staging npx playwright test --grep @bug-<id>` (rồi mở rộng module liên quan).
+  - web: `TEST_ENV=staging npx playwright test -g "<tên test vừa sinh>"` (rồi mở rộng module liên quan).
   - desktop: `QT_QPA_PLATFORM=offscreen pytest -q -m regression -k <module>`.
 - Xác nhận: regression test **đỏ→xanh**, và **không làm vỡ** test khác. Còn đỏ → CHƯA xong, quay lại
   Bước 3/1, tuyệt đối không tuyên bố đã fix.
 - Báo cáo output thật (số pass/fail), không tô hồng.
 
 ## Bước 6 — Ghi nhận
-- `${TESTKIT_ROOT}/bug-fix-<id>.md`:
+- `${TESTKIT_ROOT}/bug-fix-<slug-tiêu-đề>.md` (vd `bug-fix-dang-nhap-duoc-du-sai-mat-khau.md`):
   ```
-  # Bug fix: BUG-LOGIN-03 — <tiêu đề> — <ngày>
+  # Bug fix: <tiêu đề bug>
   ## Nội dung bug
   ## Nguyên nhân gốc      (kèm reference: [SRS §x], [file:line])
   ## Thay đổi              (file đã sửa + tóm tắt; hoặc "spec issue — không sửa code")
-  ## Regression test       (đường dẫn + tag; đỏ trước / xanh sau)
+  ## Regression test       (đường dẫn + tên test; đỏ trước / xanh sau)
   ## Xác minh              (lệnh + kết quả pass/fail)
   > Review: PENDING
   ```
-- Cập nhật `bugs.md`: entry của bug → trạng thái **Fixed** + link tới `bug-fix-<id>.md` (+ commit nếu có).
-- Nhắc bước sau: tester duyệt `bug-fix-<id>.md`; muốn chốt trên CI → `/testkit:run` rồi `/testkit:ci`.
+  KHÔNG thêm dấu ngày, tên khách hàng hay ghi chú phát sinh nào khác vào artifact.
+- Cập nhật `bugs.md`: mục của bug → trạng thái **Fixed** + link tới file bug-fix tương ứng.
+- Nhắc bước sau: tester duyệt file bug-fix vừa sinh; muốn chốt trên CI → `/testkit:run` rồi `/testkit:ci`.
 
 ## Đầu ra
-Code app đã sửa (hoặc `open-questions.md` nếu là spec issue) + 1 regression test tag `@bug-<id>` gắn
-`rtm.md` + `bug-fix-<id>.md` (`> Review: PENDING`) + `bugs.md` entry chuyển Fixed.
+Code app đã sửa (hoặc `open-questions.md` nếu là spec issue) + 1 regression test `@regression` gắn
+`rtm.md` + `bug-fix-<slug>.md` (`> Review: PENDING`) + mục trong `bugs.md` chuyển Fixed.
+Mọi thứ sinh ra: không comment trong code, không mã định danh, không dấu ngày.
