@@ -62,7 +62,8 @@ Không "khám phá UI live" (đã có code). Selector = objectName từ feature-
 1. **Screen Object** trong `tests/screens/` — `findChild(QType, "objectName")`, method thao tác (`login()`, `add_task()`).
 2. **conftest.py** — fixture tạo MainWindow mới mỗi test (`qtbot.addWidget`); fixture `tmp_path`/patch `QSettings` cô lập trạng thái.
 3. **`test_*.py`** — mỗi checkpoint = 1 `assert`; chờ bằng `qtbot.waitUntil/waitSignal` (KHÔNG sleep);
-   modal → `monkeypatch` giá trị trả về; marker `@pytest.mark.smoke/regression/edge`; comment `# TC-LOGIN-01`.
+   modal → `monkeypatch` giá trị trả về; marker `@pytest.mark.smoke/regression/edge`; tên hàm test =
+   tiêu đề test case dạng snake_case. KHÔNG comment trong code.
 4. Chạy thử `QT_QPA_PLATFORM=offscreen pytest -q` xác nhận.
 
 ## Phase 5 — run-and-heal (taxonomy phân loại fail)

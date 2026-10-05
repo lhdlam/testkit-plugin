@@ -3,10 +3,19 @@
 - Nguồn yêu cầu: input/docs/ (toàn bộ tài liệu dự án).
 - Sinh test case BÁM SÁT tài liệu. KHÔNG bịa yêu cầu không có trong tài liệu.
   Nếu tài liệu thiếu/mâu thuẫn → ghi e2e-tests/docs/open-questions.md cho con người, KHÔNG tự suy diễn.
-- Mỗi test case phải truy vết được về nguồn (tên tài liệu + mục/yêu cầu) trong rtm.md.
+- Mỗi test case phải truy vết được về nguồn (tên tài liệu + mục) trong rtm.md — truy vết sống trong
+  TÀI LIỆU, không nằm trong code.
 - KHÔNG có source code → mọi selector lấy từ khám phá Staging thật qua Playwright MCP, KHÔNG đoán.
 - Test chạy trên môi trường DEPLOY: goto() đường dẫn tương đối, baseURL từ .env, KHÔNG hardcode URL/credential.
-- Mỗi test gắn comment ID test case + nguồn yêu cầu (vd // TC-005 ← REQ-012 ← SRS §4.2).
+- Tên test CHÍNH LÀ mô tả test case.
+- **CODE SẠCH (bàn giao khách): KHÔNG viết comment trong code.** Không comment truy vết, không comment
+  giải thích. Code tự diễn đạt qua tên biến/hàm/test rõ nghĩa.
+- **KHÔNG tự đặt mã định danh** (TC-xx, REQ-xx, BUG-xx, OQ-xx). Yêu cầu được gọi bằng tiêu đề mô tả +
+  trích dẫn nguồn thật (vd "Chính sách mật khẩu" — SRS §4.2), chỉ trong tài liệu.
+- **NGHIÊM CẤM comment tiếng Việt trong code** — không ngoại lệ. Tài liệu vẫn viết tiếng Việt, CODE thì không.
+- **Dọn rác khi gặp:** khi làm tính năng mới / sửa bug, thấy mã định danh cũ (TC-xx, REQ-xx, BUG-xx,
+  OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách ở **BẤT KỲ đâu** → **XOÁ NGAY**
+  trong cùng lần sửa. Không giới hạn phạm vi, không hỏi lại, không để "dọn sau".
 - Page Object Model; selector ưu tiên getByRole > getByLabel > getByTestId.
 - Mỗi test độc lập. Môi trường dùng chung: tự tạo & dọn dữ liệu (timestamp), không phá dữ liệu người khác.
 - Khi sản phẩm chạy khác tài liệu: KHÔNG sửa test cho khớp sản phẩm, ghi e2e-tests/docs/bugs.md.

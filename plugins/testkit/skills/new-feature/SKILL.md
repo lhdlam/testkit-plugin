@@ -12,6 +12,10 @@ riêng tính năng đó**. Nhanh, rẻ, không đụng test cũ, không quét l�
 > Dùng khi project đã init testkit (`.testkit-target` tồn tại) và đã có bộ test gốc. Nếu chưa init →
 > chạy `/testkit:init` rồi pipeline đầy đủ trước.
 
+> **Code sạch:** code sinh ra KHÔNG comment, KHÔNG mã định danh tự đặt. **NGHIÊM CẤM comment tiếng Việt.**
+> **Dọn rác khi gặp:** thấy mã định danh cũ (`TC-xx`/`REQ-xx`/`BUG-xx`/`OQ-xx`), comment tiếng Việt hay
+> comment thừa ở **BẤT KỲ đâu** → **XOÁ ngay** trong cùng lần sửa, không giới hạn phạm vi, không hỏi lại.
+
 ## Bước 0 — Đầu vào & đặt tên
 Lấy tên ngắn gọn `feat-xxxx` (kebab). Xác định **cách định phạm vi**:
 - **Cách A — git diff** (target có code: web-playwright, desktop-pyside6): có tag/nhánh `feat-xxxx`.
@@ -32,15 +36,15 @@ Lấy tên ngắn gọn `feat-xxxx` (kebab). Xác định **cách định phạm
 - `docs/feature-map-feat-xxxx.md` — màn hình/widget/REQ liên quan tính năng.
   (desktop: widget mới thiếu objectName → `docs/missing-object-names.md`)
 - `docs/test-cases-feat-xxxx.md` — case bám phạm vi (positive/negative/boundary/state/permission),
-  ID `TC-FEATXXXX-nn`. KHÔNG bịa hành vi ngoài phạm vi; ý ngoài → mục "Đề xuất".
+  Nhận diện bằng Module + Tiêu đề (KHÔNG mã định danh). KHÔNG bịa hành vi ngoài phạm vi; ý ngoài → mục "Đề xuất".
 - `docs/scenarios-feat-xxxx.md` — kịch bản E2E của tính năng.
 Mỗi artifact kết thúc `> Review: PENDING` (review advisory ở mode này — TỰ nhắc tester duyệt).
 
 ## Bước 3 — Script RIÊNG cho tính năng
 - Page/Screen Object mới (nếu có màn hình mới) trong `tests/pages/` (web) / `tests/screens/` (desktop).
 - File test riêng: `tests/e2e/feat-xxxx.spec.ts` (web) hoặc `tests/test_feat_xxxx.py` (desktop).
-  - web: tag `@feat-xxxx` (+ `@smoke/@regression`); comment `// TC-FEATXXXX-01`.
-  - desktop: `@pytest.mark.feat_xxxx`; đăng ký marker trong `pytest.ini`; comment `# TC-FEATXXXX-01`.
+  - web: tag `@feat-xxxx` (+ `@smoke/@regression`); tên test = tiêu đề test case. KHÔNG comment.
+  - desktop: `@pytest.mark.feat_xxxx`; đăng ký marker trong `pytest.ini`; tên hàm test snake_case theo tiêu đề. KHÔNG comment.
 - Tuân thủ `CLAUDE.md` + `profiles/<target>.md` (selector, auth state, monkeypatch modal, cô lập trạng thái).
 
 ## Bước 4 — Tính năng đổi hành vi cũ?

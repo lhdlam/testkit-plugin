@@ -49,7 +49,7 @@ form/nút/input + validation rule; user flow chính; luồng lỗi & edge case; 
 
 Dùng Playwright MCP mở `{STAGING_URL}`, đăng nhập bằng `.env.staging`, đi qua từng test case để
 xác thực selector thật → `docs/ui-map.md`. Test case không khớp UI → `docs/untestable.md`.
-Gom thành `docs/scenarios.md` (Smoke/Regression/Edge), mỗi bước map TC-ID.
+Gom thành `docs/scenarios.md` (Smoke/Regression/Edge), mỗi bước map tiêu đề test case.
 
 ## Phase 4 — generate-script
 
@@ -57,7 +57,7 @@ Gom thành `docs/scenarios.md` (Smoke/Regression/Edge), mỗi bước map TC-ID.
 2. `tests/auth.setup.ts` — đăng nhập 1 lần, lưu `storageState` vào `tests/fixtures/.auth/user.json`;
    config tái dùng cho mọi project trừ test kiểm tra chính luồng đăng nhập.
 3. `tests/e2e/*.spec.ts` — mỗi checkpoint = 1 `expect()`, tag `@smoke/@regression/@edge`,
-   comment truy vết `// TC-LOGIN-01`.
+   tên test = tiêu đề test case. KHÔNG comment trong code.
 4. Chạy thử 1 luồng smoke trỏ Staging để xác nhận selector khớp, KHÔNG tạo dữ liệu rác.
 
 ## Phase 5 — run-and-heal (taxonomy phân loại fail)

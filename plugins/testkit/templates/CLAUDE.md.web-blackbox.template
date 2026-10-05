@@ -6,7 +6,15 @@
 - Kiến thức domain của tester là tối quan trọng — bổ sung luồng cần kiểm ở mỗi điểm review.
 - Test chạy trên môi trường DEPLOY: goto() đường dẫn tương đối, baseURL từ .env, KHÔNG hardcode URL/credential.
 - Page Object Model; selector ưu tiên getByRole > getByLabel > getByTestId.
-- Mỗi test gắn comment ID test case (vd // TC-LOGIN-01). Mỗi test độc lập.
+- Tên test CHÍNH LÀ mô tả test case. Mỗi test độc lập.
+- **CODE SẠCH (bàn giao khách): KHÔNG viết comment trong code.** Không comment truy vết, không comment
+  giải thích. Code tự diễn đạt qua tên biến/hàm/test rõ nghĩa.
+- **KHÔNG tự đặt mã định danh** (TC-xx, REQ-xx, BUG-xx, OQ-xx). Test case nhận diện bằng
+  Module + tiêu đề mô tả.
+- **NGHIÊM CẤM comment tiếng Việt trong code** — không ngoại lệ. Tài liệu vẫn viết tiếng Việt, CODE thì không.
+- **Dọn rác khi gặp:** khi làm tính năng mới / sửa bug, thấy mã định danh cũ (TC-xx, REQ-xx, BUG-xx,
+  OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách ở **BẤT KỲ đâu** → **XOÁ NGAY**
+  trong cùng lần sửa. Không giới hạn phạm vi, không hỏi lại, không để "dọn sau".
 - Môi trường dùng chung: tự tạo & dọn dữ liệu (timestamp), không phá dữ liệu người khác.
 - Nghi app có bug → ghi e2e-tests/docs/bugs.md, KHÔNG sửa test cho xanh.
 - Lỗi do môi trường (Staging down/mạng/data drift): ghi e2e-tests/docs/env-issues.md, KHÔNG sửa test.

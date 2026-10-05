@@ -10,13 +10,14 @@ skipping requirements**.
 
 ## Inputs
 - Artifacts root (probe `${TESTKIT_ROOT}`, then `e2e-tests/docs`, then `docs`).
-- `feature-map.md` (requirements / features — `REQ-xxx` for web-from-docs; features for others).
-- `test-cases.md` (each case should cite a source: `REQ nguồn` / feature / screen).
+- `feature-map.md` (requirements / features, identified by descriptive title — never by an invented code).
+- `test-cases.md` (each case is identified by Module + Tiêu đề and should cite a real source).
 - `rtm.md` if present.
 
 ## Procedure
-1. Read `feature-map.md`; extract every testable requirement/feature unit. For `web-from-docs`, that's
-   each `REQ-xxx` with its source. For other targets, each feature/screen + its validation/permission rules.
+1. Read `feature-map.md`; extract every testable requirement/feature unit, named by its descriptive
+   title plus its real source (e.g. `SRS §4.2`). For other targets, each feature/screen + its
+   validation/permission rules. Never invent identifier codes.
 2. Read `test-cases.md`; map each test case to the requirement it cites.
 3. Build (or reconcile) the matrix `requirement → [test cases]`. Bucket each requirement:
    - **0 test cases → severity High** (uncovered — blocker if P1/critical flow).
@@ -28,10 +29,10 @@ skipping requirements**.
 
 ## Output
 Use IDs `C1`, `C2`, …. For each finding:
-- `requirement`: the REQ/feature id or name
+- `requirement`: the requirement/feature title
 - `source`: `feature-map` / `test-cases` / `rtm`
 - `severity`: High | Medium | Info
-- `detail`: e.g. "REQ-012 (SRS §4.2) has 0 test cases"
+- `detail`: e.g. "Chính sách mật khẩu (SRS §4.2) has 0 test cases"
 - `suggested_fix`: which kind of case to add (negative/boundary/permission), or "verify against source"
 
 End with a one-line **coverage summary**: `N requirements, M covered, K uncovered (X%)`.
