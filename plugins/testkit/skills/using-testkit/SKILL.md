@@ -31,7 +31,11 @@ pytest-qt) **chạy** test. Bạn (agent) đi qua một pipeline 6 pha, mỗi ph
 8. **Dọn rác khi gặp (cleanup-on-sight).** Trong lúc làm tính năng mới hoặc sửa bug, nếu gặp trong code:
    - mã định danh tự đặt (`TC-xx`, `REQ-xx`, `BUG-xx`, `OQ-xx`) → **XOÁ ngay**, không giữ, không đổi sang mã khác;
    - **comment tiếng Việt** → **XOÁ ngay**;
-   - comment truy vết/giải thích thừa, ghi chú ngày, tên khách → **XOÁ ngay**.
+   - comment truy vết/giải thích thừa, ghi chú ngày, tên khách → **XOÁ ngay**;
+   - **chỉ thị tắt lint/type-check** — `# noqa`, `# type: ignore`, `# pylint: disable`, `# fmt: off`,
+     `// eslint-disable*`, `// @ts-ignore`, `// @ts-nocheck`, `// @ts-expect-error`, `// prettier-ignore`
+     → **XOÁ ngay**, rồi **SỬA nguyên nhân thật**. TUYỆT ĐỐI không gắn lại để làm xanh lint; không sửa
+     được thì nêu lên cho người quyết — che lỗi bằng suppression chính là green-washing (vi phạm luật #3).
    **Gặp ở ĐÂU thì xoá ở ĐÓ — không giới hạn phạm vi, không hỏi lại, không để "dọn sau".** Thấy trong
    file đang mở, file vô tình đọc qua, hay bất kỳ chỗ nào khác trong repo → xoá luôn ngay lần sửa đó.
 

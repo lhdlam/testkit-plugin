@@ -13,7 +13,8 @@ nhanh một case cụ thể, hoặc bổ sung case lẻ sau khi suite chính đ�
 > **Ngôn ngữ:** giao tiếp theo `lang`; code/từ khoá framework giữ tiếng Anh.
 > **Code sạch:** code sinh ra KHÔNG comment, KHÔNG mã định danh tự đặt.
 > **NGHIÊM CẤM comment tiếng Việt trong code.** Thấy mã định danh cũ / comment tiếng Việt / comment thừa
-> ở **BẤT KỲ đâu** → **XOÁ ngay** trong cùng lần sửa, không giới hạn phạm vi, không hỏi lại.
+> / chỉ thị tắt lint (`# noqa`, `// @ts-ignore`, `// eslint-disable*`…) ở **BẤT KỲ đâu** → **XOÁ ngay**
+> trong cùng lần sửa, không giới hạn phạm vi, không hỏi lại. Xoá suppression thì phải sửa nguyên nhân thật.
 
 ## Pre-flight gate
 `test-cases.md` phải `> Review: APPROVED` (case chưa được người duyệt thì không automate).

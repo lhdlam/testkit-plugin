@@ -13,9 +13,14 @@
 - **KHÔNG tự đặt mã định danh** (TC-xx, REQ-xx, BUG-xx, OQ-xx). Yêu cầu được gọi bằng tiêu đề mô tả +
   trích dẫn nguồn thật (vd "Chính sách mật khẩu" — SRS §4.2), chỉ trong tài liệu.
 - **NGHIÊM CẤM comment tiếng Việt trong code** — không ngoại lệ. Tài liệu vẫn viết tiếng Việt, CODE thì không.
+- **KHÔNG dùng chỉ thị tắt lint/type-check để làm xanh**: `# noqa`, `# type: ignore`, `# pylint: disable`,
+  `# fmt: off`, `// eslint-disable*`, `// @ts-ignore`, `// @ts-nocheck`, `// @ts-expect-error`,
+  `// prettier-ignore`. Gặp cái có sẵn → XOÁ rồi SỬA nguyên nhân thật; không sửa được thì báo người,
+  KHÔNG che bằng suppression (đó là green-washing).
 - **Dọn rác khi gặp:** khi làm tính năng mới / sửa bug, thấy mã định danh cũ (TC-xx, REQ-xx, BUG-xx,
-  OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách ở **BẤT KỲ đâu** → **XOÁ NGAY**
-  trong cùng lần sửa. Không giới hạn phạm vi, không hỏi lại, không để "dọn sau".
+  OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách, hay chỉ thị tắt lint nêu trên
+  ở **BẤT KỲ đâu** → **XOÁ NGAY** trong cùng lần sửa.
+  Không giới hạn phạm vi, không hỏi lại, không để "dọn sau".
 - Page Object Model; selector ưu tiên getByRole > getByLabel > getByTestId.
 - Mỗi test độc lập. Môi trường dùng chung: tự tạo & dọn dữ liệu (timestamp), không phá dữ liệu người khác.
 - Khi sản phẩm chạy khác tài liệu: KHÔNG sửa test cho khớp sản phẩm, ghi e2e-tests/docs/bugs.md.

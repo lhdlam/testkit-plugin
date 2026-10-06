@@ -1279,7 +1279,7 @@ Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
           <div class="term">
             <div class="term-bar">
               <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
-              <span class="term-title">5 luật vàng</span>
+              <span class="term-title">6 luật vàng</span>
             </div>
             <div class="term-body">
 <span class="tflag">1. KHÔNG green-washing.</span>
@@ -1301,10 +1301,17 @@ Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
 <span class="tflag">4. NGHIÊM CẤM comment tiếng Việt trong code.</span>
    Không ngoại lệ. Tài liệu/artifact vẫn viết tiếng Việt theo lang — <span class="tok-bad">CODE thì không</span>.
 
-<span class="tflag">5. Dọn rác khi gặp (cleanup-on-sight).</span>
+<span class="tflag">5. Không che lỗi bằng suppression.</span>
+   Cấm gắn <span class="tok-bad"># noqa</span>, <span class="tok-bad"># type: ignore</span>,
+   <span class="tok-bad">// @ts-ignore</span>, <span class="tok-bad">// eslint-disable</span>… để làm xanh lint.
+   Gặp cái có sẵn → XOÁ rồi <span class="tok-ok">sửa nguyên nhân thật</span>; không sửa được thì báo người,
+   KHÔNG che. Che lỗi bằng suppression = green-washing.
+
+<span class="tflag">6. Dọn rác khi gặp (cleanup-on-sight).</span>
    Khi làm tính năng mới / sửa bug, thấy <span class="tok-bad">mã định danh cũ</span>
    (TC-xx, REQ-xx, BUG-xx, OQ-xx), <span class="tok-bad">comment tiếng Việt</span>, comment thừa,
-   ghi chú ngày/tên khách ở <span class="tok-bad">BẤT KỲ đâu</span> → <span class="tok-bad">XOÁ NGAY</span>
+   ghi chú ngày/tên khách, hay <span class="tok-bad">chỉ thị tắt lint</span> (noqa / ts-ignore / eslint-disable)
+   ở <span class="tok-bad">BẤT KỲ đâu</span> → <span class="tok-bad">XOÁ NGAY</span>
    trong cùng lần sửa. <span class="tok-warn">Không giới hạn phạm vi</span>, không hỏi lại, không để "dọn sau".
             </div>
           </div>

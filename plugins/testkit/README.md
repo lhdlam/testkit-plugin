@@ -17,9 +17,12 @@
    trong `rtm.md`, không nhúng vào code. Trích dẫn **nguồn thật** (`SRS §4.2`, `file:line`) vẫn giữ —
    đó là tham chiếu có thật, không phải mã bịa.
 8. **NGHIÊM CẤM comment tiếng Việt trong code.** Không ngoại lệ — tài liệu viết tiếng Việt, CODE thì không.
-9. **Dọn rác khi gặp (cleanup-on-sight):** khi làm tính năng mới / sửa bug, thấy mã định danh cũ
-   (TC-xx, REQ-xx, BUG-xx, OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách
-   ở **BẤT KỲ đâu** → **XOÁ NGAY** trong cùng lần sửa.
+9. **Không che lỗi bằng suppression:** cấm `# noqa`, `# type: ignore`, `# pylint: disable`,
+   `// @ts-ignore`, `// @ts-nocheck`, `// eslint-disable*`, `// prettier-ignore`… để làm xanh lint.
+   Gặp cái có sẵn → XOÁ rồi **sửa nguyên nhân thật**; không sửa được thì báo người, không che.
+10. **Dọn rác khi gặp (cleanup-on-sight):** khi làm tính năng mới / sửa bug, thấy mã định danh cũ
+   (TC-xx, REQ-xx, BUG-xx, OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách,
+   hay chỉ thị tắt lint ở **BẤT KỲ đâu** → **XOÁ NGAY** trong cùng lần sửa.
    Không giới hạn phạm vi, không hỏi lại, không để "dọn sau".
 
 ## Kiến trúc: 1 pipeline + target profile cắm vào
