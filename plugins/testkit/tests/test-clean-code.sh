@@ -96,6 +96,19 @@ else
     ok "code templates carry no lint suppressions"
 fi
 
+# Customer decisions and their dates never belong in code
+chk "skills/using-testkit/SKILL.md" "quyết định của khách" "using-testkit bans customer-decision notes"
+chk "README.md" "quyết định của khách" "README bans customer-decision notes"
+chk "skills/generate-script/SKILL.md" "quyết định của khách" "generate-script bans customer-decision notes"
+chk "skills/fixbug/SKILL.md" "quyết định của khách" "fixbug bans customer-decision notes"
+chk "skills/case-script/SKILL.md" "quyết định của khách" "case-script bans customer-decision notes"
+chk "skills/new-feature/SKILL.md" "quyết định của khách" "new-feature bans customer-decision notes"
+chk "agents/test-integrity.md" "Customer-decision notes" "test-integrity detects customer-decision notes"
+for t in web-playwright web-from-docs web-blackbox desktop-pyside6; do
+    chk "templates/CLAUDE.md.$t.template" "quyết định của khách" "$t template bans customer-decision notes"
+done
+chk "templates/cursor-rules.testkit.mdc.template" "quyết định của khách" "cursor rules ban customer-decision notes"
+
 # No date / customer stamps in generated artifact headers
 if grep -rqE "<ngày>|— <ngày" --include="*.md" "$ROOT"; then
     bad "artifact templates still stamp a date"

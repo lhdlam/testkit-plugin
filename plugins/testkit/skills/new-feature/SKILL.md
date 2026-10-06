@@ -14,7 +14,8 @@ riêng tính năng đó**. Nhanh, rẻ, không đụng test cũ, không quét l�
 
 > **Code sạch:** code sinh ra KHÔNG comment, KHÔNG mã định danh tự đặt. **NGHIÊM CẤM comment tiếng Việt.**
 > **Dọn rác khi gặp:** thấy mã định danh cũ (`TC-xx`/`REQ-xx`/`BUG-xx`/`OQ-xx`), comment tiếng Việt,
-> comment thừa hay chỉ thị tắt lint (`# noqa`, `// @ts-ignore`, `// eslint-disable*`…) ở **BẤT KỲ đâu**
+> comment thừa, ghi chú quyết định của khách + ngày quyết định, hay chỉ thị tắt lint (`# noqa`,
+> `// @ts-ignore`, `// eslint-disable*`…) ở **BẤT KỲ đâu**
 > → **XOÁ ngay** trong cùng lần sửa, không giới hạn phạm vi, không hỏi lại. Xoá suppression thì phải sửa
 > nguyên nhân thật, không gắn lại để làm xanh.
 

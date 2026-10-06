@@ -16,9 +16,12 @@
   `# fmt: off`, `// eslint-disable*`, `// @ts-ignore`, `// @ts-nocheck`, `// @ts-expect-error`,
   `// prettier-ignore`. Gặp cái có sẵn → XOÁ rồi SỬA nguyên nhân thật; không sửa được thì báo người,
   KHÔNG che bằng suppression (đó là green-washing).
+- **KHÔNG ghi quyết định của khách và ngày quyết định vào code** — vd `// khách chốt bỏ validate —
+  02/10/2026`, `# theo yêu cầu KH ngày 15/9`, tên khách, số hợp đồng/ticket. Quyết định nghiệp vụ
+  thuộc về TÀI LIỆU, không phải code.
 - **Dọn rác khi gặp:** khi làm tính năng mới / sửa bug, thấy mã định danh cũ (TC-xx, REQ-xx, BUG-xx,
-  OQ-xx), comment tiếng Việt, comment thừa, ghi chú ngày/tên khách, hay chỉ thị tắt lint nêu trên
-  ở **BẤT KỲ đâu** → **XOÁ NGAY** trong cùng lần sửa.
+  OQ-xx), comment tiếng Việt, comment thừa, ghi chú quyết định của khách / ngày quyết định, hay chỉ thị
+  tắt lint nêu trên ở **BẤT KỲ đâu** → **XOÁ NGAY** trong cùng lần sửa.
   Không giới hạn phạm vi, không hỏi lại, không để "dọn sau".
 - Môi trường dùng chung: tự tạo & dọn dữ liệu (timestamp), không phá dữ liệu người khác.
 - Nghi app có bug → ghi e2e-tests/docs/bugs.md, KHÔNG sửa test cho xanh.
