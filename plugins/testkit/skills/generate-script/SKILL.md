@@ -10,13 +10,18 @@ Mục tiêu: biến kịch bản thành **code chạy được**, ổn định, 
 `CLAUDE.md` + `profiles/<target>.md`.
 
 ## Luật code sạch (bắt buộc)
-- **KHÔNG viết comment trong code sinh ra** — không comment truy vết, không comment giải thích,
-  không ghi chú ngày/tên khách. Code tự diễn đạt qua tên biến/hàm/test rõ nghĩa.
+- **KHÔNG viết comment trong code sinh ra** — không comment truy vết, không comment giải thích.
+  Code tự diễn đạt qua tên biến/hàm/test rõ nghĩa.
+- **KHÔNG ghi quyết định của khách / ngày quyết định vào code** (vd `// khách chốt ... — 02/10/2026`,
+  tên khách, số hợp đồng/ticket). Quyết định nghiệp vụ sống trong tài liệu. Gặp là **XOÁ ngay**.
 - **KHÔNG tự đặt mã định danh** (TC-xx, REQ-xx, BUG-xx). **Tên test CHÍNH LÀ tiêu đề test case.**
 - Truy vết test ↔ test case ↔ yêu cầu sống trong `rtm.md` (ánh xạ qua file + tên test), **không** trong code.
 - **NGHIÊM CẤM comment tiếng Việt trong code** — không ngoại lệ.
-- **Dọn rác khi gặp:** thấy mã định danh cũ (`TC-xx`/`REQ-xx`/`BUG-xx`/`OQ-xx`), comment tiếng Việt hay
-  comment thừa ở **BẤT KỲ đâu** → **XOÁ ngay trong cùng lần sửa**, không hỏi lại, không giới hạn phạm vi.
+- **KHÔNG dùng chỉ thị tắt lint/type-check** (`# noqa`, `# type: ignore`, `// @ts-ignore`,
+  `// eslint-disable*`…) để làm xanh. Gặp cái có sẵn → **XOÁ** rồi **sửa nguyên nhân thật**.
+- **Dọn rác khi gặp:** thấy mã định danh cũ (`TC-xx`/`REQ-xx`/`BUG-xx`/`OQ-xx`), comment tiếng Việt,
+  comment thừa hay chỉ thị `noqa`/`ts-ignore`/`eslint-disable` ở **BẤT KỲ đâu** → **XOÁ ngay trong cùng
+  lần sửa**, không hỏi lại, không giới hạn phạm vi.
 
 ## Pre-flight gate
 `${TESTKIT_ROOT:-e2e-tests/docs}/scenarios.md` phải `> Review: APPROVED`. Chưa → DỪNG, nhắc duyệt Phase 3.

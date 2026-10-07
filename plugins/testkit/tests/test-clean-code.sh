@@ -71,6 +71,44 @@ chk "skills/using-testkit/SKILL.md" "không giới hạn phạm vi" "cleanup is 
 chk "skills/fixbug/SKILL.md" "BẤT KỲ đâu" "fixbug cleans up anywhere it finds markers"
 chk "README.md" "BẤT KỲ đâu" "README states cleanup is unbounded"
 
+# Lint/type-check suppressions are banned and cleaned up on sight
+chk "skills/using-testkit/SKILL.md" "noqa" "using-testkit bans lint suppressions"
+chk "README.md" "noqa" "README bans lint suppressions"
+chk "skills/generate-script/SKILL.md" "noqa" "generate-script bans lint suppressions"
+chk "skills/fixbug/SKILL.md" "noqa" "fixbug bans lint suppressions"
+chk "skills/case-script/SKILL.md" "noqa" "case-script bans lint suppressions"
+chk "skills/new-feature/SKILL.md" "noqa" "new-feature bans lint suppressions"
+chk "skills/run-and-heal/SKILL.md" "noqa" "run-and-heal bans suppressions as a green-wash fix"
+chk "agents/test-integrity.md" "noqa" "test-integrity detects lint suppressions"
+for t in web-playwright web-from-docs web-blackbox desktop-pyside6; do
+    chk "templates/CLAUDE.md.$t.template" "noqa" "$t template bans lint suppressions"
+done
+chk "templates/cursor-rules.testkit.mdc.template" "noqa" "cursor rules ban lint suppressions"
+
+# Removing a suppression must be paired with fixing the real cause, never re-silencing
+chk "skills/using-testkit/SKILL.md" "SỬA nguyên nhân thật" "suppression removal requires a real fix"
+chk "skills/run-and-heal/SKILL.md" "Ba luật cứng" "run-and-heal lists suppressions as a hard rule"
+
+# The shipped code templates must carry no suppressions themselves
+if grep -rqE "noqa|type: ?ignore|@ts-ignore|eslint-disable|pylint: ?disable" "$ROOT"/templates/*.ts.template "$ROOT"/templates/*.py.template 2>/dev/null; then
+    bad "code templates contain lint suppressions"
+else
+    ok "code templates carry no lint suppressions"
+fi
+
+# Customer decisions and their dates never belong in code
+chk "skills/using-testkit/SKILL.md" "quyết định của khách" "using-testkit bans customer-decision notes"
+chk "README.md" "quyết định của khách" "README bans customer-decision notes"
+chk "skills/generate-script/SKILL.md" "quyết định của khách" "generate-script bans customer-decision notes"
+chk "skills/fixbug/SKILL.md" "quyết định của khách" "fixbug bans customer-decision notes"
+chk "skills/case-script/SKILL.md" "quyết định của khách" "case-script bans customer-decision notes"
+chk "skills/new-feature/SKILL.md" "quyết định của khách" "new-feature bans customer-decision notes"
+chk "agents/test-integrity.md" "Customer-decision notes" "test-integrity detects customer-decision notes"
+for t in web-playwright web-from-docs web-blackbox desktop-pyside6; do
+    chk "templates/CLAUDE.md.$t.template" "quyết định của khách" "$t template bans customer-decision notes"
+done
+chk "templates/cursor-rules.testkit.mdc.template" "quyết định của khách" "cursor rules ban customer-decision notes"
+
 # No date / customer stamps in generated artifact headers
 if grep -rqE "<ngày>|— <ngày" --include="*.md" "$ROOT"; then
     bad "artifact templates still stamp a date"

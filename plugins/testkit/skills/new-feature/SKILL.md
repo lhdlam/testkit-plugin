@@ -13,8 +13,11 @@ riêng tính năng đó**. Nhanh, rẻ, không đụng test cũ, không quét l�
 > chạy `/testkit:init` rồi pipeline đầy đủ trước.
 
 > **Code sạch:** code sinh ra KHÔNG comment, KHÔNG mã định danh tự đặt. **NGHIÊM CẤM comment tiếng Việt.**
-> **Dọn rác khi gặp:** thấy mã định danh cũ (`TC-xx`/`REQ-xx`/`BUG-xx`/`OQ-xx`), comment tiếng Việt hay
-> comment thừa ở **BẤT KỲ đâu** → **XOÁ ngay** trong cùng lần sửa, không giới hạn phạm vi, không hỏi lại.
+> **Dọn rác khi gặp:** thấy mã định danh cũ (`TC-xx`/`REQ-xx`/`BUG-xx`/`OQ-xx`), comment tiếng Việt,
+> comment thừa, ghi chú quyết định của khách + ngày quyết định, hay chỉ thị tắt lint (`# noqa`,
+> `// @ts-ignore`, `// eslint-disable*`…) ở **BẤT KỲ đâu**
+> → **XOÁ ngay** trong cùng lần sửa, không giới hạn phạm vi, không hỏi lại. Xoá suppression thì phải sửa
+> nguyên nhân thật, không gắn lại để làm xanh.
 
 ## Bước 0 — Đầu vào & đặt tên
 Lấy tên ngắn gọn `feat-xxxx` (kebab). Xác định **cách định phạm vi**:

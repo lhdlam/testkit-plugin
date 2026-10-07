@@ -29,8 +29,11 @@ Với mỗi test fail, đọc trace/log rồi phân loại:
 | **(desktop) modal chặn** | test treo ở dialog | `monkeypatch` giá trị trả về |
 | **(desktop) chỉ fail headless** | render phụ thuộc màn hình | sửa để chạy `offscreen`/xvfb |
 
-> Hai luật cứng: (1) **KHÔNG sửa test cho xanh khi nghi app có bug.**
+> Ba luật cứng: (1) **KHÔNG sửa test cho xanh khi nghi app có bug.**
 > (2) **Flaky do data drift** chữa bằng dữ liệu độc lập, KHÔNG bằng tăng timeout.
+> (3) **KHÔNG gắn chỉ thị tắt lint/type-check** (`# noqa`, `# type: ignore`, `// @ts-ignore`,
+> `// eslint-disable*`…) để làm xanh — đó là green-washing. Gặp cái có sẵn → **XOÁ** rồi sửa nguyên
+> nhân thật; không sửa được thì báo người quyết, không che.
 
 ## Tùy chọn — dùng subagent (khi có)
 - `failure-classifier`: phân loại hàng loạt fail và route sang `bugs.md`/`env-issues.md`.

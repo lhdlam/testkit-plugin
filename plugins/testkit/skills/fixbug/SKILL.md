@@ -31,8 +31,13 @@ không tái phát.
    `app/auth.ts:31`) chỉ nằm trong tài liệu, không nằm trong code.
 7. **NGHIÊM CẤM comment tiếng Việt trong code** — không ngoại lệ. Gặp là **XOÁ ngay**.
 8. **Dọn rác khi gặp (cleanup-on-sight).** Thấy mã định danh cũ (`TC-xx`/`REQ-xx`/`BUG-xx`/`OQ-xx`),
-   comment tiếng Việt, comment thừa, ghi chú ngày/tên khách ở **BẤT KỲ đâu** — trong vùng đang sửa, file
-   đọc qua, hay chỗ khác trong repo → **XOÁ ngay trong cùng diff**, không hỏi lại, không giới hạn phạm vi.
+   comment tiếng Việt, comment thừa, **ghi chú quyết định của khách / ngày quyết định** (vd
+   `// khách chốt ... — 02/10/2026`, tên khách, số hợp đồng), hoặc **chỉ thị tắt lint/type-check**
+   (`# noqa`, `# type: ignore`, `# pylint: disable`, `// @ts-ignore`, `// @ts-nocheck`,
+   `// eslint-disable*`, `// prettier-ignore`) ở **BẤT KỲ đâu** — trong vùng đang sửa, file đọc qua, hay
+   chỗ khác trong repo → **XOÁ ngay trong cùng diff**, không hỏi lại, không giới hạn phạm vi.
+   Với suppression: xoá xong phải **SỬA nguyên nhân thật**; TUYỆT ĐỐI không gắn `noqa`/`ts-ignore` để
+   che lỗi do bản fix gây ra — đó là green-washing (vi phạm luật #2).
 9. **Ngôn ngữ:** giao tiếp + artifact theo `lang` (`.testkit-lang` / `TESTKIT_LANG`, mặc định `vi`).
    Code và từ khoá framework (tag `@regression`, `getByRole`) giữ tiếng Anh.
 
