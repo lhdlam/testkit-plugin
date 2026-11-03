@@ -24,7 +24,6 @@ chk "templates/cursor-rules.testkit.mdc.template" "KHÔNG viết comment trong c
 # Code-producing skills carry the rule
 chk "skills/generate-script/SKILL.md" "Luật code sạch" "generate-script has the clean-code section"
 chk "skills/case-script/SKILL.md" "KHÔNG comment trong code" "case-script forbids comments"
-chk "skills/fixbug/SKILL.md" "Code sạch (bàn giao khách)" "fixbug forbids comments"
 chk "skills/new-feature/SKILL.md" "KHÔNG comment" "new-feature forbids comments"
 
 # Test case identity is Module + title, and the test name carries it
@@ -62,20 +61,17 @@ chk "templates/cursor-rules.testkit.mdc.template" "Dọn rác khi gặp" "cursor
 # Cleanup-on-sight must reach every skill that writes code
 chk "skills/using-testkit/SKILL.md" "cleanup-on-sight" "using-testkit states cleanup-on-sight"
 chk "skills/generate-script/SKILL.md" "Dọn rác khi gặp" "generate-script has cleanup-on-sight"
-chk "skills/fixbug/SKILL.md" "cleanup-on-sight" "fixbug has cleanup-on-sight"
 chk "skills/case-script/SKILL.md" "XOÁ ngay" "case-script deletes legacy markers on sight"
 chk "skills/new-feature/SKILL.md" "Dọn rác khi gặp" "new-feature has cleanup-on-sight"
 
 # Cleanup is unbounded by design — delete on sight, wherever it is found
 chk "skills/using-testkit/SKILL.md" "không giới hạn phạm vi" "cleanup is unbounded (delete on sight)"
-chk "skills/fixbug/SKILL.md" "BẤT KỲ đâu" "fixbug cleans up anywhere it finds markers"
 chk "README.md" "BẤT KỲ đâu" "README states cleanup is unbounded"
 
 # Lint/type-check suppressions are banned and cleaned up on sight
 chk "skills/using-testkit/SKILL.md" "noqa" "using-testkit bans lint suppressions"
 chk "README.md" "noqa" "README bans lint suppressions"
 chk "skills/generate-script/SKILL.md" "noqa" "generate-script bans lint suppressions"
-chk "skills/fixbug/SKILL.md" "noqa" "fixbug bans lint suppressions"
 chk "skills/case-script/SKILL.md" "noqa" "case-script bans lint suppressions"
 chk "skills/new-feature/SKILL.md" "noqa" "new-feature bans lint suppressions"
 chk "skills/run-and-heal/SKILL.md" "noqa" "run-and-heal bans suppressions as a green-wash fix"
@@ -100,7 +96,6 @@ fi
 chk "skills/using-testkit/SKILL.md" "quyết định của khách" "using-testkit bans customer-decision notes"
 chk "README.md" "quyết định của khách" "README bans customer-decision notes"
 chk "skills/generate-script/SKILL.md" "quyết định của khách" "generate-script bans customer-decision notes"
-chk "skills/fixbug/SKILL.md" "quyết định của khách" "fixbug bans customer-decision notes"
 chk "skills/case-script/SKILL.md" "quyết định của khách" "case-script bans customer-decision notes"
 chk "skills/new-feature/SKILL.md" "quyết định của khách" "new-feature bans customer-decision notes"
 chk "agents/test-integrity.md" "Customer-decision notes" "test-integrity detects customer-decision notes"

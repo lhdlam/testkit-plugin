@@ -29,14 +29,13 @@ has "commands/review-dev.md"      "review-dev command exists"
 chk "skills/review-dev/SKILL.md" "Blocked" "review-dev has verdict taxonomy"
 chk "skills/review-dev/SKILL.md" "bugs.md" "review-dev routes fails to bugs.md"
 
-# fixbug
-has "skills/fixbug/SKILL.md"      "fixbug skill exists"
-has "commands/fixbug.md"          "fixbug command exists"
-chk "skills/fixbug/SKILL.md" "green-wash" "fixbug forbids green-washing"
-chk "skills/fixbug/SKILL.md" "regression" "fixbug always adds a regression test"
-chk "skills/fixbug/SKILL.md" "HUMAN GATE" "fixbug stops at a human gate before editing code"
-chk "skills/fixbug/SKILL.md" "bug-fix-" "fixbug writes a bug-fix artifact"
-chk "skills/using-testkit/SKILL.md" "fixbug" "using-testkit documents fixbug as the dev-side exception"
+
+# the dev side now lives in numokit — testkit must not ship it
+[[ -e "$ROOT/skills/fixbug" || -e "$ROOT/commands/fixbug.md" ]] \
+    && bad "fixbug still present — it moved to the numokit plugin" \
+    || ok "fixbug removed (now /numokit:fixbug)"
+chk "skills/using-testkit/SKILL.md" "numokit" "using-testkit points at numokit for code edits"
+chk "skills/using-testkit/SKILL.md" "Không có ngoại lệ" "testkit never edits product code"
 
 # gate wiring
 chk "hooks/pre-tool-gate.sh" "case-script" "gate covers case-script"

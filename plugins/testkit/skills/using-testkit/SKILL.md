@@ -43,9 +43,9 @@ pytest-qt) **chạy** test. Bạn (agent) đi qua một pipeline 6 pha, mỗi ph
    **Gặp ở ĐÂU thì xoá ở ĐÓ — không giới hạn phạm vi, không hỏi lại, không để "dọn sau".** Thấy trong
    file đang mở, file vô tình đọc qua, hay bất kỳ chỗ nào khác trong repo → xoá luôn ngay lần sửa đó.
 
-> **Ngoại lệ duy nhất của luật #1:** `/testkit:fixbug` được phép **sửa code app** (dev-side) — nhưng chỉ
-> sau một **human gate bắt buộc** (hỏi tester + duyệt hướng) và vẫn cấm green-washing (sửa app, không
-> làm yếu test). Mọi command khác giữ nguyên: agent viết test, framework chạy test.
+> **Không có ngoại lệ.** testkit KHÔNG sửa code sản phẩm — kể cả khi thấy rõ bug. Nghi bug → ghi
+> `bugs.md` cho người xử. Việc chẩn đoán & sửa code thuộc plugin **numokit**
+> (`/numokit:fixbug`, https://github.com/lhdlam/numokit-plugin) — hai plugin độc lập, dùng song song.
 
 ## Ngôn ngữ (en/vi)
 
@@ -83,7 +83,6 @@ tên file, lệnh shell, tag framework (`@smoke`). Tên test theo convention tro
 | ❓ Q&A | `question` | hỏi đáp tài liệu/code/artifact — mọi câu trả lời kèm reference | `/testkit:question` |
 | 🎯 TC-script | `case-script` | sinh script cho test case cụ thể (gate: test-cases APPROVED) | `/testkit:tc <module \| tiêu đề>` |
 | ✅ Nghiệm thu | `review-dev` | review output dev theo test case → verdict từng TC + dev-review.md | `/testkit:review-dev <scope>` |
-| 🐞 Fix bug | `fixbug` | chẩn đoán → hỏi tester (gate) → **sửa code app** + regression test → bug-fix-<slug>.md | `/testkit:fixbug <mô tả bug>` |
 
 ## Target profile
 
