@@ -521,6 +521,9 @@
           <a class="uc-link" data-target="uc6" href="#uc6">
             <span class="uc-num">6.</span>Chẩn đoán &amp; sửa bug (fixbug)
           </a>
+          <a class="uc-link" data-target="uc7" href="#uc7">
+            <span class="uc-num">7.</span>Phân tích task &amp; lập kế hoạch (plan)
+          </a>
         </div>
         <div class="sb-group">
           <div class="sb-group-title">Tham khảo</div>
@@ -1268,6 +1271,126 @@ Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
         </div>
       </section>
 
+      <!-- ──────────── UC 7 — PLAN ──────────── -->
+      <section id="uc7" class="panel" role="tabpanel">
+        <div class="panel-head">
+          <h2>Phân tích task &amp; lập kế hoạch — <code>/testkit:plan</code></h2>
+          <p>
+            Nhận một task mới (tính năng, yêu cầu đổi, lô bug)? Chạy pha này <b>trước</b> khi đụng pipeline:
+            agent <b>chỉ đọc</b> — định phạm vi, <b>đo ảnh hưởng</b>, <b>so khớp với tài liệu</b> và
+            <b>raise mọi chỗ lệch</b> — rồi trình <code>plan-&lt;slug&gt;.md</code> cho bạn duyệt.
+          </p>
+          <p class="callout">
+            <b>Pha này KHÔNG sinh test, KHÔNG sửa code.</b> Mục đích là bắt sai phạm vi, lệch spec và rủi ro
+            lan rộng <i>trước khi</i> tốn công sinh test case/script. Lập plan là <b>tùy chọn</b> — nhưng
+            <b>đã lập thì phải duyệt</b> mới chạy được <code>/testkit:new-feature</code>.
+          </p>
+          <div class="meta">
+            <span class="chip accent">Phase 0.5</span>
+            <span class="chip">chỉ đọc</span>
+            <span class="chip">đo ảnh hưởng</span>
+            <span class="chip muted">gate có điều kiện</span>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Đầu vào</span> mô tả task hoặc nhánh/tag git
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">plan · chỉ đọc, không sinh test</span>
+            </div>
+            <div class="term-body">
+<span class="label input">▶ Cách A — mô tả tự do</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:plan</span> <span class="tstr">"thêm nút export CSV ở trang report"</span>
+
+<span class="label input">▶ Cách B — trỏ nhánh/tag git đã có code (chắc chắn hơn)</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:plan</span> <span class="tstr">feat-export-csv</span>
+<span class="tcom"># agent dùng git diff để định phạm vi, không quét cả repo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Lõi</span> Đo ảnh hưởng 6 hạng mục
+            <span class="phase-desc">— mỗi dòng kèm nguồn thật + mức Cao/Trung bình/Thấp</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">plan · blast radius</span>
+            </div>
+            <div class="term-body">
+<span class="tcom"># Quét ĐỦ 6 hạng mục — không bị ảnh hưởng thì ghi "không", KHÔNG bỏ trống.</span>
+
+<span class="tflag">Màn hình / luồng</span>          màn hình, route, dialog, bước trong luồng bị đổi
+<span class="tflag">Test case hiện có</span>         case phải sửa Expected / bị vô hiệu
+<span class="tflag">Test tự động hiện có</span>      file + tên test nhiều khả năng đỏ (đối chiếu rtm.md)
+<span class="tflag">Tài liệu / yêu cầu</span>        mục tài liệu cần cập nhật theo task
+<span class="tflag">Dữ liệu &amp; phân quyền</span>     schema/dữ liệu dùng chung, vai trò, phiên, quyền
+<span class="tflag">Vùng dùng chung</span>           hàm/component/API dùng chung nơi khác — dễ vỡ ngoài ý muốn
+
+Mức: <span class="tok-bad">Cao</span> (chắc chắn vỡ / chạm luồng critical) · <span class="tok-warn">Trung bình</span> (phải sửa theo) · <span class="tok-ok">Thấp</span> (gián tiếp)
+Không đủ dữ kiện → ghi <span class="tok-warn">"cần xác minh"</span> kèm cách xác minh. <span class="tok-bad">KHÔNG hạ mức cho kế hoạch đẹp.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">So khớp spec</span> lệch thì RAISE, không tự quyết
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">plan · đối chiếu 3 chiều: task ↔ tài liệu ↔ hiện thực</span>
+            </div>
+            <div class="term-body">
+<span class="tflag">Task ≠ Tài liệu</span>        task yêu cầu khác điều tài liệu quy định
+                        → RAISE <span class="tcmd">open-questions.md</span>, chờ BA/tester
+<span class="tflag">Tài liệu ≠ Hiện thực</span>   tài liệu và code đang vênh sẵn từ trước
+                        → RAISE (bug tiềm ẩn HOẶC tài liệu lỗi thời)
+<span class="tflag">Task thiếu định nghĩa</span>  tài liệu không nói gì về vùng này
+                        → nêu ở "Câu hỏi cần trả lời", <span class="tok-bad">KHÔNG tự suy diễn</span>
+
+<span class="tok-warn">⚠</span> Có lệch → <span class="tok-bad">chưa được coi là đã chốt phạm vi</span>; plan phải ghi rõ "chờ phân xử".
+            </div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <h3 class="phase-title">
+            <span class="phase-num">Đầu ra</span> plan-&lt;slug&gt;.md
+            <span class="skill-chip gate">🚦 bạn duyệt</span>
+          </h3>
+          <div class="term">
+            <div class="term-bar">
+              <span class="lights"><span class="light"></span><span class="light"></span><span class="light"></span></span>
+              <span class="term-title">plan · gate có điều kiện</span>
+            </div>
+            <div class="term-body">
+<span class="tok-add">A</span> <span class="tcmd">plan-them-export-csv.md</span>
+     Mục tiêu · Nguồn · Phạm vi (trong / <span class="tok-bad">NGOÀI</span>) · Đánh giá ảnh hưởng
+     Lệch spec · Rủi ro · Các bước đề xuất · Câu hỏi cần bạn trả lời
+  <span class="tprompt">&gt;</span> <span class="tcmd">Review:</span> <span class="tok-warn">PENDING</span>
+
+<span class="label gate">🚦 Gate có điều kiện (khác các pha khác)</span>
+  Chưa lập plan nào   → pipeline chạy như cũ, <span class="tok-ok">không chặn</span>  <span class="tcom">(tương thích ngược)</span>
+  Đã lập, còn PENDING → hook <span class="tok-bad">CHẶN</span> <span class="tcmd">/testkit:new-feature</span>
+  Plan không dùng nữa → cứ <span class="tok-ok">xoá file</span> đi
+
+<span class="label output">▼ Duyệt xong, đi tiếp theo loại task</span>
+  Tính năng mới          → <span class="tcmd">/testkit:new-feature</span>
+  Thêm case module sẵn có → <span class="tcmd">/testkit:cases</span> rồi <span class="tcmd">/testkit:tc</span>
+  Sửa bug                → <span class="tcmd">/testkit:fixbug</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ──────────── UC REF — RULES / COMMANDS / TROUBLESHOOTING ──────────── -->
       <section id="ucref" class="panel" role="tabpanel">
         <div class="panel-head">
@@ -1340,6 +1463,7 @@ Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
 <span class="tprompt">$</span> <span class="tcmd">/testkit:question mật khẩu yêu cầu gì?</span>   <span class="tcom"># trả lời KÈM reference [SRS §x] [TC-y] [file:line]</span>
 <span class="tprompt">$</span> <span class="tcmd">/testkit:tc Login</span>                        <span class="tcom"># sinh script cho test case của module (cần test-cases APPROVED)</span>
 <span class="tprompt">$</span> <span class="tcmd">/testkit:review-dev login</span>                <span class="tcom"># nghiệm thu output dev theo test case → dev-review.md</span>
+<span class="tprompt">$</span> <span class="tcmd">/testkit:plan "thêm nút export CSV"</span>       <span class="tcom"># phân tích task + đo ảnh hưởng TRƯỚC khi làm</span>
 <span class="tprompt">$</span> <span class="tcmd">/testkit:fixbug "sai mật khẩu vẫn vào được"</span>  <span class="tcom"># chẩn đoán → hỏi bạn (gate) → sửa code + regression test</span>
             </div>
           </div>
@@ -1385,6 +1509,7 @@ Agent KHÔNG sửa code cho khớp một tài liệu sai. Thay vào đó:
           <table class="t">
             <thead><tr><th>Pha</th><th>Lệnh</th><th>Artifact</th><th>Cổng</th></tr></thead>
             <tbody>
+              <tr><td>0.5</td><td><code>/testkit:plan</code></td><td><code>plan-&lt;slug&gt;.md</code></td><td>🚦 review (gate có điều kiện)</td></tr>
               <tr><td>1</td><td><code>/testkit:analyze</code></td><td><code>feature-map.md</code></td><td>🚦 review</td></tr>
               <tr><td>2</td><td><code>/testkit:cases</code></td><td><code>test-cases.md</code> + <code>rtm.md</code></td><td>🚦 review</td></tr>
               <tr><td>3</td><td><code>/testkit:scenarios</code></td><td><code>ui-map.md</code> + <code>scenarios.md</code></td><td>🚦 review</td></tr>

@@ -143,6 +143,28 @@ UI_SLOWMO=500 pytest -s tests/test_login.py
 ```
 CI thì vẫn luôn headless — watch chỉ để debug/demo.
 
+### (Khuyến nghị) `/testkit:plan` — phân tích task TRƯỚC khi làm
+
+Khi nhận một task mới (tính năng, yêu cầu đổi, lô bug), chạy trước khi đụng pipeline:
+
+```bash
+/testkit:plan "thêm nút export CSV ở trang report"
+/testkit:plan feat-export-csv            # hoặc trỏ nhánh/tag git đã có code
+```
+
+Agent CHỈ ĐỌC (không sinh test, không sửa code) và trả về `plan-<slug>.md`:
+- **Phạm vi** — trong / NGOÀI phạm vi (chặn phình việc)
+- **Đánh giá ảnh hưởng** 6 hạng mục, mỗi dòng kèm nguồn + mức Cao/Trung bình/Thấp:
+  màn hình·luồng · test case hiện có · test tự động hiện có · tài liệu · dữ liệu & phân quyền · vùng dùng chung
+- **Lệch spec** — so khớp task ↔ tài liệu ↔ hiện thực; lệch thì raise `open-questions.md`, KHÔNG tự quyết
+- **Rủi ro**, **các bước đề xuất**, **câu hỏi cần bạn trả lời**
+
+Bạn duyệt (`PENDING` → `APPROVED`) rồi mới chạy `/testkit:new-feature` (hoặc `/testkit:cases`, `/testkit:fixbug`).
+
+> Lập plan là **tùy chọn** — chưa lập thì pipeline chạy như cũ. Nhưng **đã lập rồi thì phải duyệt**:
+> trên Claude Code hook sẽ chặn `/testkit:new-feature` khi còn `plan-*.md` ở trạng thái PENDING.
+> Plan không còn dùng nữa thì cứ xoá file đi.
+
 ### (Tùy chọn) Công cụ tester hàng ngày
 ```bash
 /testkit:question mật khẩu yêu cầu gì?   # trả lời KÈM reference [SRS §x] [TC-y] [file:line]

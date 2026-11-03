@@ -71,6 +71,7 @@ tên file, lệnh shell, tag framework (`@smoke`). Tên test theo convention tro
 | Pha | Skill | Artifact | Command |
 |---|---|---|---|
 | 0 Setup | `setup` | config + CLAUDE.md | `/testkit:init` |
+| 0.5 Kế hoạch | `plan-task` | `plan-<slug>.md` — phân tích task + đo ảnh hưởng + raise lệch spec | `/testkit:plan <task>` |
 | 1 Hiểu | `analyze-target` | `feature-map.md` | `/testkit:analyze` |
 | 2 Test case | `generate-cases` | `test-cases.md` (+ `rtm.md`) | `/testkit:cases` |
 | 3 Kịch bản | `map-and-scenario` | `ui-map.md` + `scenarios.md` | `/testkit:scenarios` |

@@ -12,6 +12,11 @@
 #   map-and-scenario  ← test-cases.md
 #   generate-script   ← scenarios.md   (strongest gate: no code before scenarios signed off)
 #
+# Conditional gate:
+#   new-feature       ← every plan-*.md must be APPROVED, but only if a plan exists.
+#                       Planning is opt-in; once a plan is written it must be signed off
+#                       before artifacts get generated from it.
+#
 # Fail-open: jq missing, empty/malformed stdin, skill not in the map, or no testkit
 # project (no <root>/.testkit-target). Cursor has no enforced PreToolUse hook, so the
 # skills self-check the same marker (advisory) — see using-testkit.
@@ -37,6 +42,7 @@ case "$skill" in
     generate-script)  required="scenarios.md" ;;
     case-script)      required="test-cases.md" ;;   # /testkit:tc — lighter path, still needs approved cases
     review-dev)       required="test-cases.md" ;;   # acceptance review needs an approved yardstick
+    new-feature)      required="@plan" ;;           # conditional: only if a plan-*.md exists
     *) exit 0 ;;
 esac
 
@@ -49,6 +55,32 @@ for cand in "${TESTKIT_ROOT:-}" "e2e-tests/docs" "docs"; do
 done
 # Not an initialized testkit project → fail-open.
 [[ -n "$ROOT" ]] || exit 0
+
+# Conditional plan gate: a plan is optional, but an unapproved one blocks generation.
+if [[ "$required" == "@plan" ]]; then
+    pending=""
+    for plan in "$ROOT"/plan-*.md; do
+        [[ -f "$plan" ]] || continue
+        if ! grep -qE '^[[:space:]]*>[[:space:]]*Review:[[:space:]]+APPROVED[[:space:]]*$' "$plan"; then
+            pending+="      $plan"$'\n'
+        fi
+    done
+    # No plan at all, or every plan approved → allow.
+    [[ -n "$pending" ]] || exit 0
+    cat >&2 <<EOF
+✗ testkit gate: refusing "$skill" — a plan is still awaiting review.
+
+  Not approved yet:
+$pending
+  Read the plan, settle the questions and the spec deviations it raised, then change
+  the trailing line
+      > Review: PENDING
+  to
+      > Review: APPROVED
+  and re-run. (A plan that no longer applies can simply be deleted.)
+EOF
+    exit 1
+fi
 
 ARTIFACT="$ROOT/$required"
 

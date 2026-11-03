@@ -66,6 +66,8 @@ PreToolUse hook cưỡng chế → **các gate là advisory** (agent tự giác)
 ```
 /testkit:init        → setup dự án test + CLAUDE.md + config (chọn target)
         ↓
+/testkit:plan        → Phase 0.5: phân tích task + đo ảnh hưởng + raise lệch spec   🚦 review
+        ↓   (tùy chọn — nhưng đã lập plan thì phải duyệt mới chạy new-feature)
 /testkit:analyze     → Phase 1: feature-map.md   🚦 review
         ↓
 /testkit:cases       → Phase 2: test-cases.md (+ rtm.md)   🚦 review
@@ -86,6 +88,7 @@ feature mới (scope qua git diff hoặc mô tả), không quét lại cả repo
 
 | Command | Việc |
 |---|---|
+| `/testkit:plan <mô tả task>` | **Phân tích task trước khi làm**: định phạm vi (git diff / mô tả) → đo **ảnh hưởng 6 hạng mục** (màn hình · test case · test tự động · tài liệu · dữ liệu/phân quyền · vùng dùng chung) → **so khớp task ↔ tài liệu ↔ hiện thực**, lệch thì raise `open-questions.md` → `plan-<slug>.md` 🚦. Chỉ đọc, không sinh test, không sửa code |
 | `/testkit:question <câu hỏi>` | Hỏi đáp tài liệu/code/artifact — mọi câu trả lời **kèm reference** (`[SRS §4.2]`, `[test-cases.md → TC-x]`, `[file:line]`); không nguồn = không khẳng định |
 | `/testkit:tc <module \| tiêu đề>` | Sinh script cho **test case cụ thể** (đường tắt, không cần scenarios) — đánh dấu `[automated]` trong rtm.md |
 | `/testkit:review-dev <scope>` | **Nghiệm thu output của dev theo test case**: verdict từng TC (Pass/Fail/Blocked/Untestable) → `dev-review.md`, Fail → `bugs.md` |
